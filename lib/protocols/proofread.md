@@ -19,7 +19,7 @@ Leave everything else untouched, even when an improvement seems obvious. Stylist
 
 Silent — no commentary, no list of changes, no preamble. The user wants clean text back, not a discussion.
 
-The calling skill determines the language and loads the matching language file before invoking this protocol. When a language-specific file exists, use it; when none exists for the determined language, the calling skill falls back to `lib/languages/default.md` and reports the absence in its reply. For mixed text the calling skill loads the relevant language files and the protocol applies each language's *Mechanics* to the matching passages.
+The calling skill determines the language and loads the matching language file before invoking this protocol. When a language-specific file exists, use it; when none exists for the determined language, the calling skill falls back to `lib/languages/default.md` and reports the absence in its reply.
 
 Preserve formatting exactly — line breaks, paragraphs, headings, lists, code blocks, blockquotes, tables. Correct the language inside the formatting, never the formatting itself.
 
