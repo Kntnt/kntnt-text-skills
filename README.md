@@ -4,22 +4,25 @@ A plugin for Claude Code and Cowork that provides seven interconnected skills fo
 
 ## What the plugin does
 
-The plugin exposes seven skills, organised in two groups.
+The plugin exposes seven skills, organised in three groups.
 
-**Active task skills — triggered automatically on relevant prompts:**
+**Automatically-triggered task skill:**
 
-- `/proofread` — conservative proofreading. Corrects only what is objectively wrong (spelling, grammar, punctuation, the conventions in the loaded language file). Never changes word choice, word order, structure, tone, or argumentation. The lightest of three review skills: `proofread ⊂ redline ⊂ edit`.
+- `/proofread` — conservative proofreading. Corrects only what is objectively wrong (spelling, grammar, punctuation, the conventions in the loaded language file). Never changes word choice, word order, structure, tone, or argumentation. The lightest of three review skills: `proofread ⊂ redline ⊂ edit`. Triggers on the `/proofread` slash command and on natural-language proofreading requests.
+
+**Slash-only task skills:**
+
 - `/redline` — critical editorial review with human-in-the-loop. Runs the same silent proofread pass as `/proofread`, then performs a critical-review pass against the full rule set (style, content type, technique, language) and presents each finding one at a time as a four-part proposal (marking, problem, solution, prompt). You accept, reject, counter, or delegate. Scope is from proofreading up to and including line editing.
 - `/edit` — AFK (away-from-keyboard) variant of `/redline`. Same proofread and critical-review passes, but findings are settled by an internal subagent — no question-by-question dialogue with you. The main agent and subagent iterate as colleagues for up to three rounds and deliver the polished text directly.
 - `/write` — four-phase content creation. Phase 1 acquires a brief over nine fields. Phase 2 presents the idea for structure, tone, technique, and address. Phase 3 writes the draft. Phase 4 applies the redline protocol with subagent settling — the same procedure `/edit` runs — so you receive only the polished final result.
 
-**Manual context loaders — fire only on the explicit slash command:**
+**Slash-only context loaders:**
 
 - `/writing-rules` — loads the writing rules, the general style guide, and the language file(s) into the session, so later ad-hoc writing follows the rule set without going through `/write` or `/edit`.
 - `/abt` — loads the ABT technique (And, But, Therefore — narrative arc).
 - `/pac` — loads the PAC technique (Premise, Analysis, Conclusion — analytical arc).
 
-The context loaders carry `disable-model-invocation: true` in their frontmatter and therefore activate only on the exact slash command — never through the model deciding on its own that they would be useful.
+The slash-only skills (both task skills and context loaders) carry `disable-model-invocation: true` in their frontmatter and therefore activate only on the exact slash command — never through the model deciding on its own that they would be useful.
 
 ## Languages
 
@@ -121,8 +124,6 @@ AFK (away-from-keyboard) variant of `/redline`. Same proofread and critical-revi
 /edit @draft.md
 /edit en_GB @draft.md
 ```
-
-When invoked via the slash command, `/edit` proceeds directly. When invoked via natural language (*redigera den här texten*, *polera utkastet*, *polish this draft*, *edit my text*), the plugin first confirms that you want AFK editing rather than `/redline`-style dialogue — bare mentions of *edit* or *redigera* without a clear text in context do not trigger the question at all.
 
 Phase 1 and Phase 2 are identical to `/redline`. Phase 3 settles the findings via the subagent protocol: the main agent points out, the subagent improves, for up to three rounds, early consensus preferred. You receive only the polished final text. The single exception is the last-resort finding described under `/redline` — if the text requires developmental work, the plugin surfaces that single decision to you as a closing note.
 
