@@ -24,7 +24,7 @@ The redline pass operates against the substantive style foundation, the loaded l
 
 When no language-specific file exists for the determined language, the calling skill falls back to `lib/languages/default.md`. The redline pass then operates against `default.md`'s *Mechanics* only — there is no *Style* section in `default.md`, because the style layer (address, AI-tell manifestations, interference patterns, genre adjustments) is inherently language-and-culture-bound and has no meaningful baseline.
 
-Detect the content type from the prompt and the text's features (presence of standfirst, attributed quotes, PAC pattern, declarative argument-headings). Use `bin/list-frontmatter.sh lib/genres/` to retrieve the frontmatter of all content-type files in a single call, then match against the triggers and disambiguation rules. If neither prompt nor text features yield a clear type, ask once before the pass begins.
+The calling skill has already determined the content type and loaded the matching file before invoking this protocol.
 
 ## Review order
 
