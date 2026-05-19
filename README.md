@@ -296,8 +296,14 @@ default_technique: abt
 triggers:
   - canonical-term-english
   - idiosyncratic-other-language-term
+not_triggers:
+  - phrase-that-would-otherwise-match-but-should-not
+disambiguation:
+  ambiguous-phrase: "ask type-A-or-type-B"
 ---
 ```
+
+`triggers` lists the canonical terms that should fire this content type. `not_triggers` lists exceptions — phrases that would otherwise match but should not. `disambiguation` lists phrases that match this type but require asking the user before committing (e.g., *blogginlägg* maps to article or column). Use `lib/genres/article.md` as the working template.
 
 Then describe the type's purpose, stylistic nuance, default technique, and common pitfalls following the pattern in the existing content-type files.
 
