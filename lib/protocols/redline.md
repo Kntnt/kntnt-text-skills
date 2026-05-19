@@ -4,7 +4,7 @@ The critical-review procedure for a text that already exists. The pass produces 
 
 ## Role
 
-A nitisk and demanding editorial colleague who wants the text to succeed. The role is constructive, not punitive — every finding exists to make the text better, never to expose the writer. Tone is direct and substantive, never sycophantic, never stubborn for its own sake.
+A meticulous and demanding editorial colleague who wants the text to succeed. The role is constructive, not punitive — every finding exists to make the text better, never to expose the writer. Tone is direct and substantive, never sycophantic, never stubborn for its own sake.
 
 The colleague reads with two questions in parallel: does this text serve its reader, and does it follow the rule set? Both questions matter. A finding stands on rule violation, on reader-experience consequence, or — most often — on both at once.
 
@@ -14,7 +14,7 @@ From proofreading up to and including line editing. Concretely:
 
 - **Always in scope.** Sentence-level rewrites, paragraph-level restructuring within a section, word choice including anglicisms and AI-tell constructions, punctuation choices at the comma/dash/parenthesis level, headline and subheading wording, repetition between adjacent elements, transitions between paragraphs and sections, application of the content-type's structural rules, application of the chosen technique's arc, the global bans (source fabrication, AI metaphor, rhetorical question).
 - **Sometimes in scope.** Section-level restructuring within the text as given. Removing or merging sections that do not earn their place. Adding a missing element the content type requires (e.g., a missing standfirst in an article).
-- **Last-resort only.** Substantive or developmental editing — wholesale restructuring of the text's argument, recasting the angle, replacing the chosen content type, requesting new source material. If the text is so undermålig that line editing cannot fix it, say so plainly in a single finding and propose what the writer should do instead (e.g., "this is structured as an article but the material wants to be a case study — consider writing it again with content-type case-study"). Do not silently rewrite at the developmental level.
+- **Last-resort only.** Substantive or developmental editing — wholesale restructuring of the text's argument, recasting the angle, replacing the chosen content type, requesting new source material. If the text is so below publishable standard that line editing cannot fix it, say so plainly in a single finding and propose what the writer should do instead (e.g., "this is structured as an article but the material wants to be a case study — consider writing it again with content-type case-study"). Do not silently rewrite at the developmental level.
 
 The boundary between line editing and developmental editing is the test: can the finding be expressed as a concrete change to specific lines of the text as it stands? If yes, it is in scope. If it requires the writer to gather more material or rethink the premise, it is developmental and belongs in a single last-resort finding.
 
@@ -35,7 +35,7 @@ The redline pass walks the text in this order. The order matters: lower layers f
 3. **Technique integrity.** Is the arc (ABT or PAC) present and invisible (ABT) or appropriately visible (PAC)? Where is the B, where is the T, where is the C? If a beat is missing or buried, that is a finding.
 4. **Address and voice.** Does the address match the content type? Is the writer's voice consistent? Is "du" used where appropriate and avoided where not? Is the reader treated as a colleague, never condescendingly?
 5. **Cognitive load.** Are terms explained before use? Is the order from known to unknown? Is evidence presented before conclusion? Are tripwires removed?
-6. **Anglicisms and AI-tells.** Apply the Lukttest. Substitute. Rewrite.
+6. **Anglicisms and AI-tells.** Apply the Smell Test. Substitute. Rewrite.
 7. **Rhythm and transitions.** Sentence-length variation, seamless transitions, no announced bridges.
 8. **Precision and word choice.** Every word signals — review for unintended signals. Substitute approximate words for exact ones.
 9. **Paragraph and sentence mechanics.** Paragraph length, sentence length, list punctuation, comma vs dash vs parenthesis.
