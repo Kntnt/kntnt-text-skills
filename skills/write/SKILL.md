@@ -82,7 +82,7 @@ Read in this order when the user invokes `/write`:
 3. `../../lib/techniques/<technique>.md` — once the technique is confirmed.
 4. `../../lib/rules/style.md`, `../../lib/rules/writing.md`, and the language file determined above (specific `lib/languages/<lang>.md`, otherwise `lib/languages/default.md`) — for the draft.
 5. `../../lib/protocols/input.md` — as needed.
-6. `../../lib/protocols/proofread.md` and `../../lib/protocols/redline.md` — for Phase 4 review of the draft.
+6. `../../lib/protocols/proofread.md`, `../../lib/protocols/redline.md`, and `../../lib/protocols/finding-format.md` — for Phase 4 review of the draft.
 7. `../../lib/protocols/subagent.md` — for Phase 4 settling.
 8. `../../lib/protocols/output.md` — to deliver the result.
 

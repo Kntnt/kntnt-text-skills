@@ -44,12 +44,7 @@ A finding lives at the highest layer that explains it. If a paragraph is wrong b
 
 ## Finding format
 
-Each finding is a self-contained unit with four parts. The calling skill's settling protocol consumes these units.
-
-- **(i) Marking.** A concrete pointer into the text. Either a short quote (the offending span as it appears in the text, no longer than necessary to identify it unambiguously) or a structural reference ("the third paragraph under the first H2", "the standfirst", "the closing section"). The recipient must be able to find the location without searching.
-- **(ii) Problem.** What is wrong, expressed in one or two sentences, with explicit rule reference where one applies — the relevant section of the style foundation, the content-type file, the technique file, the loaded language file, or the objective writing rules. When the finding rests on reader-experience consequence rather than a named rule, name the consequence concretely (*the reader has no way to tell whether the quotation is exact or paraphrased*).
-- **(iii) Solution.** A concrete proposal — the rewritten span, the restructured paragraph order, the new headline, the deleted word. The proposal is specific enough that "accept" applies it without further interpretation. If the finding is at a layer where a single concrete rewrite is not possible (e.g., the article needs an in medias res opening that does not yet exist), the solution describes the intended shape with sufficient precision that the writer can produce it.
-- **(iv) Prompt.** Form depends on the settling protocol. A user-dialogue settling protocol attaches a short prompt inviting the user to engage with the finding. A subagent-driven settling protocol omits the prompt — the subagent receives the marking, problem, and solution as material to react to.
+Each finding is a self-contained unit conforming to the format defined in `protocols/finding-format.md`. The calling skill's settling protocol consumes these units.
 
 ## Pacing
 
