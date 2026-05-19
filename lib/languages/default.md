@@ -1,7 +1,6 @@
 ---
 name: default
 language: (baseline)
-inherits:
 ---
 
 # Default (baseline)

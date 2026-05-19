@@ -1,7 +1,6 @@
 ---
 name: en_GB
 language: British English
-inherits:
 ---
 
 # British English (en_GB)

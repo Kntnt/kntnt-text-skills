@@ -1,14 +1,11 @@
 ---
 name: sv
 language: Swedish
-inherits:
 ---
 
 # Swedish (sv)
 
 Language conventions for Swedish. Loaded by skills when the input language is determined to be Swedish, or when the user passes `sv` or a Swedish territorial variant as a language argument.
-
-A territorial variant file (e.g., `sv_FI.md`) may explicitly inherit from this file via `inherits: @sv.md` in its frontmatter and override the sections where it differs.
 
 The file is organised in two layers. *Mechanics* is the proofread scope — typography, punctuation, quotation, grammar, and other objective conventions that the proofread pass applies. *Style* is the redline / edit scope — address, AI-tell manifestations, interference patterns, and genre-level adjustments that the critical-review passes apply on top of the proofread pass.
 

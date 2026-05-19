@@ -1,7 +1,6 @@
 ---
 name: en_US
 language: American English
-inherits:
 ---
 
 # American English (en_US)
