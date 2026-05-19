@@ -1,11 +1,9 @@
 ---
 name: proofread
-description: Conservative proofreading. Trigger on `/proofread` (alone, with text, file reference, or URL) and on `proofread`, `proofreading`, `copyedit`, `copyediting`, `fix the typos`, `check the spelling`, `spell-check`. Swedish and other-language equivalents (`korrekturläs`, `korra`, `rätta stavfel`) are understood semantically.
+description: Conservative proofreading — proofread ⊂ redline ⊂ edit, the lightest of three review skills. Corrects only objectively wrong things (spelling, grammar, punctuation, duplicated or missing words, wrong-word errors, and the loaded language file's typographic and mechanic conventions). Never changes style, word order, structure, voice, or argumentation — those are the redline / edit passes. Use whenever the user writes `/proofread` (alone — operates on the most recent text in the conversation — or followed by text, a file reference, or a URL). English trigger phrases: `proofread`, `proofreading`, `copyedit`, `copyediting`, `fix the typos`, `check the spelling`, `spell-check`. Swedish equivalents (`korrekturläs`, `korra`, `rätta stavfel`) and similar phrasings in other languages are understood semantically. Optional language argument (`/proofread sv`, `/proofread en_GB`); without it, auto-detects from the input. Preserves original formatting.
 ---
 
 # /proofread
-
-Conservative proofreading — proofread ⊂ redline ⊂ edit, the lightest of three review skills. Corrects only objectively wrong things (spelling, grammar, punctuation, duplicated or missing words, wrong-word errors, and the loaded language file's mechanic conventions). Never changes style, word order, structure, voice, or argumentation. Optional language argument (`/proofread sv`, `/proofread en_GB`); auto-detects language when no argument is given. Preserves original formatting.
 
 Apply the procedure in `../../lib/protocols/proofread.md` to the user's input.
 
