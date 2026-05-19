@@ -53,12 +53,13 @@ When `default.md` is used, the skill mentions in its reply (in English):
 
 ### Language determination flow
 
-Each skill that processes text determines the language in this order:
+Each skill that processes text follows `lib/protocols/language.md`. In summary:
 
-1. **Argument.** If the user passes a language argument (e.g. `/proofread sv`, `/edit en_GB`), use it.
-2. **Detect + inventory.** Otherwise detect the language of the input and check `lib/languages/` for matching files. If multiple files exist for the detected language, ask the user which to use. If a single file exists, use it without asking. If no file exists, fall back to `default.md` and report the absence.
+1. **Argument.** If the user passes a language argument (e.g. `/proofread sv`, `/edit en_GB`), use it. A bare argument that matches no file directly but matches several territorial variants (e.g. `en` matches both `en_GB.md` and `en_US.md`) triggers the same disambiguation question as an ambiguous detection.
+2. **Source step.** Without an argument, the skill picks a source mode: *detect mode* (`/proofread`, `/redline`, `/edit` — source from the input text) or *propose mode* (`/write` — propose from the prompt's language and confirm).
+3. **Inventory.** Check `lib/languages/` for matching files. If multiple files match, ask the user which to use. If a single file matches, use it. If none, fall back to `default.md` and report the absence.
 
-`/write` proposes a target language based on the prompt and asks for confirmation when no argument is given. The manual context loader `/writing-rules` loads either the specified language file or all installed language files.
+The manual context loader `/writing-rules` loads either the specified language file or all installed language files.
 
 ## Installation
 

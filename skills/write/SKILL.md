@@ -9,11 +9,7 @@ Four-phase content creation.
 
 ## Language determination
 
-If the user passed a language argument (e.g. `sv`, `sv_SE`, `en`, `en_GB`, `en_US`), use it as the target language for the new text. Otherwise propose a target language based on the prompt's language (Swedish prompt → Swedish text) and any source material, and ask the user to accept, change, or specify. Honour the chosen language for the rest of the run.
-
-Once the language is set, load the matching `../../lib/languages/<lang>.md`. If no file exists for the chosen language, fall back to `../../lib/languages/default.md` and mention this in the reply (in English):
-
-> No language file found for [language]. Baseline conventions from `default.md` apply. Add `lib/languages/<code>.md` for stricter control.
+Follow `../../lib/protocols/language.md` in **propose mode** — propose a target language based on the prompt's language (Swedish prompt → Swedish text) and any source material, and ask the user to confirm. Honour the chosen language for the rest of the run.
 
 Phase 3 (draft) and Phase 4 (redline + subagent) use the full language file (both *Mechanics* and *Style*). When `default.md` is in use, only *Mechanics* exists — drafting proceeds with the universal style foundation in `rules/style.md` carrying the style layer.
 
@@ -77,14 +73,15 @@ Once the type is confirmed, read the full content-type file. Other content-type 
 
 Read in this order when the user invokes `/write`:
 
-1. `bin/list-frontmatter.sh lib/genres/` — for content-type detection.
-2. The matching `../../lib/genres/<type>.md` — once the type is confirmed in Phase 1.
-3. `../../lib/techniques/<technique>.md` — once the technique is confirmed.
-4. `../../lib/rules/style.md`, `../../lib/rules/writing.md`, and the language file determined above (specific `lib/languages/<lang>.md`, otherwise `lib/languages/default.md`) — for the draft.
-5. `../../lib/protocols/input.md` — as needed.
-6. `../../lib/protocols/proofread.md`, `../../lib/protocols/redline.md`, and `../../lib/protocols/finding-format.md` — for Phase 4 review of the draft.
-7. `../../lib/protocols/subagent.md` — for Phase 4 settling.
-8. `../../lib/protocols/output.md` — to deliver the result.
+1. `../../lib/protocols/language.md` — the language determination procedure.
+2. `bin/list-frontmatter.sh lib/genres/` — for content-type detection.
+3. The matching `../../lib/genres/<type>.md` — once the type is confirmed in Phase 1.
+4. `../../lib/techniques/<technique>.md` — once the technique is confirmed.
+5. `../../lib/rules/style.md`, `../../lib/rules/writing.md`, and the language file determined above (specific `lib/languages/<lang>.md`, otherwise `lib/languages/default.md`) — for the draft.
+6. `../../lib/protocols/input.md` — as needed.
+7. `../../lib/protocols/proofread.md`, `../../lib/protocols/redline.md`, and `../../lib/protocols/finding-format.md` — for Phase 4 review of the draft.
+8. `../../lib/protocols/subagent.md` — for Phase 4 settling.
+9. `../../lib/protocols/output.md` — to deliver the result.
 
 ## Special handling
 

@@ -9,14 +9,7 @@ Three-phase critical editorial review with human-in-the-loop settling.
 
 ## Language determination
 
-If the user passed a language argument (e.g. `sv`, `sv_SE`, `en`, `en_GB`, `en_US`), use it. Otherwise determine language in two steps:
-
-1. **Detect** the language of the input text.
-2. **Inventory** the matching files in `../../lib/languages/`:
-   - If multiple files exist for the detected language, ask the user which to use.
-   - If a single file exists, use it without asking.
-   - If no file exists for the detected language, fall back to `../../lib/languages/default.md` and mention this in the reply (in English):
-     > No language file found for [language]. Baseline conventions from `default.md` apply. Add `lib/languages/<code>.md` for stricter control.
+Follow `../../lib/protocols/language.md` in **detect mode** — source the language from the input text.
 
 Phase 1 (proofread) applies only the *Mechanics* section of the loaded file. Phase 2 (redline) applies both *Mechanics* and *Style*. When `default.md` is in use, only *Mechanics* exists — Phase 2 still runs but without language-specific style overlays (the universal style foundation in `rules/style.md` carries the pass).
 
@@ -36,13 +29,14 @@ Settle each finding via `../../lib/protocols/dialogue.md`. The user accepts, rej
 
 Read in this order:
 
-1. `../../lib/protocols/proofread.md`, `../../lib/rules/writing.md`, and the language file determined above (specific `lib/languages/<lang>.md`, otherwise `lib/languages/default.md`) — Phase 1.
-2. `bin/list-frontmatter.sh lib/genres/` — to identify the content type.
-3. The matching `../../lib/genres/<type>.md` and `../../lib/techniques/<technique>.md`.
-4. `../../lib/rules/style.md`, `../../lib/protocols/redline.md`, and `../../lib/protocols/finding-format.md` — Phase 2.
-5. `../../lib/protocols/dialogue.md` — Phase 3.
-6. `../../lib/protocols/input.md` and `../../lib/protocols/output.md` — as needed.
-7. `../../lib/protocols/subagent.md` — only on delegation.
+1. `../../lib/protocols/language.md` — the language determination procedure.
+2. `../../lib/protocols/proofread.md`, `../../lib/rules/writing.md`, and the language file determined above (specific `lib/languages/<lang>.md`, otherwise `lib/languages/default.md`) — Phase 1.
+3. `bin/list-frontmatter.sh lib/genres/` — to identify the content type.
+4. The matching `../../lib/genres/<type>.md` and `../../lib/techniques/<technique>.md`.
+5. `../../lib/rules/style.md`, `../../lib/protocols/redline.md`, and `../../lib/protocols/finding-format.md` — Phase 2.
+6. `../../lib/protocols/dialogue.md` — Phase 3.
+7. `../../lib/protocols/input.md` and `../../lib/protocols/output.md` — as needed.
+8. `../../lib/protocols/subagent.md` — only on delegation.
 
 ## Output
 

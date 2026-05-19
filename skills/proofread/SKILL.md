@@ -9,21 +9,15 @@ Apply the procedure in `../../lib/protocols/proofread.md` to the user's input.
 
 ## Language determination
 
-If the user passed a language argument (e.g. `sv`, `sv_SE`, `en`, `en_GB`, `en_US`), use it. Otherwise determine language in two steps:
-
-1. **Detect** the language of the input text.
-2. **Inventory** the matching files in `../../lib/languages/`:
-   - If multiple files exist for the detected language (e.g., both `en.md` and `en_GB.md` and `en_US.md`), ask the user which to use.
-   - If a single file exists for the detected language (base or territorial), use it without asking.
-   - If no file exists for the detected language, fall back to `../../lib/languages/default.md` and mention this in the reply (in English):
-     > No language file found for [language]. Baseline conventions from `default.md` apply. Add `lib/languages/<code>.md` for stricter control.
+Follow `../../lib/protocols/language.md` in **detect mode** — source the language from the input text.
 
 Only the *Mechanics* section of the loaded language file (or of `default.md`) applies to this skill. The *Style* section is out of scope here — it is used by the redline / edit passes.
 
 ## Files to read
 
-1. `../../lib/protocols/proofread.md` — the procedure and the full scope.
-2. `../../lib/rules/writing.md` — universal writing conventions.
-3. `../../lib/languages/<lang>.md` — the specific language file determined above. If none exists for the determined language, use `../../lib/languages/default.md` instead.
-4. `../../lib/protocols/input.md` — only when the input source needs resolving (file reference, URL, bare `/proofread`).
-5. `../../lib/protocols/output.md` — only as needed to deliver the result.
+1. `../../lib/protocols/language.md` — the language determination procedure.
+2. `../../lib/protocols/proofread.md` — the procedure and the full scope.
+3. `../../lib/rules/writing.md` — universal writing conventions.
+4. `../../lib/languages/<lang>.md` — the specific language file determined above. If none exists for the determined language, use `../../lib/languages/default.md` instead.
+5. `../../lib/protocols/input.md` — only when the input source needs resolving (file reference, URL, bare `/proofread`).
+6. `../../lib/protocols/output.md` — only as needed to deliver the result.
