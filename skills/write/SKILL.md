@@ -48,7 +48,7 @@ Write the draft per the applicable content-type file, technique file, and langua
 
 ## Phase 4 — automatic redline review with subagent settling
 
-Apply `../../lib/protocols/redline.md` to the draft to produce a finding list, then settle the findings via `../../lib/protocols/subagent.md` — main agent and subagent iterate as colleagues for up to three rounds, early consensus preferred. The main agent has final decision authority. The polished text is delivered to the user via `../../lib/protocols/output.md`. No user-facing summary of the internal dialogue is produced.
+Apply `../../lib/protocols/redline.md` to the draft to produce a finding list, then settle the findings via `../../lib/protocols/subagent.md` — main agent and subagent iterate as colleagues for up to three rounds, early consensus preferred. The main agent has final decision authority. The polished text is delivered to the user via the output protocol matching the input form (see *Files to read*). No user-facing summary of the internal dialogue is produced.
 
 There is no post-draft user-facing dialogue.
 
@@ -79,10 +79,10 @@ Read in this order when the user invokes `/write`:
 3. The matching `../../lib/genres/<type>.md` — once the type is confirmed in Phase 1.
 4. `../../lib/techniques/<technique>.md` — once the technique is confirmed.
 5. `../../lib/rules/style.md`, `../../lib/rules/writing.md`, and the language file determined above (specific `lib/languages/<lang>.md`, otherwise `lib/languages/default.md`) — for the draft.
-6. `../../lib/protocols/input.md` — as needed.
+6. `../../lib/protocols/input.md` — to determine the input form when source material is provided.
 7. `../../lib/protocols/proofread.md` and `../../lib/protocols/redline.md` — for Phase 4 review of the draft.
 8. `../../lib/protocols/subagent.md` — for Phase 4 settling.
-9. `../../lib/protocols/output.md` — to deliver the result.
+9. `../../lib/protocols/output-inline.md` if the input is inline; otherwise `../../lib/protocols/output-files.md` — to deliver the result.
 
 ## Special handling
 

@@ -38,7 +38,7 @@ Read in this order:
 4. The matching `../../lib/genres/<type>.md` and `../../lib/techniques/<technique>.md`.
 5. `../../lib/rules/style.md` and `../../lib/protocols/redline.md` — Phase 2.
 6. `../../lib/protocols/dialogue.md` — Phase 3.
-7. `../../lib/protocols/input.md` and `../../lib/protocols/output.md` — as needed.
+7. `../../lib/protocols/input.md` — to determine the input form. Then `../../lib/protocols/output-inline.md` if the input is inline; otherwise `../../lib/protocols/output-files.md`.
 8. `../../lib/protocols/subagent.md` — only on delegation.
 
 ## Output
