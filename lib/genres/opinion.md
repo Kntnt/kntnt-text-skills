@@ -27,50 +27,62 @@ Distinguished from report: the report *analyses* from a neutral position; the op
 
 ## Stylistic nuance
 
+<!-- scope: write -->
 ### Headings
 
 H1 is a declarative thesis (*A new kind of agency threatens traditional agencies*) — not metaphorical, not narrative, not evocative. H2 subheadings are declarative argument-headlines (*Traditional agencies fail to meet demand*, *Disruptive change threatens traditional agencies*) or imperative calls to action (*Transform*, *Broaden the portfolio*, *Don't be a boiled frog*). Headings carry the argument — they tell the reader where each section is going before she gets there.
 
+<!-- scope: write -->
 ### Headline length
 
 Maximum 60 characters.
 
+<!-- scope: write -->
 ### Tone — pushing
 
 The text drives a message outward. Polemical, serious, deliberate. Humour is absent or rare — the opinion piece is not entertainment.
 
+<!-- scope: write -->
 ### Address
 
 Explicit first person appears naturally when the writer is stating her own view (*I believe the agency market is facing a disruptive reshaping*, *My hope with this article is…*). Used sparingly enough that the focus stays on the argument, but the personal source of the position must be clear. Direct second-person is uncommon — the target audience is typically abstract (an industry, a collective recipient) rather than an individual reader.
 
+<!-- scope: write -->
 ### Opening
 
 Thesis declared upfront in the standfirst or the first paragraph. The reader knows early what the writer thinks and where the text is going.
 
+<!-- scope: write -->
 ### Free language
 
 Sentence fragments and conjunction-as-sentence-opener are permitted but used more sparingly than in column — only when the rhetorical effect is clear. The genre tolerates *But…!* as a fragment for emphasis; it does not tolerate fragments for rhythm alone.
 
+<!-- scope: write -->
 ### Rhetorical repetition
 
 A phrase that returns after each argument, building cumulative effect, is well-suited to the opinion piece. From `rules/style.md`: this technique is used only in opinion-driven texts, never in fact articles or press releases.
 
+<!-- scope: write -->
 ### Sources
 
 Inline references where the argument requires them. Source provenance reinforces the polemic. The agent never invents sources — see the global rule in `rules/style.md`.
 
+<!-- scope: write -->
 ### Length
 
 Typically six hundred to fifteen hundred words. The argument's complexity governs length.
 
+<!-- scope: write -->
 ### Ending
 
 Call to action — typically not a commercial CTA but an exhortation: *It is time to act*. The opinion piece lands in something concrete; an opinion piece that does not know what should happen is not finished.
 
+<!-- scope: write -->
 ## Default technique
 
 ABT — applied in explicit-argumentative mode. The structure can and typically should be visible: opening conditions / status quo (A) → problem or mismatch (B) → action or transformation (T). The reader is meant to see each step. This is the inverse of column's preference for hidden structure — but the same A-B-T core. See `lib/techniques/abt.md`.
 
+<!-- scope: review -->
 ## Common pitfalls
 
 Personal anecdote that softens the argument. The opinion piece pushes. Long scenes or self-reflective passages drain drive. If the material is reflective rather than argumentative — choose column.

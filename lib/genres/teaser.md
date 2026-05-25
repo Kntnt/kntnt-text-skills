@@ -29,32 +29,39 @@ The reader of a teaser is scanning: in a newsletter inbox, on a homepage, in a s
 
 ## Stylistic nuance
 
+<!-- scope: write -->
 ### Structure
 
 1. *Headline.* Typically the same as the headline of the text being teased, but can be its own. Functions as content declaration and interest hook.
 2. *Condensed body.* Summarise what the text is about without giving away the interesting details. Lure the reader. Serve as the longer-form content declaration. The reader should know what she gets and want it.
 3. *Lightweight CTA.* *Read the guide*, *See the analysis*, *See how they did it*. The action is always click. Generic *Read more* is weaker than a verb that names the promise.
 
+<!-- scope: write -->
 ### Mini-ABT as microstructure
 
 The genre standard: start with the necessary fact (A), introduce the conflict or question (B), hint at the solution or promise (T), end with the CTA. The entire arc fits within about sixty words — that is the craft. The *but* and *therefore* do not have to be explicit; implication is enough.
 
+<!-- scope: write -->
 ### Tone
 
 Tone matches the source text's voice but condensed. A teaser for an article should sound like the article's author, not like a marketing department. The standfirst in an article is the article's own entry to itself.
 
+<!-- scope: write -->
 ### Voice and address
 
 Direct, active. Direct second-person sparingly and as emphasis. The source text's address choices govern. A case-study teaser holds distance (the client's voice carries); an article teaser can be more direct.
 
+<!-- scope: write -->
 ### Length
 
 Standard about sixty words for newsletter blocks, web modules, standalone teasers, and standfirsts. Meta descriptions: maximum 160 characters, aim for 155. Other social-media platforms: the platform's own length and tone conventions apply on top of these principles.
 
+<!-- scope: write -->
 ### Headline length
 
 Maximum 60 characters.
 
+<!-- scope: write -->
 ### Meta title
 
 When the teaser format is meta description, generate a meta title as well. The title obeys the standard headline rule (60 characters) and does not include company-name suffixes (*| Company*) — the CMS template adds those.
@@ -63,10 +70,12 @@ When the teaser format is meta description, generate a meta title as well. The t
 
 The teaser must function with no surrounding context — the reader has not seen the source yet. No unresolved pronouns, no backward references, no assumed prior understanding. The standalone-readability principle from `rules/writing.md` applies more strictly here than anywhere else.
 
+<!-- scope: write -->
 ## Default technique
 
 Mini-ABT — see *Stylistic nuance* above. Inherited from `lib/techniques/abt.md` but applied at microstructure scale (the whole teaser is the ABT, not a section of a longer text).
 
+<!-- scope: review -->
 ## Common pitfalls
 
 Clickbait or overstatement. *You will never believe what X did*, *The incredible truth about Y*. The content declaration breaks when the reader clicks. Trust is spent on the first click and not recovered.

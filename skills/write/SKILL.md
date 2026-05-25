@@ -68,7 +68,7 @@ At the start of Phase 1, invoke `bin/list-frontmatter.sh lib/genres/` to retriev
 
 When the prompt or metadata triggers a disambiguation rule (blogginlägg → article-or-column; e-book chapter → ask per chapter), present the disambiguation question. Negative triggers (`not_triggers`) prevent false positives. If no genre matches clearly via triggers or semantic likeness, propose the genre whose frontmatter has `default: true` — do not read multiple genre files in full to compare.
 
-Once the type is confirmed, read the full content-type file. Other content-type files are not read in full during this invocation.
+Once the type is confirmed, read the content-type file. Skip sections preceded by `<!-- scope: review -->`; read only unmarked sections and sections preceded by `<!-- scope: write -->`. Review-scoped sections describe checks (common pitfalls, repetition rules) for a post-hoc critical review of an existing text — they add no value when the drafting itself is following the genre's write-scoped rules. Other content-type files are not read during this invocation.
 
 ## Files to read
 

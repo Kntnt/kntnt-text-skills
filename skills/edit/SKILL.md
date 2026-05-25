@@ -24,6 +24,8 @@ Apply `../../lib/protocols/redline.md` against `../../lib/rules/style.md`, the l
 
 If no genre matches clearly via triggers or semantic likeness, use the genre whose frontmatter has `default: true`. Do not read multiple genre files in full to compare — the frontmatter inventory plus the fallback flag is sufficient to decide.
 
+When reading the chosen genre file, skip sections preceded by `<!-- scope: write -->`; read only unmarked sections and sections preceded by `<!-- scope: review -->`. Write-scoped sections describe drafting concerns (structure, length, headings, address) that add no value to a review pass.
+
 ## Phase 3 — subagent settling
 
 Settle the finding list via `../../lib/protocols/subagent.md` — main agent and subagent iterate as colleagues for up to three rounds, early consensus preferred. The polished text is delivered via the output protocol matching the input form (see *Files to read*). No user-facing summary of the internal dialogue is produced.

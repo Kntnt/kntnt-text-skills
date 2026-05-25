@@ -18,6 +18,7 @@ The reader is a journalist scanning many releases per day to find what is newswo
 
 ## Stylistic nuance
 
+<!-- scope: write -->
 ### Structure
 
 1. **Headline.** Present tense, active verbs, maximum 60 characters. Numbers increase news value.
@@ -30,26 +31,32 @@ The reader is a journalist scanning many releases per day to find what is newswo
 8. **Contact information.** Name, title, phone, email.
 9. **Company information.** Short, fact-based, neutral boilerplate.
 
+<!-- scope: write -->
 ### Attribution
 
 Apply the loaded language file's dialogue conventions for attribution. The principle from `rules/style.md` and the Quotation section of `rules/writing.md` are universal; the typographic realisation (quotation marks, speech dash, etc.) is set by the language file.
 
+<!-- scope: write -->
 ### Address
 
 No direct second-person at all. Neutral, journalistic tone.
 
+<!-- scope: write -->
 ### Headline length
 
 Maximum 60 characters for the headline.
 
+<!-- scope: write -->
 ### Strict grammar
 
 Press releases use strict grammar. No sentence fragments, no one-word sentences, no conjunction-as-sentence-opener.
 
+<!-- scope: write -->
 ## Default technique
 
 None. The press release follows journalistic structure — the news first, then context. ABT is not applied as a structural backbone. If the brief explicitly requests ABT, follow the brief.
 
+<!-- scope: review -->
 ## Common pitfalls
 
 Marketing tone. Adjectives like *fantastic*, *revolutionary*, *market-leading* without concrete substance. The press release lets the facts speak; the journalist will decide what is fantastic.

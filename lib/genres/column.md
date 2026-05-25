@@ -30,46 +30,57 @@ Guest columns written as ghostwriter for someone else are still written as colum
 
 ## Stylistic nuance
 
+<!-- scope: write -->
 ### Headings
 
 H1 may be metaphorical or evocative (*Content is not a packet of biscuits and a vacuum cleaner*). H2 subheadings may be narrative, evocative, or rhetorical (*Thanks for the tea*, *Tragicomic*, *Are you offering biscuits and vacuums too?*). Subheadings do not have to be content declarations in the web-copy or report sense — the genre tolerates and even rewards headings that draw the reader forward rather than label what follows.
 
+<!-- scope: write -->
 ### Headline length
 
 Maximum 60 characters.
 
+<!-- scope: write -->
 ### Tone — drawing
 
 The reader is taken along on the story. The text has narrative pull. Underplayed humour, irony, and self-distance are common but not absolutely required. When humour is used it must be subtle and wry — never pasted on for effect. The reader should feel a little special when she catches the implication. Reference, wordplay, a wry observation — never a punch line that names itself as a joke.
 
+<!-- scope: write -->
 ### Address
 
 Direct second-person and explicit first person are both natural and common. The text addresses the reader directly. Personal observations from the author appear without ceremony.
 
+<!-- scope: write -->
 ### Opening
 
 Often a personal anecdote or scene that frames a wider point — but not required. The genre tolerates other openings. The agent does not invent personal anecdotes or scenes that did not happen — see *Common pitfalls*.
 
+<!-- scope: write -->
 ### Free language
 
 Sentence fragments, conjunction-as-sentence-opener, and a more direct tone are permitted. The free language is used for rhythm and drag — not as licence to write loosely.
 
+<!-- scope: write -->
 ### Rhetorical repetition
 
 A phrase that returns through the text, building cumulative effect, is permitted as a load-bearing device. Used sparingly. From `rules/style.md`: this technique is used only in opinion-driven texts (column and opinion), never in fact articles or press releases.
 
+<!-- scope: write -->
 ### Length
 
 Typically five hundred to twelve hundred words. Longer is possible when the reflection warrants it.
 
+<!-- scope: write -->
 ### Ending
 
 A mild CTA is normal, often tied back to the column's theme or implicit metaphor. Not pushy.
 
+<!-- scope: write -->
 ## Default technique
 
 ABT — applied with greater freedom in visibility than in opinion. The A-B-T core (set the conditions, introduce conflict or curiosity, deliver the payoff) must be present, but the column tolerates and benefits from variation in how it is expressed. The structure should never feel formulaic; the drawing quality demands that the reader follow the story, not the framework. See `lib/techniques/abt.md`.
 
+<!-- scope: review -->
 ## Common pitfalls
 
 Pasted-on humour. Humour included for effect rather than naturally emerging. Pasted-on humour is worse than no humour — it signals amateurishness. Subtlety is the test: the reader should feel a little special when she catches the implication, not nudged toward a joke that names itself.

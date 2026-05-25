@@ -37,46 +37,57 @@ Not included: board minutes, meeting minutes, legal documents, contracts. Differ
 
 ## Stylistic nuance
 
+<!-- scope: write -->
 ### Tone
 
 Analytically rigorous *with rhythm* — not dry-and-clinical, not bureaucratic. Value-laden expressions are avoided unless concretely motivated (*A fantastic rise* never; *The rise was noticeable* if the data warrant it). The analysis itself has drive — the text takes the reader on an investigative journey: data observed, patterns identified, mechanisms explained, conclusions drawn.
 
+<!-- scope: write -->
 ### Authorial voice
 
 Invisible personally. The text should feel written by an analyst, not by an author with a persona. No first person singular. The author's authority comes from the evidence and the analysis, not from her presence.
 
+<!-- scope: write -->
 ### Headings
 
 H1 is the report's title, maximum 60 characters. Descriptive H2 and H3 — not numbered (no *1.*, *1.1*, *1.2*). H2 carries the thematic area; H3 carries the function-bearing subsection title. Subsection titles may be simultaneously a label and a discovery — *Thirty-five search terms explain the entire gap*, *Purchase intent crowds out category content* — never teasing, but information-rich so they help the reader navigate and prepare the conclusion.
 
+<!-- scope: write -->
 ### Recurring inner pattern
 
 The PAC pattern (Premise → Analysis → Conclusion) typically appears within each large section: premise (data, historical context, starting point we build on) → analysis (mechanism, finding, what the premise actually means) → conclusion (recommendation or implication). Used where it serves the material, never as a straitjacket. Not avoided for variation's sake either — if the pattern serves the section, it serves. See `lib/techniques/pac.md`.
 
+<!-- scope: write -->
 ### Opening
 
 A short introductory paragraph directly under H1 establishes scope, purpose, and period. No labelled summary section at normal length (about three thousand words). At five thousand words or more, or on explicit request, add an executive summary as a separate front-loaded section.
 
+<!-- scope: write -->
 ### Voice and pronouns
 
 The pronoun system that realises the reporting voice is set by the loaded language file. The universal principle: the reporting or acting organisation speaks in first-person plural; the subject under examination is referred to in the third person, by name when it is an organisation. No direct second-person anywhere.
 
+<!-- scope: write -->
 ### Rhetorical questions
 
 Sparingly and with weight, only to mark a decision point where the reader needs to act (*What does SafeTeam's leadership want?*). The agent does not invent rhetorical questions — if they appear in the source material, they can be kept and improved. Otherwise they are not introduced.
 
+<!-- scope: write -->
 ### Paragraphs
 
 Three to five sentences typical. Strict grammar. No sentence fragments. No one-word sentences. No conjunction-as-sentence-opener. Variation exists but within grammatical bounds. These limits apply even though they are looser in article, case-study, web copy, column, and opinion.
 
+<!-- scope: write -->
 ### Argument order
 
 Evidence before conclusion (general principle from `rules/style.md`, applied strictly here). Conclusion sections come at the end of each major section, after the reader has seen the basis.
 
+<!-- scope: write -->
 ### Numerical precision
 
 High density. Apply the loaded language file's typographic rules rigorously — percentage convention, no-break space between number and unit, dates in the language's standard format. Abbreviations introduced with the full form at first occurrence per `rules/writing.md` — *search engine optimisation (SEO)* — then abbreviated.
 
+<!-- scope: write -->
 ### Tables, graphs, and images
 
 Used where the information is comparative, time-series, or numerically dominated. Table captions describe what is shown. Graphs are referred to with explicit prose around them.
@@ -85,14 +96,17 @@ Used where the information is comparative, time-series, or numerically dominated
 
 Stronger version of the body-text-standalone rule. Each H2 and H3 section must be readable by an analyst who has jumped directly to it from the table of contents, without losing the thread.
 
+<!-- scope: write -->
 ### Length
 
 Typically fifteen hundred to three thousand words. Longer for comprehensive material, but length is governed by what the material warrants — never filler.
 
+<!-- scope: write -->
 ## Default technique
 
 PAC (Premise → Analysis → Conclusion). See `lib/techniques/pac.md`. ABT is not the default for report and is not mentioned here as a fallback — if the user wants ABT in a report, the user names it explicitly.
 
+<!-- scope: review -->
 ## Common pitfalls
 
 Value-laden expressions without motivation. *Fantastic rise*, *catastrophic fall*, *impressive results*. The report lets the numbers speak. Describe what happened with precision, not with adjectives that add drama without information.
@@ -109,6 +123,7 @@ Untraceable sources without marking. Claims whose source cannot be traced must b
 
 Invented recommendations. Recommendations may not be added beyond what the source material supports. If the source material only delivers understanding — without pointing to actions — the report carries that understanding without adding action proposals. There may be a plan the agent does not know about, and speculative proposals risk working against it. Recommendations come from the brief or source material — never from the writing itself.
 
+<!-- scope: review -->
 ## Regulatory reminders specific to report
 
 Sentence fragments and one-word sentences are forbidden in reports even though they are permitted in article, case study, web copy, column, and opinion.
