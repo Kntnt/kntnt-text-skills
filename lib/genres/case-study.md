@@ -18,6 +18,7 @@ A case study is built on the principles of article and reportage — standfirst,
 
 ## Stylistic nuance
 
+<!-- scope: write -->
 ### Structure
 
 1. **Headline (H1).** Describes what the customer achieves, the solution that is used, or the value the customer gets — not the sender. Maximum 60 characters. Right: *Ystadbostäder chose a digital lock system with physical keys*. Wrong: *SafeTeam delivers lock systems to Ystadbostäder*.
@@ -29,30 +30,37 @@ A case study is built on the principles of article and reportage — standfirst,
 7. **Recommendation (H2).** Let the interviewee explicitly say that they are satisfied or recommend the solution. Without this point, the text is not a case study but a project description.
 8. **Closing (H2, short).** Two to four sentences directed at the reader inviting a concrete next step (e.g., *Get in touch with your nearest office*). Must contain a link to a page that helps the reader move on (contact form, product page, landing page). The link's URL and anchor text come from the brief. When it falls naturally, the recommendation and the closing can be woven together in a shared closing section.
 
+<!-- scope: write -->
 ### Length
 
 Medium-length case study: about one thousand words; in-depth: about fifteen hundred. Length follows the material's complexity; do not pad to hit a target.
 
+<!-- scope: write -->
 ### Address
 
 Direct second-person is avoided throughout. The interviewee carries the narrative. The sender is referred to in the third person — never as *we* or *our solution* in the writer's voice. The pronoun system that realises this is set by the loaded language file.
 
+<!-- scope: write -->
 ### Attributed direct speech
 
 Apply the loaded language file's dialogue conventions for attribution. The principle from `rules/style.md` is the carrying-voices mode; the typographic realisation (quotation marks, speech dash, etc.) is set by the language file. Verbatim quotation is reserved for cases where the exact wording is itself essential — see the Quotation section of `rules/writing.md` and the language file's overrides.
 
+<!-- scope: review -->
 ### Repetition rule (specific to case-study elements)
 
 H1, standfirst, lead, *About the customer*, and *The challenge* lie dangerously close to each other. The repetition rule from `rules/style.md` applies. Each element must have its own job. H1 names the solution or the value. The standfirst gives the result. The lead opens the narrative (anecdote, question, concrete situation). *About the customer* gives the background. *The challenge* tells what triggered the assignment. If two elements can be struck without the reader missing new information, you have repeated yourself.
 
+<!-- scope: write -->
 ### In medias res opening
 
 Case studies suit in medias res particularly well when the situation has natural drama (an acute problem, a drill, an event that exposes the value of the solution). The scene then replaces the lead and stands before *About the customer*. See the in medias res mechanic in `lib/techniques/abt.md`.
 
+<!-- scope: write -->
 ## Default technique
 
 ABT. The interviewee's voice and the case-study structure carry the narrative; the ABT arc runs underneath. See `lib/techniques/abt.md`.
 
+<!-- scope: review -->
 ## Common pitfalls
 
 Starting with the sender. Always start with the customer. The first sentence the reader encounters in body text — after H1 and standfirst — must be about the customer's situation, not the supplier's offering.

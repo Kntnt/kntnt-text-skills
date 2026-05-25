@@ -17,6 +17,7 @@ Web copy is not a page-template content type. It is the principle set for writin
 
 Readers of web copy are scanning, not reading linearly. They arrive cold from search or referral, do not always know where on the site they have landed, and need to find what they want and skip the rest. Every choice in web copy serves that scanning behaviour.
 
+<!-- scope: write -->
 ## Stylistic nuance
 
 Scanability is the organising constraint. All other choices serve it.
@@ -31,10 +32,12 @@ Direct, active voice. The reader is spoken to as an individual. The risk is not 
 
 Headline length: maximum 60 characters.
 
+<!-- scope: write -->
 ## Default technique
 
 ABT — both as an outer structural arc over the whole page and, more characteristically, as iterative microstructure within sections. A pillar page can carry an outer ABT: a brief A introducing the reader's situation, one or more B-sections describing the problem space, T-sections presenting the solution. But the more distinctive use on the web is *iterative* ABT — each section, each argument, each reasoning block can carry its own mini-ABT: *this is so (A), but we have this problem (B), the solution is this (T)*. Not overdone. Not every paragraph. Present as a tool wherever a point needs to be hooked and landed. See `lib/techniques/abt.md`.
 
+<!-- scope: review -->
 ## Common pitfalls
 
 Clever headlines or cliffhangers. The scanner sees only the heading. A heading that reads *And then something unexpected happened* does not deliver a content declaration. The section gets skipped.

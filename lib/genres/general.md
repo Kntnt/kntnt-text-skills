@@ -39,18 +39,22 @@ What `general` is *not*: genre-specific texts that have their own content type. 
 
 `general` has minimal stylistic profile of its own. It inherits `rules/style.md` directly and lets the material and purpose govern the details — the point of a fallback is not to force ad-hoc texts into conventions that do not fit them. But some frames are worth writing out.
 
+<!-- scope: write -->
 ### Address
 
 Depends on subgenre and relationship. Letter or email to a private person or well-known customer: direct second-person is natural. Business email without an established relationship: more formal, the impersonal or formal pronoun the loaded language file specifies. Internal memo: third person or first-person plural (the organisation's voice). Ad-hoc text without a clear addressee: the brief governs; ask when unclear.
 
+<!-- scope: write -->
 ### Structure
 
 No imposed template. The material governs. Conventional parts are respected where they exist. Letter: greeting → matter → closing → signature (if requested). Email: subject line (if requested) → greeting → matter → closing. Memo: date/heading → background → point → conclusion or action. Other: logical order the material requires.
 
+<!-- scope: write -->
 ### Length
 
 Range from a single sentence to a few hundred words. Longer texts drift naturally toward article or report — but do not ask if length grows. If the text needs to be long, it is long.
 
+<!-- scope: write -->
 ### Headings
 
 Optional. Short letters, emails, memos need none. Longer general texts can have subheadings (descriptive, maximum 60 characters).
@@ -59,14 +63,17 @@ Optional. Short letters, emails, memos need none. Longer general texts can have 
 
 Still applies — the text should read without depending on subject lines, headings, or other external context.
 
+<!-- scope: write -->
 ### Format conventions
 
 Email may have a subject line generated separately. Letters may have date and address line if requested. Memos may have heading and date. None of this is default — generate these elements only when the brief asks for them.
 
+<!-- scope: write -->
 ## Default technique
 
 None. ABT or PAC may be applied if the material and purpose support it, but nothing is applied automatically. If the user explicitly invokes a technique (*write a text, use the ABT framework*), apply that technique — `general` accepts any installed technique on explicit request.
 
+<!-- scope: review -->
 ## Common pitfalls
 
 Forced genre convention. Adding a standfirst, an ABT arc, subheadings, or other structural apparatus from other content types when the material does not require them. A three-sentence email needs no narrative arc. A short memo needs no lead. `general` inherits `rules/style.md` but not any specific genre template.

@@ -27,6 +27,7 @@ Blog posts are not a separate content type. When the user signals a blog post, a
 
 ## Stylistic nuance
 
+<!-- scope: write -->
 ### Structure
 
 Every article opens in this order:
@@ -39,34 +40,42 @@ Every article opens in this order:
 
 **Multi-paragraph lead.** Normally the lead is a single paragraph, but a multi-paragraph lead can be justified when the article's opening requires a scenario (situation → complication → promise). In such cases the ABT structure should be clear: one or two paragraphs set the scene (A), one paragraph introduces the complication (B), and the last paragraph delivers the article's promise or roadmap (T). A multi-paragraph lead requires that the last paragraph make an explicit promise that the rest of the article then fulfils — do not omit anything that has been promised.
 
+<!-- scope: review -->
 ### Repetition rule (specific to article elements)
 
 H1, standfirst, lead, and the first H2 section lie dangerously close to each other. The repetition rule from `rules/style.md` applies strictly here. Each element has its own distinct job: H1 plus standfirst form a self-contained teaser; the lead introduces and drives forward; the first H2 section concretises with details and examples. Rule of thumb: if you can strike the title, standfirst, or lead without the reader missing any new information, you have repeated yourself.
 
+<!-- scope: write -->
 ### Paragraphs
 
 Normally two to three sentences, maximum about eighty words. Varying sentence length. A single sentence — or a single word — is acceptable when motivated.
 
+<!-- scope: write -->
 ### Subheadings
 
 H2, maximum 60 characters, descriptive. Normally two to three paragraphs between them. The last subheading introduces the closing section.
 
+<!-- scope: write -->
 ### Closing
 
 Fulfil the opening's promise. The last section (under its own H2) should invite the reader to do something concrete based on what the article has been about. The section should contain a link to a page that helps the reader carry out the action (e.g., a contact form, a product page, a landing page). The link's URL and anchor text come from the brief.
 
+<!-- scope: write -->
 ### Headline length
 
 Maximum 60 characters for H1 and every subheading at every level.
 
+<!-- scope: write -->
 ### In medias res opening
 
 A particularly powerful device. An outer ABT that encloses the whole text. The outer A is baked into the scene — never placed as a separate exposition paragraph before B, because then the device is lost. The outer B is the in medias res scene itself, the hook. The outer T is the bridge paragraph that reveals the scene's frame (*It was not an attack…*) followed by the rest of the article. The rest of the article is the outer T and has its own overarching ABT, which can in turn be nested or iterated. Use the device sparingly and only when the situation has genuine drama. Otherwise it becomes mannerism. See `lib/techniques/abt.md`.
 
+<!-- scope: write -->
 ## Default technique
 
 ABT — applied invisibly. The reader should never feel the structure. See `lib/techniques/abt.md`.
 
+<!-- scope: review -->
 ## Common pitfalls
 
 Visible ABT formula. The structure must stay below the surface. If the text feels as if it follows a pattern, the technique has failed.
