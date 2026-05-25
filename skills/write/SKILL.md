@@ -66,7 +66,7 @@ Techniques are not applied from training data; they must be present as installed
 
 At the start of Phase 1, invoke `bin/list-frontmatter.sh lib/genres/` to retrieve all type metadata in one bash call. Match the user's prompt against the triggers semantically — canonical forms plus idiosyncratic terms are sufficient; infer compounds and conjugations. The best match becomes the proposal for the *Content type* field in Phase 1.
 
-When the prompt or metadata triggers a disambiguation rule (blogginlägg → article-or-column; e-book chapter → ask per chapter), present the disambiguation question. Negative triggers (`not_triggers`) prevent false positives. When no candidate matches, propose `general` as fallback.
+When the prompt or metadata triggers a disambiguation rule (blogginlägg → article-or-column; e-book chapter → ask per chapter), present the disambiguation question. Negative triggers (`not_triggers`) prevent false positives. If no genre matches clearly via triggers or semantic likeness, propose the genre whose frontmatter has `default: true` — do not read multiple genre files in full to compare.
 
 Once the type is confirmed, read the full content-type file. Other content-type files are not read in full during this invocation.
 

@@ -2,6 +2,7 @@
 name: general
 swedish_term: "allmän text"
 default_technique: none
+default: true
 triggers:
   - "allmän text"
   - "general text"

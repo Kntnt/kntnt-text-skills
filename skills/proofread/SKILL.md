@@ -13,6 +13,10 @@ Follow `../../lib/protocols/language.md` in **detect mode** — source the langu
 
 Only the *Mechanics* section of the loaded language file (or of `default.md`) applies to this skill. The *Style* section is out of scope here — it is used by the redline / edit passes.
 
+## Genre selection
+
+This skill does not consult a genre file — only *Mechanics* applies. The plugin-wide fallback rule still holds: if any genre selection becomes necessary, use the genre whose frontmatter has `default: true`.
+
 ## Files to read
 
 1. `../../lib/protocols/language.md` — the language determination procedure.

@@ -22,6 +22,8 @@ Apply `../../lib/protocols/proofread.md` against `../../lib/rules/writing.md` an
 
 Apply `../../lib/protocols/redline.md` against `../../lib/rules/style.md`, the loaded language file, the applicable file in `../../lib/genres/`, and the applicable file in `../../lib/techniques/`. The pass produces a finding list.
 
+If no genre matches clearly via triggers or semantic likeness, use the genre whose frontmatter has `default: true`. Do not read multiple genre files in full to compare — the frontmatter inventory plus the fallback flag is sufficient to decide.
+
 ## Phase 3 — dialogue settling
 
 Settle each finding via `../../lib/protocols/dialogue.md`. The user accepts, rejects, counters, or delegates. On delegation, hand the remaining open findings to `../../lib/protocols/subagent.md` and deliver the polished text directly.
