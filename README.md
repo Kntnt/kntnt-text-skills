@@ -172,8 +172,6 @@ The plugin briefly confirms that the module is loaded. The rules then apply for 
 kntnt-text-skills/
 ├── .claude-plugin/
 │   └── plugin.json
-├── bin/
-│   └── list-frontmatter.sh
 ├── skills/
 │   ├── write/SKILL.md
 │   ├── edit/SKILL.md
@@ -201,6 +199,7 @@ kntnt-text-skills/
 │   │   ├── output-inline.md
 │   │   └── output-files.md
 │   ├── genres/
+│   │   ├── _index.md
 │   │   ├── article.md
 │   │   ├── case-study.md
 │   │   ├── press-release.md
@@ -314,7 +313,7 @@ Then describe the type's purpose, stylistic nuance, default technique, and commo
 
 **New language.** Create a file `lib/languages/<lang>.md` named per the POSIX locale form (`sv`, `sv_SE`, `nb_NO`, `de_DE`, etc.). Use the existing language files as a template. Organise the file in two top-level sections: `## Mechanics` (typography, quotation marks, quotation conventions, punctuation conventions, grammar specifics, greetings and closings) and `## Style` (address and voice, AI-tell manifestations, interference from other languages, genre adjustments). The file is self-contained. (For territorial variants, see the inheritance note under *Languages* above — the overlay loader is not yet implemented.)
 
-`/write`, `/redline`, and `/edit` discover new files automatically through `bin/list-frontmatter.sh` (for content types) and through directory inventory (for languages). No registration step is needed.
+`/write`, `/redline`, and `/edit` resolve content types through `lib/genres/_index.md` — a static, hand-maintained index that mirrors the frontmatter of every file in `lib/genres/`. When you add, rename, or remove a genre file, update `_index.md` to match. The skills read the index directly; they do not regenerate it. Languages are still discovered automatically through directory inventory of `lib/languages/`.
 
 Before editing any files under `skills/` or `lib/`, read the **Authoring rules** section below — it captures the architectural constraints that earlier rounds of cleanup have established and that future changes must preserve.
 

@@ -64,7 +64,7 @@ Techniques are not applied from training data; they must be present as installed
 
 ## Content-type detection
 
-At the start of Phase 1, invoke `bin/list-frontmatter.sh lib/genres/` to retrieve all type metadata in one bash call. Match the user's prompt against the triggers semantically — canonical forms plus idiosyncratic terms are sufficient; infer compounds and conjugations. The best match becomes the proposal for the *Content type* field in Phase 1.
+At the start of Phase 1, read `../../lib/genres/_index.md` to retrieve all type metadata in one read. Match the user's prompt against the triggers semantically — canonical forms plus idiosyncratic terms are sufficient; infer compounds and conjugations. The best match becomes the proposal for the *Content type* field in Phase 1.
 
 When the prompt or metadata triggers a disambiguation rule (blogginlägg → article-or-column; e-book chapter → ask per chapter), present the disambiguation question. Negative triggers (`not_triggers`) prevent false positives. If no genre matches clearly via triggers or semantic likeness, propose the genre whose frontmatter has `default: true` — do not read multiple genre files in full to compare.
 
@@ -75,7 +75,7 @@ Once the type is confirmed, read the content-type file. Skip sections preceded b
 Read in this order when the user invokes `/write`:
 
 1. `../../lib/protocols/language.md` — the language determination procedure.
-2. `bin/list-frontmatter.sh lib/genres/` — for content-type detection.
+2. `../../lib/genres/_index.md` — for content-type detection.
 3. The matching `../../lib/genres/<type>.md` — once the type is confirmed in Phase 1.
 4. `../../lib/techniques/<technique>.md` — once the technique is confirmed.
 5. `../../lib/rules/style.md`, `../../lib/rules/writing.md`, and the language file determined above (specific `lib/languages/<lang>.md`, otherwise `lib/languages/default.md`) — for the draft.

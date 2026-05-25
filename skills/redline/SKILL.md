@@ -36,7 +36,7 @@ Read in this order:
 
 1. `../../lib/protocols/language.md` — the language determination procedure.
 2. `../../lib/protocols/proofread.md`, `../../lib/rules/writing.md`, and the language file determined above (specific `lib/languages/<lang>.md`, otherwise `lib/languages/default.md`) — Phase 1.
-3. `bin/list-frontmatter.sh lib/genres/` — to identify the content type.
+3. `../../lib/genres/_index.md` — to identify the content type.
 4. The matching `../../lib/genres/<type>.md` and `../../lib/techniques/<technique>.md`.
 5. `../../lib/rules/style.md` and `../../lib/protocols/redline.md` — Phase 2.
 6. `../../lib/protocols/dialogue.md` — Phase 3.
