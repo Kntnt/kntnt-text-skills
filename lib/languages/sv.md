@@ -33,6 +33,7 @@ The file is organised in two layers. *Mechanics* is the proofread scope — typo
 | Percent in figures | No-break space: 14 % |
 | Percent in running text | Written out: 14 procent (except in technical text) |
 | Degrees in running text | Written out: 45 grader (except in technical text) |
+| Genitiv av namn på -s, -x, -z | Noll-markering är förstahandsval: *Marx teorier*, *CoMaps föregångare*. Apostrof ensam (*Andreas'*) endast vid genuin tvetydighet. *'s* (*CoMaps's*) är aldrig korrekt på svenska. Se grammatikregeln nedan för undantag. |
 
 ### Quotation marks
 
@@ -121,6 +122,35 @@ Reflexive forms (*sin*, *sitt*, *sina*) refer back to the sentence's subject. Po
 #### En/ett agreement
 
 Common gender (*en bil*) and neuter (*ett hus*) agreement must be maintained throughout — articles, adjectives, pronouns.
+
+#### Genitiv av namn på -s, -x, -z
+
+När ett namn (egennamn eller annat substantiv) i grundform slutar på ett s-ljud — alltså på bokstaven *-s*, *-x* eller *-z* — ska genitiv normalt markeras med **noll-markering**: grundformen får stå oförändrad och får sin genitivfunktion av sammanhanget. Det är förstahandsvalet enligt Isof / Språkrådets Frågelådan, TT-språket och Språkkonsulterna.
+
+- *Marx teorier* (inte *Marx's teorier*, inte *Marx' teorier*)
+- *CoMaps föregångare* (inte *CoMaps's föregångare*)
+- *Anders bok*, *Lars cykel*, *Felix skor*
+
+**Apostrof ensam** (*Andreas'*) är tillåten endast när noll-markeringen är genuint tvetydig — alltså när läsaren riskerar att läsa formen som nominativ snarare än genitiv och kontexten inte räddar tolkningen. Använd den sparsamt; i de flesta löpande texter räcker noll-markeringen.
+
+**Engelsk apostrof-s** (*'s*) — *CoMaps's föregångare*, *Andreas's bok* — är **aldrig** korrekt på svenska. Det är en interferens från engelskan och ska rättas. Förstahandsvalet är att stryka *'s* helt och behålla grundformen (*CoMaps föregångare*, *Andreas bok*); endast om den formen är genuint tvetydig kan en ensam apostrof användas (*Andreas'*).
+
+**Fonetiskt undantag.** När namnets uttal slutar på en *vokal* eller på *annan konsonant än ett tydligt s-ljud* — trots att stavningen har *-s*, *-x* eller *-z* sist — ska slut-*s* för genitiv läggas till på vanligt sätt, eftersom genitivet annars inte hörs:
+
+- *Alices bok* (uttalas /aˈliːsəs/ — basformen slutar på vokal i uttalet)
+- *Assanges försvar* (uttalas med /ʃ/, inte /s/, i slutet)
+- *Buschs anförande* (uttalas med /ʃ/-ljud)
+- *Louises kommentar* (basformen slutar på vokal i uttalet)
+- *Ibrahimovics mål* (basformen slutar på /tʃ/-ljud, inte /s/)
+
+**Stam som inte slutar på s-ljud.** För namn vars grundform inte slutar på ett s-ljud lägger man på vanligt vis till *-s* i genitiv, även om stavningen råkar ha andra sibilanter i sig:
+
+- *Lagerkvists romaner*
+- *Wallenbergs intressen*
+
+Regeln gäller även varumärken och företagsnamn som slutar på *-s*, *-x* eller *-z* (*CoMaps*, *Volvox*). Noll-markering är förstahandsvalet; apostrof ensam endast vid tvetydighet; *'s* aldrig.
+
+Källor: Isof / Språkrådets Frågelådan, TT-språket, Språkkonsulterna.
 
 ### Greetings and closings
 
