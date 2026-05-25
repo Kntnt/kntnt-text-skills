@@ -36,7 +36,7 @@ Read in this order:
 2. `../../lib/protocols/proofread.md`, `../../lib/rules/writing.md`, and the language file determined above (specific `lib/languages/<lang>.md`, otherwise `lib/languages/default.md`) — Phase 1.
 3. `bin/list-frontmatter.sh lib/genres/` — to identify the content type.
 4. The matching `../../lib/genres/<type>.md` and `../../lib/techniques/<technique>.md`.
-5. `../../lib/rules/style.md`, `../../lib/protocols/redline.md`, and `../../lib/protocols/finding-format.md` — Phase 2.
+5. `../../lib/rules/style.md` and `../../lib/protocols/redline.md` — Phase 2.
 6. `../../lib/protocols/subagent.md` — Phase 3.
 7. `../../lib/protocols/input.md` and `../../lib/protocols/output.md` — as needed.
 

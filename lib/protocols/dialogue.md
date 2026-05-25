@@ -4,7 +4,7 @@ The settling procedure for a critical-review finding list when the user is in th
 
 ## Presentation format
 
-One finding is presented at a time, in the four-part format defined in `protocols/finding-format.md`. The fourth part — the prompt — is a short closing line that invites one of the four response modes below; the agent does not enumerate the modes every time, since the user knows them, and a simple "What do you think?" or "Apply?" is enough.
+One finding is presented at a time, in the four-part format defined by the calling skill's redline pass. The fourth part — the prompt — is a short closing line that invites one of the four response modes below; the agent does not enumerate the modes every time, since the user knows them, and a simple "What do you think?" or "Apply?" is enough.
 
 Findings are presented one at a time, not in a wall-of-text list. The user responds, the agent moves on. See "Pacing" below for how to handle long finding lists.
 

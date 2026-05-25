@@ -195,7 +195,6 @@ kntnt-text-skills/
 │   │   ├── language.md
 │   │   ├── proofread.md
 │   │   ├── redline.md
-│   │   ├── finding-format.md
 │   │   ├── dialogue.md
 │   │   ├── subagent.md
 │   │   ├── input.md
@@ -235,7 +234,7 @@ The procedure and rule files are arranged in three layers with distinct responsi
 | Layer | File | Content |
 |---|---|---|
 | Rules — what | `lib/rules/writing.md`, `lib/rules/style.md`, `lib/languages/*.md`, `lib/genres/*.md`, `lib/techniques/*.md` | The universal writing conventions, the substantive style foundation, the per-language realisations, the content-type-specific rules, and the narrative or analytical arcs. |
-| Procedure — how | `lib/protocols/language.md`, `lib/protocols/proofread.md`, `lib/protocols/redline.md`, `lib/protocols/finding-format.md`, `lib/protocols/dialogue.md`, `lib/protocols/subagent.md` | The language determination procedure, the proofread pass procedure, the redline pass procedure, the shared finding format, the human-in-the-loop settling procedure, the subagent settling procedure. |
+| Procedure — how | `lib/protocols/language.md`, `lib/protocols/proofread.md`, `lib/protocols/redline.md`, `lib/protocols/dialogue.md`, `lib/protocols/subagent.md` | The language determination procedure, the proofread pass procedure, the redline pass procedure (including the shared finding format), the human-in-the-loop settling procedure, the subagent settling procedure. |
 | Skill — entry | `skills/proofread/SKILL.md`, `skills/redline/SKILL.md`, `skills/edit/SKILL.md` | Each composes one or more procedure files. No skill duplicates rule content or procedure content; everything is by reference. |
 
 Changing a rule requires editing exactly one place. Adding a new content type, technique, or language requires no `SKILL.md` change. The inheritance is enforced by composition — `/redline` and `/edit` reference the same `protocols/proofread.md` and `protocols/redline.md` files that `/proofread` and `/redline` use respectively.
