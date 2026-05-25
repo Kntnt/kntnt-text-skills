@@ -8,7 +8,7 @@ The plugin exposes seven skills, organised in three groups.
 
 **Automatically-triggered task skill:**
 
-- `/proofread` — conservative proofreading. Corrects only what is objectively wrong (spelling, grammar, punctuation, the conventions in the loaded language file). Never changes word choice, word order, structure, tone, or argumentation. The lightest of three review skills: `proofread ⊂ redline ⊂ edit`. Triggers on the `/proofread` slash command and on natural-language proofreading requests.
+- `/proofread` — conservative proofreading. Corrects only what is objectively wrong (spelling, grammar, punctuation, the conventions in the loaded mechanics file). Never changes word choice, word order, structure, tone, or argumentation. The lightest of three review skills: `proofread ⊂ redline ⊂ edit`. Triggers on the `/proofread` slash command and on natural-language proofreading requests.
 
 **Slash-only task skills:**
 
@@ -105,7 +105,7 @@ Critical editorial review with human-in-the-loop. Use it when a text exists, you
 /redline sv @draft.md
 ```
 
-Phase 1 runs silently — the technical corrections are baked into the final result and are not shown separately. Phase 2 produces a list of findings against the full rule set (`rules/style.md`, the loaded language file, the applicable content-type file, the applicable technique file). Phase 3 presents the findings one at a time in a four-part format: marking (the offending span or location), problem (what is wrong, with rule reference), solution (a concrete proposal), and a prompt to which you respond in one of four ways:
+Phase 1 runs silently — the technical corrections are baked into the final result and are not shown separately. Phase 2 produces a list of findings against the full rule set (`rules/style.md`, the loaded mechanics and style files, the applicable content-type file, the applicable technique file). Phase 3 presents the findings one at a time in a four-part format: marking (the offending span or location), problem (what is wrong, with rule reference), solution (a concrete proposal), and a prompt to which you respond in one of four ways:
 
 - **Accept** — the proposal is applied.
 - **Reject** — the proposal is dropped.
@@ -141,7 +141,7 @@ If no language argument is given, `/write` proposes a target language based on t
 
 **Phase 2 — idea.** The plugin presents a short plan for structure, tone, ABT or PAC usage, address, and language. The default is to wait for your approval before the draft is written. Bypass: if you have pre-authorised in the original prompt that the plugin should proceed without asking (*just produce the draft*, *no need to wait*), the plugin presents the idea and continues to Phase 3 immediately.
 
-**Phase 3 — draft.** The plugin writes the draft per the content-type file, the technique file, and the language file.
+**Phase 3 — draft.** The plugin writes the draft per the content-type file, the technique file, and the loaded language files.
 
 **Phase 4 — redline review with subagent settling.** The plugin applies the same procedure `/edit` runs — `protocols/redline.md` plus `protocols/subagent.md` — to the draft. Main agent and subagent iterate for up to three rounds, early consensus encouraged. You see only the polished final result — the internal dialogue is not reported.
 
@@ -219,7 +219,7 @@ kntnt-text-skills/
 └── README.md
 ```
 
-Each `SKILL.md` is a short entry point that references the shared modules via relative paths. Rules, language files, content types, and techniques live in `lib/` so every skill can share the same rule set without duplication. All files outside `lib/languages/` are written in British English; language-specific conventions and examples live in the matching language file.
+Each `SKILL.md` is a short entry point that references the shared modules via relative paths. Rules, language files, content types, and techniques live in `lib/` so every skill can share the same rule set without duplication. All files outside `lib/languages/` are written in British English; language-specific conventions and examples live in the matching language layer files.
 
 ## Review architecture: proofread ⊂ redline ⊂ edit
 
@@ -259,7 +259,7 @@ The plugin covers nine content types — the last is a fallback:
 | Opinion piece | opinionstext | ABT (pushing, explicit-argumentative) |
 | General (fallback) | allmän text | none |
 
-Each content type has its own file in `lib/genres/` describing its purpose and context, stylistic nuance (tone, length, structure, headline conventions, address), default technique, and common pitfalls. The files are compact — only what distinguishes the type from the general rules. Language-specific realisations (e.g., which mark renders attribution in a particular language) come from the loaded language file.
+Each content type has its own file in `lib/genres/` describing its purpose and context, stylistic nuance (tone, length, structure, headline conventions, address), default technique, and common pitfalls. The files are compact — only what distinguishes the type from the general rules. Language-specific realisations (e.g., which mark renders attribution in a particular language) come from the loaded language files. Sections within each genre file are annotated with `<!-- scope: write -->` or `<!-- scope: review -->` markers so write-only sections are skipped during review passes and vice versa; sections relevant to both phases are left unmarked.
 
 Maximum headline length is 60 characters for every H1, H2, H3, and below across all content types.
 
@@ -311,7 +311,11 @@ disambiguation:
 
 `triggers` lists the canonical terms that should fire this content type. `not_triggers` lists exceptions — phrases that would otherwise match but should not. `disambiguation` lists phrases that match this type but require asking the user before committing (e.g., *blogginlägg* maps to article or column). Use `lib/genres/article.md` as the working template.
 
-Then describe the type's purpose, stylistic nuance, default technique, and common pitfalls following the pattern in the existing content-type files.
+A single genre is flagged as the fallback by adding `default: true` to its frontmatter — `lib/genres/general.md` currently carries this flag. When no trigger matches and no semantic likeness lands cleanly, skills fall back to the genre whose frontmatter has `default: true`. Exactly one genre must carry the flag.
+
+Then describe the type's purpose, stylistic nuance, default technique, and common pitfalls following the pattern in the existing content-type files. Annotate each section heading with `<!-- scope: write -->` (sections relevant only to drafting — typically address, structure, length, headings, format conventions, default technique) or `<!-- scope: review -->` (sections relevant only to critical review — typically common pitfalls and review-only checks). Sections relevant to both phases (purpose, trigger keywords) are left unmarked. The review skills (`/redline`, `/edit`) skip write-scoped sections; the write skill (`/write`) skips review-scoped sections.
+
+Finally, add a matching block for the new genre to `lib/genres/_index.md` so the skills can discover it without reading every genre file in full.
 
 **New technique.** Create a file `lib/techniques/<name>.md` with the corresponding frontmatter. Describe the technique in parallel with ABT and PAC: the carrying parts, variants, where it applies, concrete examples.
 
@@ -323,13 +327,13 @@ Before editing any files under `skills/` or `lib/`, read the **Authoring rules**
 
 ## Design principles
 
-- **DRY.** Shared rules live in one place. The proofread pass is described once across three layers. Language-specific conventions live only in the language file. No trigger keywords are duplicated between `SKILL.md` and content-type frontmatter.
-- **Modular.** New content type = one new file. New technique = one new file. New language = one new file. No `SKILL.md` needs to change.
+- **DRY.** Shared rules live in one place. The proofread pass is described once across three layers. Language-specific conventions live only in the language layer files. No trigger keywords are duplicated between `SKILL.md` and content-type frontmatter.
+- **Modular.** New content type = one new file (plus a row in `lib/genres/_index.md`). New technique = one new file. New language = two new files (`<lang>-mechanics.md` + `<lang>-style.md`; the style file is optional for languages with no meaningful style layer). No `SKILL.md` needs to change.
 - **Manual context loaders.** `/writing-rules`, `/abt`, `/pac` fire only on explicit slash commands. Their descriptions document what they do — not when to invoke them.
 - **Tools, not algorithms.** The skill files describe outcomes and rules. They do not specify matching algorithms or file-search heuristics — the plugin solves the mechanics with standard tools (Glob, Grep, Read, Edit, Write, Bash).
 - **The user, not the author.** All skill-internal text addresses *the user*. The plugin is generic; the house voice it embodies is documented in metadata, not embedded in the skill text.
-- **English baseline, language layer for the rest.** Everything outside `lib/languages/` is written in British English. Per-language conventions, examples, and overrides live in `lib/languages/<lang>.md`.
-- **Token-aware.** The subagent is invoked once per `/write` (Phase 4, auto), once per `/edit` (Phase 3, auto), and once per `/redline` invocation when the user delegates an open finding. Maximum three iterations per invocation, early termination preferred. Skills load one language file (the matching one), not all of them.
+- **English baseline, language layer for the rest.** Everything outside `lib/languages/` is written in British English. Per-language conventions, examples, and overrides live in `lib/languages/<lang>-mechanics.md` and `lib/languages/<lang>-style.md`.
+- **Token-aware.** The subagent is invoked once per `/write` (Phase 4, auto), once per `/edit` (Phase 3, auto), and once per `/redline` invocation when the user delegates an open finding. Maximum three iterations per invocation, early termination preferred. Skills load only the language layers each pass needs (`/proofread` reads mechanics; `/redline`, `/edit`, and `/write` read both) plus the construction-scoped rule files that match constructions present in the input.
 
 ## Authoring rules
 
@@ -364,6 +368,8 @@ These rules govern how to edit the files in this plugin. They exist to prevent a
 - Compare `skills/redline/SKILL.md` and `skills/edit/SKILL.md` — Phase 1 and Phase 2 sections should not be duplicated verbatim. Shared procedure belongs in a shared protocol file.
 - Search for specific rule-file names (`rules/writing.md`, `rules/style.md`, the construction-scoped rule files, the language layer files) inside protocol files. They should not appear; protocols speak of *the loaded rule files* and *the loaded language file*.
 - Confirm `lib/languages/` contains a `<lang>-mechanics.md` per installed language and a companion `<lang>-style.md` for every language that has a meaningful style layer. The default fallback ships mechanics only (`default-mechanics.md`). The mechanics file carries proofread-scope conventions; the style file carries redline / edit-scope conventions. Place a new convention in the file that matches its layer.
+- Confirm `lib/genres/_index.md` lists every genre file in `lib/genres/` with matching frontmatter (`name`, `swedish_term`, `default_technique`, `triggers`, plus `default`, `not_triggers`, and `disambiguation` where set). Exactly one genre carries `default: true`.
+- Open each genre file and confirm sections are annotated with `<!-- scope: write -->` or `<!-- scope: review -->` markers where the section is relevant to only one phase. Sections relevant to both (purpose, trigger keywords) stay unmarked.
 - Search for Swedish-only or English-only prose outside `lib/languages/`. All files outside the language directory should be in British English with no embedded Swedish examples (canonical Swedish triggers in genre frontmatter, which are user-input matchers, are the documented exception).
 - Read each skill body. If it summarises content also covered in a referenced file, pick one location and remove the duplicate. The language-resolution procedure is the documented exception — it lives inline in every consuming SKILL.md by design.
 - Read each frontmatter description. Does it overstate equivalence between skills? Does it differentiate this skill from siblings clearly enough that Claude knows when to pick it?
