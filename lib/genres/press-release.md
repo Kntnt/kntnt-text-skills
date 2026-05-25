@@ -34,7 +34,7 @@ The reader is a journalist scanning many releases per day to find what is newswo
 <!-- scope: write -->
 ### Attribution
 
-Apply the loaded language file's dialogue conventions for attribution. The principle from `rules/style.md` and the Quotation section of `rules/writing.md` are universal; the typographic realisation (quotation marks, speech dash, etc.) is set by the language file.
+Apply the loaded language file's dialogue conventions for attribution. The principle from `rules/style.md` and `rules/quotation.md` are universal; the typographic realisation (quotation marks, speech dash, etc.) is set by the language file.
 
 <!-- scope: write -->
 ### Address

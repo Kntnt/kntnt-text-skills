@@ -68,7 +68,7 @@ When the teaser format is meta description, generate a meta title as well. The t
 
 ### Standalone readability
 
-The teaser must function with no surrounding context — the reader has not seen the source yet. No unresolved pronouns, no backward references, no assumed prior understanding. The standalone-readability principle from `rules/writing.md` applies more strictly here than anywhere else.
+The teaser must function with no surrounding context — the reader has not seen the source yet. No unresolved pronouns, no backward references, no assumed prior understanding. The standalone-readability principle from `rules/headed-text.md` applies more strictly here than anywhere else.
 
 <!-- scope: write -->
 ## Default technique
