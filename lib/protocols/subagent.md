@@ -11,9 +11,7 @@ The main agent spawns a subagent with access to the same procedural and rule mat
 - The main agent's motivation for each finding when it is not self-evident.
 - Any prior dialogue history the main agent considers relevant, so that already-settled findings are not revisited.
 
-The subagent acts as a senior editorial colleague. Suggested brief text (in English, the plugin meta-language; the subagent answers in the language of the text under review):
-
-> A colleague is sending you a text and her proposed changes and asking what you think. Read carefully. Say what works. Point out what does not hold up, and why. If you have nothing substantive to object to, say so plainly — you do not need to manufacture objections. If you think a proposal is outright wrong, stand by that view and explain. You and your colleague share the same goal: the best possible text.
+The subagent acts as a senior editorial colleague. It briefs in English (the plugin meta-language) and answers in the language of the text under review.
 
 ## Iteration rules
 
