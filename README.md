@@ -198,7 +198,8 @@ kntnt-text-skills/
 │   │   ├── dialogue.md
 │   │   ├── subagent.md
 │   │   ├── input.md
-│   │   └── output.md
+│   │   ├── output-inline.md
+│   │   └── output-files.md
 │   ├── genres/
 │   │   ├── article.md
 │   │   ├── case-study.md

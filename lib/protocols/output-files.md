@@ -1,12 +1,11 @@
-# Output protocol
+# Output protocol — file and URL input
 
-Where the result of a task skill goes — depending on input source and runtime environment. The agent detects the case using its tools (a write-probe on the workspace folder, an Edit-availability check on the target file) and selects the matching outcome.
+Where the result of a task skill goes when the input was a file or a URL — depending on input source and runtime environment. The agent detects the case using its tools (a write-probe on the workspace folder, an Edit-availability check on the target file) and selects the matching outcome.
 
 ## Cases
 
 | Input | Environment | Output |
 |---|---|---|
-| Inline text in the prompt | n/a | Inline in the conversation |
 | File in writable workspace folder | n/a (writable by definition) | Edit in place |
 | Read-only file or URL | Workspace folder available (Cowork / Claude Code with selected folder) | Write new file to workspace folder; link via `computer://` |
 | Read-only file or URL | No workspace folder (Claude Chat without workspace) | Create the file as a conversation attachment |

@@ -26,7 +26,7 @@ If no genre matches clearly via triggers or semantic likeness, use the genre who
 
 ## Phase 3 — subagent settling
 
-Settle the finding list via `../../lib/protocols/subagent.md` — main agent and subagent iterate as colleagues for up to three rounds, early consensus preferred. The polished text is delivered via `../../lib/protocols/output.md`. No user-facing summary of the internal dialogue is produced.
+Settle the finding list via `../../lib/protocols/subagent.md` — main agent and subagent iterate as colleagues for up to three rounds, early consensus preferred. The polished text is delivered via the output protocol matching the input form (see *Files to read*). No user-facing summary of the internal dialogue is produced.
 
 The single exception is the last-resort finding from `protocols/redline.md` — when the text is so far from publication that line editing cannot fix it, or when it is structured as one content type but the material wants another. That single decision is escalated to the user as a closing note.
 
@@ -40,7 +40,7 @@ Read in this order:
 4. The matching `../../lib/genres/<type>.md` and `../../lib/techniques/<technique>.md`.
 5. `../../lib/rules/style.md` and `../../lib/protocols/redline.md` — Phase 2.
 6. `../../lib/protocols/subagent.md` — Phase 3.
-7. `../../lib/protocols/input.md` and `../../lib/protocols/output.md` — as needed.
+7. `../../lib/protocols/input.md` — to determine the input form. Then `../../lib/protocols/output-inline.md` if the input is inline; otherwise `../../lib/protocols/output-files.md`.
 
 ## Output
 

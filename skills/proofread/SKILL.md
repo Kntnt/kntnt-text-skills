@@ -23,5 +23,5 @@ This skill does not consult a genre file — only *Mechanics* applies. The plugi
 2. `../../lib/protocols/proofread.md` — the procedure and the full scope.
 3. `../../lib/rules/writing.md` — universal writing conventions.
 4. `../../lib/languages/<lang>.md` — the specific language file determined above. If none exists for the determined language, use `../../lib/languages/default.md` instead.
-5. `../../lib/protocols/input.md` — only when the input source needs resolving (file reference, URL, bare `/proofread`).
-6. `../../lib/protocols/output.md` — only as needed to deliver the result.
+5. `../../lib/protocols/input.md` — to determine the input form (inline text, file, or URL).
+6. `../../lib/protocols/output-inline.md` if the input is inline; otherwise `../../lib/protocols/output-files.md` — to deliver the result.
