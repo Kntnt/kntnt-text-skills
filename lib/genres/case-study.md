@@ -43,7 +43,7 @@ Direct second-person is avoided throughout. The interviewee carries the narrativ
 <!-- scope: write -->
 ### Attributed direct speech
 
-Apply the loaded language file's dialogue conventions for attribution. The principle from `rules/style.md` is the carrying-voices mode; the typographic realisation (quotation marks, speech dash, etc.) is set by the language file. Verbatim quotation is reserved for cases where the exact wording is itself essential — see the Quotation section of `rules/writing.md` and the language file's overrides.
+Apply the loaded language file's dialogue conventions for attribution. The principle from `rules/style.md` is the carrying-voices mode; the typographic realisation (quotation marks, speech dash, etc.) is set by the language file. Verbatim quotation is reserved for cases where the exact wording is itself essential — see `rules/quotation.md` and the language file's overrides.
 
 <!-- scope: review -->
 ### Repetition rule (specific to case-study elements)

@@ -85,7 +85,7 @@ Evidence before conclusion (general principle from `rules/style.md`, applied str
 <!-- scope: write -->
 ### Numerical precision
 
-High density. Apply the loaded language file's typographic rules rigorously — percentage convention, no-break space between number and unit, dates in the language's standard format. Abbreviations introduced with the full form at first occurrence per `rules/writing.md` — *search engine optimisation (SEO)* — then abbreviated.
+High density. Apply the loaded language file's typographic rules rigorously — percentage convention, no-break space between number and unit, dates in the language's standard format. Abbreviations introduced with the full form at first occurrence per `rules/abbreviations.md` — *search engine optimisation (SEO)* — then abbreviated.
 
 <!-- scope: write -->
 ### Tables, graphs, and images

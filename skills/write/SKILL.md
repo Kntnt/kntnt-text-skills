@@ -10,9 +10,19 @@ Four-phase content creation.
 
 ## Language determination
 
-Follow `../../lib/protocols/language.md` in **propose mode** — propose a target language based on the prompt's language (Swedish prompt → Swedish text) and any source material, and ask the user to confirm. Honour the chosen language for the rest of the run.
+Propose a target language and confirm with the user (propose mode). The resolution procedure:
 
-Phase 3 (draft) and Phase 4 (redline + subagent) use the full language file (both *Mechanics* and *Style*). When `default.md` is in use, only *Mechanics* exists — drafting proceeds with the universal style foundation in `rules/style.md` carrying the style layer.
+1. **Argument.** If the user passed a language argument (e.g. `sv`, `sv_SE`, `en`, `en_GB`, `en_US`), use it as the candidate. A bare argument (`sv`, `en`) that matches no file directly but matches several territorial variants goes to the disambiguation question below.
+2. **Propose.** Without an argument, propose a target language based on the prompt's language (Swedish prompt → Swedish text) and any source material, and ask the user to confirm.
+3. **Inventory.** Look for `<lang>-mechanics.md` and `<lang>-style.md` in `../../lib/languages/` for the candidate:
+   - One language match: load both layers if both exist; if only the mechanics file exists, drafting proceeds without a language-specific style overlay.
+   - Several language matches: ask the user which to use.
+   - No match: fall back to `../../lib/languages/default-mechanics.md` and mention this in the reply (in English):
+     > No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>-mechanics.md` and `lib/languages/<code>-style.md` for stricter control.
+
+Honour the chosen language for the rest of the run.
+
+Phase 3 (draft) and Phase 4 (redline + subagent) use both layers (`<lang>-mechanics.md` and `<lang>-style.md`). When only `default-mechanics.md` is available, drafting proceeds with the universal style foundation in `rules/style.md` carrying the style layer.
 
 ## Phase 1 — brief acquisition
 
@@ -44,11 +54,23 @@ No subagent is invoked in Phase 2.
 
 ## Phase 3 — draft
 
-Write the draft per the applicable content-type file, technique file, and language file.
+Write the draft per the applicable content-type file, technique file, and language file(s).
 
 ## Phase 4 — automatic redline review with subagent settling
 
-Apply `../../lib/protocols/redline.md` to the draft to produce a finding list, then settle the findings via `../../lib/protocols/subagent.md` — main agent and subagent iterate as colleagues for up to three rounds, early consensus preferred. The main agent has final decision authority. The polished text is delivered to the user via the output protocol matching the input form (see *Files to read*). No user-facing summary of the internal dialogue is produced.
+Apply the same review machinery as `/edit` to the draft.
+
+### Conditional rule loading for Phase 4
+
+Inspect the drafted text before loading the construction-scoped rule files. Load only the rule files that match constructions actually present in the draft:
+
+- Always: `../../lib/rules/writing.md` — the universal punctuation rules (comma, dash, parenthesis).
+- If the draft contains quotation marks, dialogue, or block quotations: `../../lib/rules/quotation.md`.
+- If the draft contains initialisms or acronyms: `../../lib/rules/abbreviations.md`.
+- If the draft contains H1, headings, subheadings, or a standfirst structure: `../../lib/rules/headed-text.md`.
+- If the draft contains bulleted, numbered, or definition lists: `../../lib/rules/lists.md`.
+
+Then apply `../../lib/protocols/proofread.md` (silent Phase 4a) against those rule files and the language mechanics file, followed by `../../lib/protocols/redline.md` (Phase 4b) against `../../lib/rules/style.md`, the language style file, the chosen genre file, and the chosen technique file — producing a finding list. Settle the findings via `../../lib/protocols/subagent.md` — main agent and subagent iterate as colleagues for up to three rounds, early consensus preferred. The main agent has final decision authority. The polished text is delivered to the user via the output protocol matching the input form (see *Files to read*). No user-facing summary of the internal dialogue is produced.
 
 There is no post-draft user-facing dialogue.
 
@@ -74,15 +96,14 @@ Once the type is confirmed, read the content-type file. Skip sections preceded b
 
 Read in this order when the user invokes `/write`:
 
-1. `../../lib/protocols/language.md` — the language determination procedure.
-2. `../../lib/genres/_index.md` — for content-type detection.
-3. The matching `../../lib/genres/<type>.md` — once the type is confirmed in Phase 1.
-4. `../../lib/techniques/<technique>.md` — once the technique is confirmed.
-5. `../../lib/rules/style.md`, `../../lib/rules/writing.md`, and the language file determined above (specific `lib/languages/<lang>.md`, otherwise `lib/languages/default.md`) — for the draft.
-6. `../../lib/protocols/input.md` — to determine the input form when source material is provided.
-7. `../../lib/protocols/proofread.md` and `../../lib/protocols/redline.md` — for Phase 4 review of the draft.
-8. `../../lib/protocols/subagent.md` — for Phase 4 settling.
-9. `../../lib/protocols/output-inline.md` if the input is inline; otherwise `../../lib/protocols/output-files.md` — to deliver the result.
+1. `../../lib/genres/_index.md` — for content-type detection.
+2. The matching `../../lib/genres/<type>.md` — once the type is confirmed in Phase 1.
+3. `../../lib/techniques/<technique>.md` — once the technique is confirmed.
+4. `../../lib/rules/style.md`, `../../lib/rules/writing.md`, and the language files determined above (specific `lib/languages/<lang>-mechanics.md` plus `lib/languages/<lang>-style.md` where it exists, otherwise `lib/languages/default-mechanics.md`) — for the draft.
+5. `../../lib/protocols/input.md` — to determine the input form when source material is provided.
+6. `../../lib/protocols/proofread.md` and `../../lib/protocols/redline.md` — for Phase 4 review of the draft. Load the construction-scoped rule files (`quotation.md`, `abbreviations.md`, `headed-text.md`, `lists.md`) only for the constructions present in the draft per *Conditional rule loading for Phase 4* above.
+7. `../../lib/protocols/subagent.md` — for Phase 4 settling.
+8. `../../lib/protocols/output-inline.md` if the input is inline; otherwise `../../lib/protocols/output-files.md` — to deliver the result.
 
 ## Special handling
 

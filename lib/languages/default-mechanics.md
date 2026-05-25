@@ -1,17 +1,18 @@
 ---
 name: default
 language: (baseline)
+layer: mechanics
 ---
 
-# Default (baseline)
+# Default mechanics (baseline)
 
-The fallback file. Loaded when no language-specific file exists for the input language. Provides international-standard conventions where they exist (ISO 8601 dates, SI unit spacing, etc.) and internationally neutral defaults where no standard applies.
+The fallback mechanics file. Loaded when no language-specific mechanics file exists for the input language. Provides international-standard conventions where they exist (ISO 8601 dates, SI unit spacing, etc.) and internationally neutral defaults where no standard applies.
 
 When a calling skill falls back to this file, it also reports in the reply that a language-specific file is missing and suggests creating one.
 
-## Mechanics
+There is no companion `default-style.md`. The style layer (address, AI-tell manifestations, interference patterns, genre adjustments) is inherently language-and-culture-bound and has no meaningful baseline.
 
-### Typography
+## Typography
 
 | Convention | Realisation |
 |---|---|
@@ -33,20 +34,20 @@ When a calling skill falls back to this file, it also reports in the reply that 
 | Percent in running text | Symbol kept: 14% |
 | Degrees in running text | Symbol kept: 90° |
 
-### Quotation marks
+## Quotation marks
 
 Straight ASCII quotation marks throughout — outer `"…"`, inner `'…'`. These are universally readable; Markdown/Pandoc smart-quote rendering produces typographically correct marks per language at render time when configured.
 
-### Quotation conventions
+## Quotation conventions
 
-Apply the universal regime in `rules/writing.md` as written. Use straight ASCII marks for all three modes (run-in, block, dialogue).
+Apply the universal regime in `rules/quotation.md` as written. Use straight ASCII marks for all three modes (run-in, block, dialogue).
 
 **Punctuation relative to quotation marks.** Apply the logical (British) convention: full stops and commas go inside the quotation marks only when they belong to the quoted material:
 
 - He called it "revolutionary".
 - "It was revolutionary."
 
-### Punctuation conventions
+## Punctuation conventions
 
 **Dashes.** EN-dash (–) with spaces for parenthetical insertions and dramatic pauses. EN-dash without spaces for ranges.
 
@@ -56,6 +57,6 @@ Apply the universal regime in `rules/writing.md` as written. Use straight ASCII 
 
 Subsequently use the abbreviation alone. Generally familiar abbreviations (UN, FBI, NATO) need no introduction.
 
-### Greetings and closings
+## Greetings and closings
 
 Comma after the salutation (*Dear Susanne,*). Comma after the closing phrase (*Best regards,*) on its own line, then the name on the next line.
