@@ -1,6 +1,6 @@
 ---
 name: write
-description: Four-phase content creation. Phase 1 acquires a brief over nine fields the user accepts, modifies, or discusses. Phase 2 presents the idea (structure, tone, ABT/PAC plan, address, length). Phase 3 writes the draft against the applicable content-type, technique, and language files. Phase 4 polishes via the redline pass with subagent settling — only the polished final text is delivered. Optional language argument (`/write sv`, `/write en_GB`); without it the skill proposes a target language and asks the user to confirm. Blog posts disambiguate to article or column. Activates only via the explicit `/write` slash command.
+description: Four-phase content creation. Phase 1 acquires a brief over nine fields the user accepts, modifies, or discusses. Phase 2 presents the idea (structure, tone, ABT/PAC plan, address, length). Phase 3 writes the draft against the applicable content-type, technique, and language files. Phase 4 polishes via the redline pass and by default applies the findings directly; the subagent loop in protocols/subagent.md is opt-in via `--max-iterations=N` (0–3, default 0), and a last-resort developmental finding raises the floor to 1. Only the polished final text is delivered. Optional language argument (`/write sv`, `/write en_GB`); without it the skill proposes a target language and asks the user to confirm. Blog posts disambiguate to article or column. Activates only via the explicit `/write` slash command.
 disable-model-invocation: true
 ---
 
@@ -14,15 +14,15 @@ Propose a target language and confirm with the user (propose mode). The resoluti
 
 1. **Argument.** If the user passed a language argument (e.g. `sv`, `sv_SE`, `en`, `en_GB`, `en_US`), use it as the candidate. A bare argument (`sv`, `en`) that matches no file directly but matches several territorial variants goes to the disambiguation question below.
 2. **Propose.** Without an argument, propose a target language based on the prompt's language (Swedish prompt → Swedish text) and any source material, and ask the user to confirm.
-3. **Inventory.** Look for `<lang>-mechanics.md` and `<lang>-style.md` in `../../lib/languages/` for the candidate:
-   - One language match: load both layers if both exist; if only the mechanics file exists, drafting proceeds without a language-specific style overlay.
+3. **Inventory.** Look for `<lang>.md` in `../../lib/languages/` for the candidate:
+   - One language match: load the file; both layers live in named sections. If the file contains no *Style* section, drafting proceeds without a language-specific style overlay.
    - Several language matches: ask the user which to use.
    - No match: fall back to `../../lib/languages/default-mechanics.md` and mention this in the reply (in English):
-     > No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>-mechanics.md` and `lib/languages/<code>-style.md` for stricter control.
+     > No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>.md` for stricter control.
 
 Honour the chosen language for the rest of the run.
 
-Phase 3 (draft) and Phase 4 (redline + subagent) use both layers (`<lang>-mechanics.md` and `<lang>-style.md`). When only `default-mechanics.md` is available, drafting proceeds with the universal style foundation in `rules/style.md` carrying the style layer.
+Phase 3 (draft) and Phase 4 (redline + subagent) use both the *Mechanics* and *Style* sections of the loaded language file. When only `default-mechanics.md` is available, drafting proceeds with the universal style foundation in `rules/style.md` carrying the style layer.
 
 ## Phase 1 — brief acquisition
 
@@ -56,23 +56,36 @@ No subagent is invoked in Phase 2.
 
 Write the draft per the applicable content-type file, technique file, and language file(s).
 
-## Phase 4 — automatic redline review with subagent settling
+## Phase 4 — automatic redline review
 
 Apply the same review machinery as `/edit` to the draft.
 
-### Conditional rule loading for Phase 4
+### Rule application for Phase 4
 
-Inspect the drafted text before loading the construction-scoped rule files. Load only the rule files that match constructions actually present in the draft:
+Apply the universal punctuation rules in `../../lib/rules/writing.md` always. Apply the matching sections of `../../lib/rules/constructions.md` (quotation, abbreviation, headed-text, lists) only when the draft contains those constructions. Section-level filtering is cognitive — the file is loaded in full as part of Batch 2 below and the relevant sections are read against the draft once it exists.
 
-- Always: `../../lib/rules/writing.md` — the universal punctuation rules (comma, dash, parenthesis).
-- If the draft contains quotation marks, dialogue, or block quotations: `../../lib/rules/quotation.md`.
-- If the draft contains initialisms or acronyms: `../../lib/rules/abbreviations.md`.
-- If the draft contains H1, headings, subheadings, or a standfirst structure: `../../lib/rules/headed-text.md`.
-- If the draft contains bulleted, numbered, or definition lists: `../../lib/rules/lists.md`.
+Then apply `../../lib/protocols/proofread.md` (silent Phase 4a) against those rule files and the *Mechanics* section of the loaded language file, followed by `../../lib/protocols/redline.md` (Phase 4b) against `../../lib/rules/style.md`, the *Style* section of the language file, the chosen genre file, and the chosen technique file — producing a finding list.
 
-Then apply `../../lib/protocols/proofread.md` (silent Phase 4a) against those rule files and the language mechanics file, followed by `../../lib/protocols/redline.md` (Phase 4b) against `../../lib/rules/style.md`, the language style file, the chosen genre file, and the chosen technique file — producing a finding list. Settle the findings via `../../lib/protocols/subagent.md` — main agent and subagent iterate as colleagues for up to three rounds, early consensus preferred. The main agent has final decision authority. The polished text is delivered to the user via the output protocol matching the input form (see *Files to read*). No user-facing summary of the internal dialogue is produced.
+### Settling
 
-There is no post-draft user-facing dialogue.
+**Default behaviour.** The main agent applies the finding list directly to the drafted text and delivers the polished result via the output protocol matching the input form (see *Files to read*). No subagent is invoked.
+
+**Subagent opt-in.** The subagent loop in `../../lib/protocols/subagent.md` runs only when explicitly requested. The ceiling on iterations comes from the `--max-iterations=N` flag in the invocation:
+
+- `--max-iterations=0` (default): no subagent — main agent applies directly as above.
+- `--max-iterations=1` / `=2` / `=3`: invoke the subagent with that ceiling. The subagent's convergence rules in `subagent.md` still apply — if main agent and subagent agree after an earlier round, the loop stops there.
+- `N > 3` is clamped to 3 (the protocol maximum).
+
+**Natural-language parity.** The model parses these expressions in the prompt to the same value as the flag (flag wins on conflict; ask if ambiguous):
+
+- *iterera max tre gånger* / *iterate up to three times* / *kör djupt* / *deep review* → 3
+- *max två rundor* / *two rounds max* → 2
+- *en runda räcker* / *one round* → 1
+- *hoppa över subagent* / *skip subagent* → 0
+
+**Last-resort floor.** When the redline pass produces the last-resort finding from `protocols/redline.md`, the subagent floor is raised to 1 even if the flag is 0 — one round to sanity-check the observation before it reaches the user as a closing note.
+
+The main agent has final decision authority. No user-facing summary of any internal dialogue is produced. There is no post-draft user-facing dialogue beyond the optional last-resort closing note.
 
 ## Technique override
 
@@ -94,16 +107,29 @@ Once the type is confirmed, read the content-type file. Skip sections preceded b
 
 ## Files to read
 
-Read in this order when the user invokes `/write`:
+> The list below is a coverage requirement, not a sequence of unconditional reads. Before each Read, check whether the file's content is already in your conversation context — from any prior turn, phase, or skill invocation in this session. If it is, skip it. The user's input file or URL is always fetched fresh.
 
-1. `../../lib/genres/_index.md` — for content-type detection.
-2. The matching `../../lib/genres/<type>.md` — once the type is confirmed in Phase 1.
-3. `../../lib/techniques/<technique>.md` — once the technique is confirmed.
-4. `../../lib/rules/style.md`, `../../lib/rules/writing.md`, and the language files determined above (specific `lib/languages/<lang>-mechanics.md` plus `lib/languages/<lang>-style.md` where it exists, otherwise `lib/languages/default-mechanics.md`) — for the draft.
-5. `../../lib/protocols/input.md` — to determine the input form when source material is provided.
-6. `../../lib/protocols/proofread.md` and `../../lib/protocols/redline.md` — for Phase 4 review of the draft. Load the construction-scoped rule files (`quotation.md`, `abbreviations.md`, `headed-text.md`, `lists.md`) only for the constructions present in the draft per *Conditional rule loading for Phase 4* above.
-7. `../../lib/protocols/subagent.md` — for Phase 4 settling.
-8. `../../lib/protocols/output-inline.md` if the input is inline; otherwise `../../lib/protocols/output-files.md` — to deliver the result.
+> Reads that are not skipped above fire in batches. Each batch below groups files with no mutual dependency; issue all of them as a single parallel tool call, then advance to the next batch when the previous returns.
+
+**Batch 0.** Before Phase 1 begins:
+
+- `../../lib/genres/_index.md` — for Phase 1 content-type detection.
+
+**Batch 1.** After Phase 1 confirms the content type and technique:
+
+- The matching `../../lib/genres/<type>.md`.
+- The matching `../../lib/techniques/<technique>.md`.
+
+**Batch 2.** After Phase 2 confirmation, issue all remaining reads in parallel:
+
+- `../../lib/rules/style.md` — substantive style guidance for drafting and Phase 4 review.
+- `../../lib/rules/writing.md` — universal punctuation rules.
+- `../../lib/rules/constructions.md` — construction-scoped rules; the relevant sections are applied cognitively in Phase 4 against the draft.
+- The language file determined above: `../../lib/languages/<lang>.md` (otherwise `../../lib/languages/default-mechanics.md`).
+- `../../lib/protocols/proofread.md` — for Phase 4a.
+- `../../lib/protocols/redline.md` — for Phase 4b.
+- `../../lib/protocols/subagent.md` — for Phase 4 settling.
+- `../../lib/protocols/io.md` — input detection and output routing.
 
 ## Special handling
 

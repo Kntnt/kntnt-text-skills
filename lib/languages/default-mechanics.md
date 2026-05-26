@@ -40,7 +40,7 @@ Straight ASCII quotation marks throughout — outer `"…"`, inner `'…'`. Thes
 
 ## Quotation conventions
 
-Apply the universal regime in `rules/quotation.md` as written. Use straight ASCII marks for all three modes (run-in, block, dialogue).
+Apply the universal regime in the *Quotation* section of `rules/constructions.md` as written. Use straight ASCII marks for all three modes (run-in, block, dialogue).
 
 **Punctuation relative to quotation marks.** Apply the logical (British) convention: full stops and commas go inside the quotation marks only when they belong to the quoted material:
 
