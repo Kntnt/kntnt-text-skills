@@ -38,6 +38,19 @@ If no genre matches clearly via triggers or semantic likeness, use the genre who
 
 When reading the chosen genre file, skip sections preceded by `<!-- scope: write -->`; read only unmarked sections and sections preceded by `<!-- scope: review -->`. Write-scoped sections describe drafting concerns (structure, length, headings, address) that add no value to a review pass.
 
+## Genre fast-path
+
+Before issuing the Files-to-read batches, check two conditions against the input text and the user's prompt:
+
+1. **No structural markers in the input.** No H1 heading, no standfirst, no byline, no attributed-quote pattern.
+2. **No genre word in the user's prompt.** None of the trigger terms catalogued in `lib/genres/_index.md` for any non-`general` genre — *artikel*, *article*, *reportage*, *kundcase*, *case*, *case study*, *kundreferens*, *referenscase*, *krönika*, *column*, *kåseri*, *personal essay*, *opinionstext*, *opinion*, *debattartikel*, *debattinlägg*, *åsiktstext*, *op-ed*, *opinion piece*, *debate article*, *pressmeddelande*, *press release*, *press-release*, *rapport*, *report*, *whitepaper*, *white paper*, *vitbok*, *puff*, *teaser*, *standfirst*, *ingress*, *meta description*, *metabeskrivning*, *webbcopy*, *web copy*, *webbtext*, *web text*, *blogginlägg*, *blog post*, or close semantic equivalents.
+
+**When both conditions hold,** commit to the `general` genre immediately. Skip the read of `_index.md` and skip the matched-genre read entirely. Load `lib/genres/general.md` directly in Batch 1; its `default_technique` frontmatter is `none`, so no technique file is loaded in Batch 2. Batch 2 is therefore skipped.
+
+**When either condition is broken,** follow the standard two-batch procedure below: Batch 1 reads `_index.md`, Batch 2 reads the matched `<genre>.md` and `<technique>.md`.
+
+The last-resort floor remains the safety net: if the fast-path commits to `general` for material that actually wants another genre, the redline pass surfaces it as a last-resort developmental finding, which raises the subagent floor to 1.
+
 ## Phase 3 — dialogue settling
 
 Settle each finding via `../../lib/protocols/dialogue.md`. The user accepts, rejects, counters, or delegates.
@@ -70,12 +83,14 @@ Settle each finding via `../../lib/protocols/dialogue.md`. The user accepts, rej
 - `../../lib/rules/writing.md` — universal punctuation rules.
 - `../../lib/rules/constructions.md` — construction-scoped rules; apply the sections that match constructions in the input.
 - `../../lib/languages/<lang>.md` (otherwise `../../lib/languages/default-mechanics.md`).
-- `../../lib/genres/_index.md` — to identify the content type.
 - `../../lib/rules/style.md` — Phase 2 universal style foundation.
 - `../../lib/protocols/io.md` — input detection and output routing.
 - `../../lib/protocols/subagent.md` — loaded speculatively (only used on delegation in Phase 3).
+- One of the following based on the *Genre fast-path* check above:
+  - **Fast-path (both conditions hold):** `../../lib/genres/general.md` — committed genre. No `_index.md` read.
+  - **Standard (either condition broken):** `../../lib/genres/_index.md` — to identify the content type.
 
-**Batch 2.** After the genre and technique are identified from Batch 1's `_index.md`:
+**Batch 2.** Skipped under the fast-path. Under the standard path, after the genre and technique are identified from Batch 1's `_index.md`:
 
 - The matching `../../lib/genres/<type>.md`.
 - The matching `../../lib/techniques/<technique>.md`.
