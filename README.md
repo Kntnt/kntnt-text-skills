@@ -414,8 +414,8 @@ The plugin requires Claude Code or Cowork with support for slash commands, YAML 
 
 ## License
 
-Proprietary. See `.claude-plugin/plugin.json`.
+Licensed under the Apache License 2.0. The full licence text is in [`LICENSE`](LICENSE), and the copyright and attribution notice is in [`NOTICE`](NOTICE). Contributions are accepted under the same terms by virtue of Apache 2.0 §5 — see [`CONTRIBUTING.md`](CONTRIBUTING.md) for the contribution-scope guidance.
 
 ## About
 
-Made by [Kntnt](https://kntnt.com).
+Made by [Kntnt](https://kntnt.com). See [`NOTICE`](NOTICE) for the attribution and copyright statement that accompanies redistributions under the Apache 2.0 licence.

@@ -6,6 +6,10 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+### Changed
+
+- License changed from proprietary to Apache 2.0.
+
 ## [0.3.0] — 2026-05-25
 
 ### Added
