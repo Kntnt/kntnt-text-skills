@@ -13,7 +13,7 @@ Correct on every invocation:
 - Wrong-word errors that are objectively wrong (preposition, article, language-specific agreement)
 - Conventions in the loaded rule files and the mechanics section of the loaded language file (or the default mechanics file when no language-specific file is loaded), matched to the determined language
 
-Leave everything else untouched, even when an improvement seems obvious. Stylistic word choice, word order, structure, voice, tone, argumentation, language-interference patterns, AI-tell constructions, weak verbs — all of these can be improved, but doing so crosses the line from objective correction into substantive editing. The language style layer is **not** in scope for this pass; it belongs to the redline / edit passes. The user invoked this pass precisely to avoid stylistic interference; making those calls violates the contract.
+Leave everything else untouched, even when an improvement seems obvious. Stylistic word choice, word order, structure, voice, tone, argumentation, language-interference patterns, AI-tell constructions, weak verbs — all of these can be improved, but doing so crosses the line from objective correction into substantive editing. The language style layer is **not** in scope for this pass; it is out of scope here and handled by deeper review passes. The user invoked this pass precisely to avoid stylistic interference; making those calls violates the contract.
 
 ## Application
 
