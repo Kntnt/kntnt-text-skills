@@ -1,0 +1,14 @@
+{
+  "name": "kntnt-text-skills",
+  "owner": {
+    "name": "Thomas Barregren",
+    "url": "https://kntnt.com"
+  },
+  "plugins": [
+    {
+      "name": "kntnt-text-skills",
+      "source": ".",
+      "description": "Writing, redlining, editing, and proofreading skills modelled on Thomas Barregren's style. Ships with language files for Swedish, British English, and American English."
+    }
+  ]
+}

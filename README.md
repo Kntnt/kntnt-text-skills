@@ -75,9 +75,24 @@ The manual context loader `/writing-rules` loads either the specified language's
 
 ## Installation
 
-Copy the plugin root — the directory containing `.claude-plugin/plugin.json` — into `~/.claude/plugins/` (Claude Code) or the equivalent location for Cowork. Restart the session. The slash commands above should now be available.
+The plugin ships as a Claude Code marketplace. In Claude Code or Cowork, run:
+
+```
+/plugin marketplace add Kntnt/kntnt-text-skills
+/plugin install kntnt-text-skills@kntnt-text-skills
+```
+
+The first line registers the marketplace from the GitHub repo; the second installs the plugin from it. Restart the session if the slash commands do not appear immediately.
 
 To verify the installation, run `/writing-rules` in a fresh session. If Claude confirms that the rules are loaded, the plugin is working.
+
+**Manual install (fallback).** If your client does not yet support the `/plugin` flow, clone the repo into the plugin directory directly:
+
+```bash
+git clone git@github.com:Kntnt/kntnt-text-skills.git ~/.claude/plugins/kntnt-text-skills
+```
+
+Restart the session and the slash commands become available.
 
 ## Usage
 
