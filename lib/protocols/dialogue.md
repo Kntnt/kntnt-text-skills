@@ -30,9 +30,15 @@ Tone: direct, substantive, not sycophantic, not stubborn for its own sake. The a
 
 ### (d) Delegate
 
-The user signals that they have had enough dialogue and want the agent to decide — "just do it", "gör vad du tycker är bäst", "kör hårt", "do whatever". The agent stops asking and hands the remaining open findings to the subagent settling procedure, then delivers the polished text via the output protocol. No user-facing summary of the internal dialogue is produced — the user sees only the polished text.
+The user signals that they have had enough dialogue and want the agent to decide — "just do it", "gör vad du tycker är bäst", "kör hårt", "do whatever". The agent stops asking and settles the remaining open findings directly, then delivers the polished text via the output protocol. No user-facing summary of any internal work is produced — the user sees only the polished text.
 
-Delegation can be partial — the user can say "just do the remaining ones" mid-flow. Findings already settled in dialogue stand; the open tail is delegated.
+The behaviour on delegation depends on the calling skill's `--max-iterations=N` flag (or its natural-language equivalent):
+
+- **Without the flag (default `N=0`).** The main agent applies the remaining findings directly to the text — no subagent round.
+- **With the flag set to `1`, `2`, or `3`.** The main agent invokes `subagent.md` with that ceiling on iterations. Convergence rules in `subagent.md` still apply.
+- **Last-resort finding present in the remaining tail.** The floor is raised to 1 even when the flag is 0 — one subagent round to sanity-check before the closing note reaches the user.
+
+Delegation can be partial — the user can say "just do the remaining ones" mid-flow. Findings already settled in dialogue stand; the open tail is delegated under the rules above.
 
 ## Pacing
 

@@ -1,6 +1,6 @@
 ---
 name: redline
-description: Three-phase critical editorial review with human-in-the-loop settling — proofread ⊂ redline ⊂ edit, the middle skill. Phase 1 silently applies the conservative proofread pass. Phase 2 produces a finding list per protocols/redline.md against rules/style.md, the applicable content-type and technique files, and the loaded language file. Phase 3 settles each finding with the user one at a time via protocols/dialogue.md (accept / reject / counter / delegate). Optional language argument (`/redline sv`, `/redline en_GB`). Scope from proofreading up to and including line editing; substantive editing surfaces only as a single last-resort finding. Activates only via the explicit `/redline` slash command.
+description: Three-phase critical editorial review with human-in-the-loop settling — proofread ⊂ redline ⊂ edit, the middle skill. Phase 1 silently applies the conservative proofread pass. Phase 2 produces a finding list per protocols/redline.md against rules/style.md, the applicable content-type and technique files, and the loaded language file. Phase 3 settles each finding with the user one at a time via protocols/dialogue.md (accept / reject / counter / delegate); on delegation, the `--max-iterations=N` flag (0–3, default 0) controls whether the remaining tail is applied directly by the main agent or routed through the subagent loop. Optional language argument (`/redline sv`, `/redline en_GB`). Scope from proofreading up to and including line editing; substantive editing surfaces only as a single last-resort finding. Activates only via the explicit `/redline` slash command.
 disable-model-invocation: true
 ---
 
@@ -46,7 +46,21 @@ When reading the chosen genre file, skip sections preceded by `<!-- scope: write
 
 ## Phase 3 — dialogue settling
 
-Settle each finding via `../../lib/protocols/dialogue.md`. The user accepts, rejects, counters, or delegates. On delegation, hand the remaining open findings to `../../lib/protocols/subagent.md` and deliver the polished text directly.
+Settle each finding via `../../lib/protocols/dialogue.md`. The user accepts, rejects, counters, or delegates.
+
+**Delegation behaviour depends on the `--max-iterations=N` flag** (or its natural-language equivalent in the prompt):
+
+- `--max-iterations=0` (default): on delegation, the main agent applies the remaining open findings directly and delivers the polished text. No subagent is invoked.
+- `--max-iterations=1` / `=2` / `=3`: on delegation, the remaining open findings are handed to `../../lib/protocols/subagent.md` with that ceiling on iterations. The subagent's convergence rules still apply — early consensus stops the loop. `N > 3` is clamped to 3.
+
+**Natural-language parity.** The model parses these expressions in the prompt to the same value as the flag (flag wins on conflict; ask if ambiguous):
+
+- *iterera max tre gånger* / *iterate up to three times* / *kör djupt* / *deep review* → 3
+- *max två rundor* / *two rounds max* → 2
+- *en runda räcker* / *one round* → 1
+- *hoppa över subagent* / *skip subagent* → 0
+
+**Last-resort floor.** When the redline pass surfaces the last-resort developmental finding, the subagent floor is raised to 1 even if the flag is 0 — one round to sanity-check the observation before it reaches the user as a closing note.
 
 ## Files to read
 

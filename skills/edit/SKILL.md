@@ -1,6 +1,6 @@
 ---
 name: edit
-description: AFK (away-from-keyboard) variant of /redline — proofread ⊂ redline ⊂ edit, the deepest skill. Same Phase 1 (silent proofread) and Phase 2 (critical review per protocols/redline.md) as /redline; Phase 3 settles findings via an internal subagent per protocols/subagent.md instead of user dialogue. Optional language argument (`/edit sv`, `/edit en_GB`). Scope from proofreading up to and including line editing; substantive editing surfaces only as a single last-resort note. Activates only via the explicit `/edit` slash command.
+description: AFK (away-from-keyboard) variant of /redline — proofread ⊂ redline ⊂ edit, the deepest skill. Same Phase 1 (silent proofread) and Phase 2 (critical review per protocols/redline.md) as /redline; Phase 3 by default applies the findings directly without user dialogue. The subagent loop in protocols/subagent.md is opt-in via `--max-iterations=N` (0–3, default 0); a last-resort developmental finding raises the floor to 1. Optional language argument (`/edit sv`, `/edit en_GB`). Scope from proofreading up to and including line editing; substantive editing surfaces only as a single last-resort note. Activates only via the explicit `/edit` slash command.
 disable-model-invocation: true
 ---
 
@@ -44,11 +44,24 @@ If no genre matches clearly via triggers or semantic likeness, use the genre who
 
 When reading the chosen genre file, skip sections preceded by `<!-- scope: write -->`; read only unmarked sections and sections preceded by `<!-- scope: review -->`. Write-scoped sections describe drafting concerns (structure, length, headings, address) that add no value to a review pass.
 
-## Phase 3 — subagent settling
+## Phase 3 — settling
 
-Settle the finding list via `../../lib/protocols/subagent.md` — main agent and subagent iterate as colleagues for up to three rounds, early consensus preferred. The polished text is delivered via the output protocol matching the input form (see *Files to read*). No user-facing summary of the internal dialogue is produced.
+**Default behaviour.** The main agent applies the finding list directly to the corrected text and delivers the polished result via the output protocol matching the input form (see *Files to read*). No subagent is invoked.
 
-The single exception is the last-resort finding from `protocols/redline.md` — when the text is so far from publication that line editing cannot fix it, or when it is structured as one content type but the material wants another. That single decision is escalated to the user as a closing note.
+**Subagent opt-in.** The subagent loop in `../../lib/protocols/subagent.md` runs only when explicitly requested. The ceiling on iterations comes from the `--max-iterations=N` flag in the invocation:
+
+- `--max-iterations=0` (default): no subagent — main agent applies directly as above.
+- `--max-iterations=1` / `=2` / `=3`: invoke the subagent with that ceiling. The subagent's convergence rules in `subagent.md` still apply — if main agent and subagent agree after an earlier round, the loop stops there.
+- `N > 3` is clamped to 3 (the protocol maximum).
+
+**Natural-language parity.** The model parses these expressions in the prompt to the same value as the flag (flag wins on conflict; ask if ambiguous):
+
+- *iterera max tre gånger* / *iterate up to three times* / *kör djupt* / *deep review* → 3
+- *max två rundor* / *two rounds max* → 2
+- *en runda räcker* / *one round* → 1
+- *hoppa över subagent* / *skip subagent* → 0
+
+**Last-resort floor.** When the redline pass produces the last-resort finding from `protocols/redline.md` (the text is structured as one content type but the material wants another, or is below the line-editing repair threshold), the subagent floor is raised to 1 even if the flag is 0 — one round to sanity-check the observation before it reaches the user. The last-resort decision itself is escalated to the user as a closing note.
 
 ## Files to read
 

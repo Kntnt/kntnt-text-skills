@@ -1,6 +1,6 @@
 ---
 name: write
-description: Four-phase content creation. Phase 1 acquires a brief over nine fields the user accepts, modifies, or discusses. Phase 2 presents the idea (structure, tone, ABT/PAC plan, address, length). Phase 3 writes the draft against the applicable content-type, technique, and language files. Phase 4 polishes via the redline pass with subagent settling — only the polished final text is delivered. Optional language argument (`/write sv`, `/write en_GB`); without it the skill proposes a target language and asks the user to confirm. Blog posts disambiguate to article or column. Activates only via the explicit `/write` slash command.
+description: Four-phase content creation. Phase 1 acquires a brief over nine fields the user accepts, modifies, or discusses. Phase 2 presents the idea (structure, tone, ABT/PAC plan, address, length). Phase 3 writes the draft against the applicable content-type, technique, and language files. Phase 4 polishes via the redline pass and by default applies the findings directly; the subagent loop in protocols/subagent.md is opt-in via `--max-iterations=N` (0–3, default 0), and a last-resort developmental finding raises the floor to 1. Only the polished final text is delivered. Optional language argument (`/write sv`, `/write en_GB`); without it the skill proposes a target language and asks the user to confirm. Blog posts disambiguate to article or column. Activates only via the explicit `/write` slash command.
 disable-model-invocation: true
 ---
 
@@ -56,7 +56,7 @@ No subagent is invoked in Phase 2.
 
 Write the draft per the applicable content-type file, technique file, and language file(s).
 
-## Phase 4 — automatic redline review with subagent settling
+## Phase 4 — automatic redline review
 
 Apply the same review machinery as `/edit` to the draft.
 
@@ -70,9 +70,28 @@ Inspect the drafted text before loading the construction-scoped rule files. Load
 - If the draft contains H1, headings, subheadings, or a standfirst structure: `../../lib/rules/headed-text.md`.
 - If the draft contains bulleted, numbered, or definition lists: `../../lib/rules/lists.md`.
 
-Then apply `../../lib/protocols/proofread.md` (silent Phase 4a) against those rule files and the language mechanics file, followed by `../../lib/protocols/redline.md` (Phase 4b) against `../../lib/rules/style.md`, the language style file, the chosen genre file, and the chosen technique file — producing a finding list. Settle the findings via `../../lib/protocols/subagent.md` — main agent and subagent iterate as colleagues for up to three rounds, early consensus preferred. The main agent has final decision authority. The polished text is delivered to the user via the output protocol matching the input form (see *Files to read*). No user-facing summary of the internal dialogue is produced.
+Then apply `../../lib/protocols/proofread.md` (silent Phase 4a) against those rule files and the language mechanics file, followed by `../../lib/protocols/redline.md` (Phase 4b) against `../../lib/rules/style.md`, the language style file, the chosen genre file, and the chosen technique file — producing a finding list.
 
-There is no post-draft user-facing dialogue.
+### Settling
+
+**Default behaviour.** The main agent applies the finding list directly to the drafted text and delivers the polished result via the output protocol matching the input form (see *Files to read*). No subagent is invoked.
+
+**Subagent opt-in.** The subagent loop in `../../lib/protocols/subagent.md` runs only when explicitly requested. The ceiling on iterations comes from the `--max-iterations=N` flag in the invocation:
+
+- `--max-iterations=0` (default): no subagent — main agent applies directly as above.
+- `--max-iterations=1` / `=2` / `=3`: invoke the subagent with that ceiling. The subagent's convergence rules in `subagent.md` still apply — if main agent and subagent agree after an earlier round, the loop stops there.
+- `N > 3` is clamped to 3 (the protocol maximum).
+
+**Natural-language parity.** The model parses these expressions in the prompt to the same value as the flag (flag wins on conflict; ask if ambiguous):
+
+- *iterera max tre gånger* / *iterate up to three times* / *kör djupt* / *deep review* → 3
+- *max två rundor* / *two rounds max* → 2
+- *en runda räcker* / *one round* → 1
+- *hoppa över subagent* / *skip subagent* → 0
+
+**Last-resort floor.** When the redline pass produces the last-resort finding from `protocols/redline.md`, the subagent floor is raised to 1 even if the flag is 0 — one round to sanity-check the observation before it reaches the user as a closing note.
+
+The main agent has final decision authority. No user-facing summary of any internal dialogue is produced. There is no post-draft user-facing dialogue beyond the optional last-resort closing note.
 
 ## Technique override
 

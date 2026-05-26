@@ -2,6 +2,17 @@
 
 The colleague-consultation mechanic for settling editorial work without user-facing dialogue. The calling skill invokes this protocol when it has a critical-review finding list (or a draft and a finding list) and wants the polished result delivered directly — either because the skill is AFK by design, or because a parent dialogue has been delegated to internal settling, or because the skill produces new content and reviews it before delivery.
 
+## Invocation conditions
+
+This protocol is opt-in. The calling skill invokes it only when one of the following triggers fires:
+
+- **Explicit `--max-iterations=N` flag (or natural-language equivalent) in the calling skill's invocation.** `N=0` means do not invoke this protocol; `N=1`, `=2`, `=3` set the ceiling on iterations for the current run. `N > 3` is clamped to 3. The calling skill is responsible for parsing the flag and natural-language equivalents (e.g. *iterate up to three times* → 3, *one round* → 1, *skip subagent* → 0) and passing the resulting ceiling into this protocol.
+- **Last-resort finding from the redline pass raises the floor to 1.** When the redline pass produces a developmental observation per `redline.md` (the text is structured as one content type but the material wants another, or is below the line-editing repair threshold), the calling skill raises the iteration floor to 1 — one round of subagent sanity-check — even if the flag was 0. The closing note to the user about the last-resort decision is delivered after that round.
+
+When neither trigger fires, the calling skill applies the redline findings directly without invoking this protocol. The default behaviour of the calling skill is therefore no subagent round.
+
+The iteration ceiling passed in is an upper bound, not a target. The convergence rules in *Iteration rules* below still apply — early termination is desirable.
+
 ## The subagent
 
 The main agent spawns a subagent with access to the same procedural and rule material the main agent used in the redline pass — the loaded protocol files, the loaded objective rule files, the substantive style foundation, the applicable content-type file, and the applicable technique file. The subagent is briefed with:
