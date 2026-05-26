@@ -1,0 +1,372 @@
+{
+  "skill_name": "redline",
+  "evals": [
+    {
+      "id": 101,
+      "skill_name": "redline",
+      "name": "sv-redline-typography-and-style",
+      "language": "sv",
+      "prompt": "/redline sv",
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
+      "expected_output": "Finding list covering both mechanics and style for a Swedish article.",
+      "expectations": [
+        "Phase 1 (proofread) applies before Phase 2 — the corrected text flows into the critical review, not delivered separately.",
+        "Phase 2 surfaces findings against `rules/style.md` and the Style section of `sv.md`.",
+        "Phase 3 settles each finding one at a time via the dialogue protocol (accept / reject / counter / delegate).",
+        "Genre resolves to `article` via either the standard flow or fast-path; the H1 + standfirst + byline force the standard flow."
+      ]
+    },
+    {
+      "id": 102,
+      "skill_name": "redline",
+      "name": "sv-redline-genitive-on-s",
+      "language": "sv",
+      "prompt": "/redline sv",
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
+      "expected_output": "Mechanics finding: *Marx teorier* and *CoMaps föregångare* — explicitly flagged as correct zero-marking; any apostrophe-s drift would be a finding.",
+      "expectations": [
+        "*Marx teorier* in the article body is recognised as correct Swedish zero-marking for an -s name.",
+        "*CoMaps föregångare* is recognised as correct.",
+        "If any apostrophe-s form appears in the redline-corrected output, that is a regression and must be flagged."
+      ]
+    },
+    {
+      "id": 103,
+      "skill_name": "redline",
+      "name": "sv-redline-press-release-attribution",
+      "language": "sv",
+      "prompt": "/redline sv",
+      "files": [
+        "evals/fixtures/sv-press-release.md"
+      ],
+      "expected_output": "Findings flag that the press release uses straight ASCII quotation marks; speech dashes are the Swedish press-release standard for attribution.",
+      "expectations": [
+        "Straight ASCII quotation marks are flagged or corrected to ”…” (Swedish outer).",
+        "A finding raises that speech dashes (talstreck — EN-dash with space) are the Swedish convention for attributed speech in press releases.",
+        "Genre resolves to `press-release` via the prompt trigger or the structural markers."
+      ]
+    },
+    {
+      "id": 104,
+      "skill_name": "redline",
+      "name": "sv-redline-ai-tells",
+      "language": "sv",
+      "prompt": "/redline sv",
+      "files": [
+        "evals/fixtures/sv-grammar-errors.md"
+      ],
+      "expected_output": "Style-layer findings on AI-tell calques and anglicisms.",
+      "expectations": [
+        "*Det är värt att notera att…* is flagged as an AI-tell calque of *It's worth noting that…*.",
+        "*Sammanfattningsvis* at the start of a conclusion is flagged as formulaic.",
+        "*I en värld där…* is flagged as a calque opening cliché.",
+        "*adressera*, *navigera*, *leverera* (metaphoric), *metrik*, *regulator-miljön* are flagged as anglicism interference and Swedish substitutes are proposed."
+      ]
+    },
+    {
+      "id": 105,
+      "skill_name": "redline",
+      "name": "sv-redline-overlong-heading",
+      "language": "sv",
+      "prompt": "/redline sv",
+      "files": [
+        "evals/fixtures/overlong-heading.md"
+      ],
+      "expected_output": "Findings raise H1 length and H2 length as structural issues.",
+      "expectations": [
+        "The H1 (well over 60 characters) is flagged as too long for a readable headline.",
+        "At least one of the over-long H2 headings is flagged.",
+        "The finding is concrete (line-editing scope) — not punted to the developmental last-resort finding."
+      ]
+    },
+    {
+      "id": 106,
+      "skill_name": "redline",
+      "name": "sv-redline-fabricated-source",
+      "language": "sv",
+      "prompt": "/redline sv",
+      "files": [
+        "evals/fixtures/fabricated-source.md"
+      ],
+      "expected_output": "Findings flag the suspicious-looking references (specific publishers, journal names, dates) so the writer can verify them.",
+      "expectations": [
+        "At least one finding flags one or more of the source citations as unverifiable / likely fabricated, prompting the writer to verify.",
+        "The finding is framed as `verify` rather than asserting fabrication as fact — the redline pass surfaces, the writer confirms.",
+        "Quoted attribution that names a specific researcher is flagged as needing verification."
+      ]
+    },
+    {
+      "id": 107,
+      "skill_name": "redline",
+      "name": "en_GB-redline-typography-and-style",
+      "language": "en_GB",
+      "prompt": "/redline en_GB",
+      "files": [
+        "evals/fixtures/en_GB-article.md"
+      ],
+      "expected_output": "Finding list covering both mechanics and style for a British English article.",
+      "expectations": [
+        "Phase 1 (proofread) is applied silently; corrected text flows into Phase 2.",
+        "Genre resolves to `article` (H1 + standfirst + byline force the standard flow).",
+        "Findings respect British conventions: single outer curly quotes, no Oxford comma, DD/MM/YYYY dates, EN-dash with spaces for parenthetical insertion."
+      ]
+    },
+    {
+      "id": 108,
+      "skill_name": "redline",
+      "name": "en_GB-redline-quotation-attribution",
+      "language": "en_GB",
+      "prompt": "/redline en_GB",
+      "files": [
+        "evals/fixtures/en_GB-quotation-errors.md"
+      ],
+      "expected_output": "Findings on quotation-mark typography and punctuation placement.",
+      "expectations": [
+        "Outer single curly quotes are used; inner double curly quotes are used.",
+        "Punctuation sits outside the closing quote unless it belongs to the quoted material (logical/British convention).",
+        "Question marks belonging to the spoken utterance stay inside the quotation."
+      ]
+    },
+    {
+      "id": 109,
+      "skill_name": "redline",
+      "name": "en_GB-redline-ai-tells",
+      "language": "en_GB",
+      "prompt": "/redline en_GB",
+      "files": [
+        "evals/fixtures/en_GB-style-errors.md"
+      ],
+      "expected_output": "Style-layer findings on AI-tell vocabulary and openings.",
+      "expectations": [
+        "*In a world where…* is flagged as an opening cliché.",
+        "*It's worth noting that…* and *Let me be perfectly clear* are flagged as AI-tell constructions.",
+        "*delve into*, *leverage* (as a verb), *multifaceted*, *tapestry*, *robust*, *comprehensive*, *ultimately*, *streamline* are flagged as AI vocabulary tells.",
+        "*Furthermore* used as a crutch between paragraphs is flagged as a symptom of weak structure."
+      ]
+    },
+    {
+      "id": 110,
+      "skill_name": "redline",
+      "name": "en_GB-redline-american-drift",
+      "language": "en_GB",
+      "prompt": "/redline en_GB",
+      "files": [
+        "evals/fixtures/en_GB-spelling-drift.md"
+      ],
+      "expected_output": "Findings flag American spellings, American idioms, and American date drift.",
+      "expectations": [
+        "American -ize/-ization spellings flagged for the British -ise/-isation substitute.",
+        "*Going forward* flagged for the British substitute *in future* or omission.",
+        "*Reach out to* flagged for *contact* or *get in touch with*.",
+        "*Leverage* as a verb flagged for *use*, *exploit*, *draw on*."
+      ]
+    },
+    {
+      "id": 111,
+      "skill_name": "redline",
+      "name": "en_GB-redline-overlong-heading",
+      "language": "en_GB",
+      "prompt": "/redline en_GB please review this draft",
+      "files": [
+        "evals/fixtures/overlong-heading.md"
+      ],
+      "expected_output": "Findings raise heading length even when the source is Swedish (auto-detection should pick sv; with explicit en_GB the pass still flags structural issues).",
+      "expectations": [
+        "Headings over 60 characters are flagged as too long for a readable headline.",
+        "The finding is concrete and falls inside line-editing scope (not punted to developmental).",
+        "Genre resolves to `article` via the structural markers."
+      ]
+    },
+    {
+      "id": 112,
+      "skill_name": "redline",
+      "name": "en_GB-redline-fast-path-short-text",
+      "language": "en_GB",
+      "prompt": "/redline en_GB",
+      "files": [
+        "evals/fixtures/en_GB-short.md"
+      ],
+      "expected_output": "Fast-path commits to the `general` genre because the text has no structural markers and the prompt has no genre word.",
+      "expectations": [
+        "The fast-path exits before reading `lib/genres/_index.md`.",
+        "Genre commits to `general` (the genre with `default: true`).",
+        "The default technique is `none`, so no technique file is loaded.",
+        "Finding list (if any) is short and reflects the everyday-text register."
+      ]
+    },
+    {
+      "id": 113,
+      "skill_name": "redline",
+      "name": "en_US-redline-typography-and-style",
+      "language": "en_US",
+      "prompt": "/redline en_US",
+      "files": [
+        "evals/fixtures/en_US-article.md"
+      ],
+      "expected_output": "Finding list covering both mechanics and style for an American English article.",
+      "expectations": [
+        "Genre resolves to `article` via standard flow (H1 + standfirst + byline present).",
+        "American conventions are applied in findings: double outer curly quotes, Oxford comma in series, MM/DD/YYYY dates, EM-dash without spaces for parenthetical insertion.",
+        "Phase 1 (proofread) is applied silently; corrected text flows into Phase 2.",
+        "Phase 3 settles each finding one at a time via the dialogue protocol."
+      ]
+    },
+    {
+      "id": 114,
+      "skill_name": "redline",
+      "name": "en_US-redline-quotation-and-punctuation",
+      "language": "en_US",
+      "prompt": "/redline en_US",
+      "files": [
+        "evals/fixtures/en_US-quotation-errors.md"
+      ],
+      "expected_output": "Findings on quotation-mark typography and the American inside-the-quote punctuation convention.",
+      "expectations": [
+        "Outer quotation marks should be \"…\" (double curly), inner '…' (single curly) — opposite of British.",
+        "Commas and full stops always go inside the closing quote — *He called it \"revolutionary.\"* — regardless of whether the punctuation belongs to the quote.",
+        "Question marks belonging to the spoken utterance stay inside the quotation."
+      ]
+    },
+    {
+      "id": 115,
+      "skill_name": "redline",
+      "name": "en_US-redline-ai-tells",
+      "language": "en_US",
+      "prompt": "/redline en_US",
+      "files": [
+        "evals/fixtures/en_US-style-errors.md"
+      ],
+      "expected_output": "Style-layer findings on AI-tell vocabulary and openings, including American-specific tells.",
+      "expectations": [
+        "*In a world where…*, *It's worth noting that…*, *Let me be perfectly clear* are flagged.",
+        "*delve into*, *leverage* (as a verb), *multifaceted*, *tapestry*, *robust*, *comprehensive*, *ultimately*, *unprecedented*, *streamline* are flagged as AI vocabulary tells.",
+        "American-specific AI tells *game-changer*, *paradigm shift*, *next-generation* are flagged.",
+        "Management jargon *circle back*, *touch base*, *holistic approach*, *strategic*, *proactive*, *synergies* are flagged."
+      ]
+    },
+    {
+      "id": 116,
+      "skill_name": "redline",
+      "name": "en_US-redline-oxford-comma-and-em-dash",
+      "language": "en_US",
+      "prompt": "/redline en_US",
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
+      "expected_output": "Findings raise the missing Oxford comma and the wrong parenthetical dash form.",
+      "expectations": [
+        "*red, white and blue* is flagged — the Oxford comma is required in American English: *red, white, and blue*.",
+        "Parenthetical insertion uses EM-dash without spaces (*market—an increase*), not EN-dash with spaces (*market – an increase*).",
+        "Time format is 12-hour with AM/PM and colon (2:30 PM), not 24-hour with full stop."
+      ]
+    },
+    {
+      "id": 117,
+      "skill_name": "redline",
+      "name": "en_US-redline-fast-path-short-text",
+      "language": "en_US",
+      "prompt": "/redline en_US",
+      "files": [
+        "evals/fixtures/en_US-short.md"
+      ],
+      "expected_output": "Fast-path commits to the `general` genre because the text has no structural markers and the prompt has no genre word.",
+      "expectations": [
+        "The fast-path exits before reading `lib/genres/_index.md`.",
+        "Genre commits to `general` (the genre with `default: true`).",
+        "The default technique is `none`, so no technique file is loaded.",
+        "Findings (if any) are short and reflect everyday-text register."
+      ]
+    },
+    {
+      "id": 118,
+      "skill_name": "redline",
+      "name": "en_US-redline-abbreviation-fullstops",
+      "language": "en_US",
+      "prompt": "/redline en_US",
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
+      "expected_output": "Findings flag missing full stops on contraction abbreviations.",
+      "expectations": [
+        "*Mr Smith* and *Dr Jones* are flagged — American English always uses the full stop: *Mr. Smith*, *Dr. Jones*.",
+        "Initialisms (CEO, HTML, NASA) carry no full stops.",
+        "British -ise/-isation drift (*organise*, *analyse*) is flagged for the American substitute."
+      ]
+    },
+    {
+      "id": 402,
+      "skill_name": "redline",
+      "name": "overlay-loader-sv_FI-territorial-variant",
+      "language": "sv_FI",
+      "prompt": "/redline sv_FI",
+      "files": [
+        "evals/fixtures/sv_FI-text.md",
+        "evals/fixtures/lib/languages/sv_FI.md"
+      ],
+      "expected_output": "The overlay loader applies `sv_FI.md` over `sv.md` per `lib/protocols/language-resolution.md`. The `Typography` H2 from the variant replaces the base; every other H2 under the layer markers is carried through from `sv.md` unchanged.",
+      "expectations": [
+        "Language resolution loads `sv_FI.md` and applies the overlay over `sv.md` because the variant declares `inherits: \"@sv.md\"`.",
+        "The variant's `Typography` H2 replaces the base's `Typography` H2 wholesale — time becomes `14:30` (colon, Finnish convention), not `14.30` (full stop, Sweden-Swedish).",
+        "Other mechanics H2 sections (`Quotation marks`, `Quotation conventions`, `Punctuation conventions`, `Grammar specifics`, `Greetings and closings`) are carried through from `sv.md` unchanged.",
+        "All style H2 sections from `sv.md` are carried through unchanged (the variant has no style overrides).",
+        "Inheritance is one step only — the base `sv.md` does not itself inherit."
+      ]
+    },
+    {
+      "id": 403,
+      "skill_name": "redline",
+      "name": "fast-path-hit-short-unsignalled-sv-text",
+      "language": "sv",
+      "prompt": "/redline sv",
+      "files": [
+        "evals/fixtures/sv-short.md"
+      ],
+      "expected_output": "Fast-path commits to `general` and skips both the `_index.md` read and the matched-genre file read.",
+      "expectations": [
+        "The fast-path exits before reading `lib/genres/_index.md` — the input has no H1, no standfirst, no byline, no attributed-quote pattern, and the prompt has no genre word.",
+        "Genre commits to `general` (the genre with `default: true`).",
+        "The default technique is `none`, so no technique file is loaded.",
+        "Output (with or without findings) is identical to what the standard-flow path would have produced for the same input — the fast-path is a dedup, not a behaviour change."
+      ]
+    },
+    {
+      "id": 404,
+      "skill_name": "redline",
+      "name": "fast-path-standard-flow-on-structured-article",
+      "language": "sv",
+      "prompt": "/redline sv",
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
+      "expected_output": "The standard flow kicks in because the input carries an H1, a standfirst, a byline, and attributed-quote patterns — the fast-path's structural-marker condition is broken.",
+      "expectations": [
+        "Either condition broken: structural markers present (H1, standfirst, byline, attributed quote).",
+        "`lib/genres/_index.md` is read and trigger-matched.",
+        "Genre commits to `article` and the corresponding `lib/genres/article.md` is read.",
+        "The default technique `abt` is loaded.",
+        "Output is identical to what the fast-path would have produced if the input had been short and unsignalled — the fast-path is a dedup, not a behaviour change."
+      ]
+    },
+    {
+      "id": 405,
+      "skill_name": "redline",
+      "name": "max-iterations-natural-language-redline",
+      "language": "sv",
+      "prompt": "/redline sv en runda räcker på den här artikeln",
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
+      "expected_output": "Phase 3 delegation invokes the subagent with a ceiling of 1 (natural-language *en runda* → 1).",
+      "expectations": [
+        "On delegation, the natural-language phrase *en runda räcker* is parsed to 1 — the same value as the `--max-iterations=1` flag.",
+        "The subagent loop in `lib/protocols/subagent.md` is invoked with a ceiling of 1.",
+        "Without delegation, no subagent runs — the main agent applies the remaining open findings directly.",
+        "If the flag and the natural-language phrase conflict, the flag wins; if ambiguous, ask the user."
+      ]
+    }
+  ]
+}

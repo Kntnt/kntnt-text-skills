@@ -1,0 +1,316 @@
+{
+  "skill_name": "proofread",
+  "evals": [
+    {
+      "id": 1,
+      "skill_name": "proofread",
+      "name": "sv-typography-mechanics",
+      "language": "sv",
+      "prompt": "/proofread sv",
+      "files": [
+        "evals/fixtures/sv-typography-errors.md"
+      ],
+      "expected_output": "Corrected text with Swedish typography conventions applied; no style or word-order changes.",
+      "expectations": [
+        "Thousands separator uses thin no-break space (U+202F), not comma: 1 234 567.",
+        "Percent in figures uses no-break space and `procent` is written out in running text per Swedish mechanics: 14 procent.",
+        "Range uses EN-dash without spaces (2–5), not hyphen with spaces (2 - 5).",
+        "Time uses full stop (14.30), not colon.",
+        "Temperature uses no-break space between number and degree sign (25 °C)."
+      ]
+    },
+    {
+      "id": 2,
+      "skill_name": "proofread",
+      "name": "sv-genitive-on-s-names",
+      "language": "sv",
+      "prompt": "/proofread sv",
+      "files": [
+        "evals/fixtures/sv-typography-errors.md"
+      ],
+      "expected_output": "Apostrophe-s and apostrophe-only forms removed from names ending in -s; zero-marking is the first choice.",
+      "expectations": [
+        "*Marx's teorier* is corrected to *Marx teorier* (zero-marking).",
+        "*CoMaps's föregångare* is corrected to *CoMaps föregångare* (zero-marking).",
+        "*Andreas's bok* is corrected to *Andreas bok* (zero-marking), not *Andreas's* and not *Andreas's bok*.",
+        "The apostrophe-s form is identified as an English interference pattern that is never correct in Swedish."
+      ]
+    },
+    {
+      "id": 3,
+      "skill_name": "proofread",
+      "name": "sv-quotation-marks-and-dashes",
+      "language": "sv",
+      "prompt": "/proofread sv",
+      "files": [
+        "evals/fixtures/sv-quotation-errors.md"
+      ],
+      "expected_output": "Quotation marks normalised to ”…” (U+201D both sides); EN-dash with spaces, never EM-dash.",
+      "expectations": [
+        "Outer quotation marks use ”…” (U+201D on both sides), not \"…\" straight ASCII or curly “…”.",
+        "Punctuation placement follows Swedish convention: commas/full stops inside the quote only when they belong to the quoted material.",
+        "The EN-dash with spaces is used for parenthetical insertions, never the EM-dash (—)."
+      ]
+    },
+    {
+      "id": 4,
+      "skill_name": "proofread",
+      "name": "sv-grammar-de-dem-and-compounds",
+      "language": "sv",
+      "prompt": "/proofread sv",
+      "files": [
+        "evals/fixtures/sv-grammar-errors.md"
+      ],
+      "expected_output": "De/dem corrected per subject/object; split-compounds (särskrivning) joined into single words.",
+      "expectations": [
+        "*dom* is corrected to *de* (subject) or *dem* (object) per its syntactic role.",
+        "*sjukvårds personal* is joined into *sjukvårdspersonal* (single compound).",
+        "*sjuk husen* is joined into *sjukhusen*.",
+        "*schema läggning* is joined into *schemaläggning*."
+      ]
+    },
+    {
+      "id": 5,
+      "skill_name": "proofread",
+      "name": "sv-particskrivning-broad",
+      "language": "sv",
+      "prompt": "/proofread sv",
+      "files": [
+        "evals/fixtures/sv-particskrivning.md"
+      ],
+      "expected_output": "All split-compound errors corrected to single compound words.",
+      "expectations": [
+        "*sjukvårds anställda* → *sjukvårdsanställda*.",
+        "*sjuk sköterska* → *sjuksköterska*; *under sköterska* → *undersköterska*.",
+        "*brand kåren* → *brandkåren*; *brand män* → *brandmän*.",
+        "No style or word-order changes are made — proofread scope only."
+      ]
+    },
+    {
+      "id": 6,
+      "skill_name": "proofread",
+      "name": "sv-greetings-and-closings",
+      "language": "sv",
+      "prompt": "/proofread sv",
+      "files": [
+        "evals/fixtures/sv-typography-errors.md"
+      ],
+      "expected_output": "Greeting uses ! not ,; closing salutation has no comma before the name.",
+      "expectations": [
+        "*Hej Susanne,* is corrected to *Hej Susanne!* (exclamation mark, not comma).",
+        "*Med vänlig hälsning,* loses the trailing comma — the closing phrase stands on its own line."
+      ]
+    },
+    {
+      "id": 7,
+      "skill_name": "proofread",
+      "name": "en_GB-typography-mechanics",
+      "language": "en_GB",
+      "prompt": "/proofread en_GB",
+      "files": [
+        "evals/fixtures/en_GB-typography-errors.md"
+      ],
+      "expected_output": "Corrected text with British English typography conventions applied.",
+      "expectations": [
+        "Thousands separator uses comma: 1,234,567.",
+        "Percent in figures uses space: 14 %.",
+        "Parenthetical insertion uses EN-dash with spaces (an increase – of …), never EM-dash without spaces.",
+        "Date format is DD/MM/YYYY (04/07/2026), not MM/DD/YYYY.",
+        "Time format is 24-hour with full stop (14.30), not 12-hour with AM/PM."
+      ]
+    },
+    {
+      "id": 8,
+      "skill_name": "proofread",
+      "name": "en_GB-oxford-comma-omitted",
+      "language": "en_GB",
+      "prompt": "/proofread en_GB",
+      "files": [
+        "evals/fixtures/en_GB-typography-errors.md"
+      ],
+      "expected_output": "Oxford comma is removed in series; British convention favours no Oxford comma.",
+      "expectations": [
+        "*red, white, and blue* is corrected to *red, white and blue* (no Oxford comma).",
+        "No other word-order or content changes are made — proofread scope only."
+      ]
+    },
+    {
+      "id": 9,
+      "skill_name": "proofread",
+      "name": "en_GB-quotation-marks-and-punctuation",
+      "language": "en_GB",
+      "prompt": "/proofread en_GB",
+      "files": [
+        "evals/fixtures/en_GB-quotation-errors.md"
+      ],
+      "expected_output": "Single curly quotes outer, double curly inner; punctuation outside the quote unless part of quoted material.",
+      "expectations": [
+        "Outer quotation marks use ‘…’ (U+2018, U+2019), not \"…\" straight or “…” double.",
+        "Inner quotation marks use “…”, opposite of American convention.",
+        "Commas and full stops sit outside the closing quote unless they are part of the quoted material — *He called it ‘revolutionary’.* not *‘revolutionary,’*."
+      ]
+    },
+    {
+      "id": 10,
+      "skill_name": "proofread",
+      "name": "en_GB-abbreviation-fullstops",
+      "language": "en_GB",
+      "prompt": "/proofread en_GB",
+      "files": [
+        "evals/fixtures/en_GB-typography-errors.md"
+      ],
+      "expected_output": "Contraction abbreviations (Mr, Dr) carry no full stop; truncations (etc., vol.) do.",
+      "expectations": [
+        "*Mr. Smith* is corrected to *Mr Smith* (contraction — no full stop).",
+        "*Dr. Jones* is corrected to *Dr Jones*.",
+        "Initialisms (GDP, NATO, BBC) carry no full stops."
+      ]
+    },
+    {
+      "id": 11,
+      "skill_name": "proofread",
+      "name": "en_GB-ise-isation-spelling",
+      "language": "en_GB",
+      "prompt": "/proofread en_GB",
+      "files": [
+        "evals/fixtures/en_GB-spelling-drift.md"
+      ],
+      "expected_output": "American -ize/-ization spellings corrected to British -ise/-isation; American color/center to British colour/centre; American traveler to traveller; American favorite to favourite.",
+      "expectations": [
+        "*organize* → *organise*, *analyze* → *analyse*, *finalize* → *finalise*.",
+        "*color* → *colour*; *favorite* → *favourite*; *center* → *centre*.",
+        "*traveler* → *traveller* (double-l).",
+        "*on accident* → *by accident*."
+      ]
+    },
+    {
+      "id": 12,
+      "skill_name": "proofread",
+      "name": "en_GB-currency-and-temperature",
+      "language": "en_GB",
+      "prompt": "/proofread en_GB",
+      "files": [
+        "evals/fixtures/en_GB-typography-errors.md"
+      ],
+      "expected_output": "Currency before number with no space; temperature with no-break space between number and degree.",
+      "expectations": [
+        "Currency uses *£100* (no space, symbol before).",
+        "Temperature uses no-break space: *25 °C* not *25°C*.",
+        "Decimal separator is the full stop (123.45), thousands separator is the comma."
+      ]
+    },
+    {
+      "id": 13,
+      "skill_name": "proofread",
+      "name": "en_US-typography-mechanics",
+      "language": "en_US",
+      "prompt": "/proofread en_US",
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
+      "expected_output": "Corrected text with American English typography conventions applied.",
+      "expectations": [
+        "Thousands separator uses comma: 1,234,567.",
+        "Percent in figures has no space: 14%.",
+        "Parenthetical insertion uses EM-dash without spaces (an increase—of …), not EN-dash with spaces.",
+        "Date format is MM/DD/YYYY (07/04/2026), not DD/MM/YYYY.",
+        "Time format is 12-hour with AM/PM and colon (2:30 PM), not 24-hour with full stop."
+      ]
+    },
+    {
+      "id": 14,
+      "skill_name": "proofread",
+      "name": "en_US-oxford-comma-required",
+      "language": "en_US",
+      "prompt": "/proofread en_US",
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
+      "expected_output": "Oxford comma is added in series; American convention requires it.",
+      "expectations": [
+        "*red, white and blue* is corrected to *red, white, and blue* (Oxford comma present).",
+        "No other word-order or content changes are made — proofread scope only."
+      ]
+    },
+    {
+      "id": 15,
+      "skill_name": "proofread",
+      "name": "en_US-quotation-marks-and-punctuation",
+      "language": "en_US",
+      "prompt": "/proofread en_US",
+      "files": [
+        "evals/fixtures/en_US-quotation-errors.md"
+      ],
+      "expected_output": "Double curly quotes outer, single curly inner; punctuation inside the quote always.",
+      "expectations": [
+        "Outer quotation marks use “…” (U+201C, U+201D), not '…' or straight ASCII.",
+        "Inner quotation marks use ‘…’, opposite of British convention.",
+        "Commas and full stops sit inside the closing quote regardless of whether they belong to the quoted material — *He called it “revolutionary.”*."
+      ]
+    },
+    {
+      "id": 16,
+      "skill_name": "proofread",
+      "name": "en_US-abbreviation-fullstops",
+      "language": "en_US",
+      "prompt": "/proofread en_US",
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
+      "expected_output": "Contraction abbreviations always carry a full stop in American English.",
+      "expectations": [
+        "*Mr Smith* is corrected to *Mr. Smith* (American always uses the full stop).",
+        "*Dr Jones* is corrected to *Dr. Jones*.",
+        "Initialisms (CEO, HTML, NASA) carry no full stops."
+      ]
+    },
+    {
+      "id": 17,
+      "skill_name": "proofread",
+      "name": "en_US-spelling-from-british-drift",
+      "language": "en_US",
+      "prompt": "/proofread en_US",
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
+      "expected_output": "British -ise/-isation drift corrected to American -ize/-ization.",
+      "expectations": [
+        "*organise* → *organize*; *analyse* → *analyze*.",
+        "No other word-order or content changes are made — proofread scope only."
+      ]
+    },
+    {
+      "id": 18,
+      "skill_name": "proofread",
+      "name": "en_US-currency-and-temperature",
+      "language": "en_US",
+      "prompt": "/proofread en_US",
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
+      "expected_output": "Currency before number with no space; temperature with no space before degree.",
+      "expectations": [
+        "Currency uses *$100* (no space, symbol before).",
+        "Temperature has no space between number and degree-letter combination: *77°F* not *77 °F*.",
+        "Decimal separator is the full stop, thousands separator is the comma."
+      ]
+    },
+    {
+      "id": 401,
+      "skill_name": "proofread",
+      "name": "fallback-default-mechanics-on-german-text",
+      "language": "de",
+      "prompt": "/proofread",
+      "files": [
+        "evals/fixtures/de-fallback.md"
+      ],
+      "expected_output": "The skill falls back to `default-mechanics.md` because there is no `de.md`, reports the absence, and applies the baseline conventions to obvious mechanic errors.",
+      "expectations": [
+        "Language resolution detects German, finds no `lib/languages/de.md`, and falls back to `lib/languages/default-mechanics.md`.",
+        "The reply prints the fallback notice in English: *No language file found for [German]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>.md` for stricter control.*",
+        "Baseline conventions apply: ISO 8601 short date, SI no-break space between number and unit, comma decimal not used (full stop is the default-mechanics baseline).",
+        "The duplicated word *doppelte doppelte* is flagged; the typo *Tippfehlr* is corrected; the missing trailing word is flagged."
+      ]
+    }
+  ]
+}

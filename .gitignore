@@ -8,3 +8,6 @@
 # Local environment overrides
 .env
 .env.local
+
+# Eval runner output (per-iteration directories, grading JSON, HTML viewer)
+evals/workspace/
