@@ -9,11 +9,14 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 ### Added
 
 - `lib/protocols/language-resolution.md` — shared language-resolution protocol covering the argument step, source mode (*detect* / *propose*), file inventory, the overlay loader for territorial variants (`inherits: "@<base>.md"`), and fallback reporting. Inline `## Language determination` sections in `/proofread`, `/redline`, `/edit`, `/write`, and `/writing-rules` are replaced by a short reference to the protocol. Overlay semantics: H2 sections under `<!-- layer: mechanics -->` and `<!-- layer: style -->` are the unit of override; H3 sub-sections cannot be overridden in isolation; no partial within-section merges; one step deep only. The current shipped language files declare no `inherits` field, so the protocol is a no-op for them until the first territorial variant lands.
+- Automated audit pipeline (`scripts/audit.py`) wired to pre-commit and CI. The script runs every scriptable item from the README *Audit checklist*: skill `../../lib/...` path resolution, genre file ↔ `_index.md` symmetry and frontmatter sync, single-default-genre invariant, language-file layer markers, genre scope markers, skill slash names in execution-context lib files, `plugin.json` shape with version-matches-CHANGELOG-heading coupling, `inherits` validation (forward-compat for territorial variants), and trigger-list duplication outside `_index.md` (forward-compat for the fast-path-dedup slice). The same script is the source of truth for `.pre-commit-config.yaml` and `.github/workflows/audit.yml`; CI is the hard gate.
 
 ### Changed
 
 - License changed from proprietary to Apache 2.0.
 - README *Authoring rules* and *Audit checklist* updated to remove the prior exception for inline language resolution. Resolution is now treated like any other shared procedure: the protocol lives in `lib/protocols/`, and each consuming `SKILL.md` references it.
+- README *Audit checklist* now carries `(auto)` / `(manual)` markers per item and a brief note on installing the pre-commit hook.
+- `lib/protocols/proofread.md` rephrased to remove the prior naming of sibling skills (the previous line referred to *the redline / edit passes*); the protocol now speaks generically of *deeper review passes*, restoring caller-agnosticism per authoring rule 1.
 
 ## [0.3.0] — 2026-05-25
 
