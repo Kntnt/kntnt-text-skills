@@ -343,6 +343,8 @@ Finally, add a matching block for the new genre to `lib/genres/_index.md` so the
 
 Before editing any files under `skills/` or `lib/`, read the **Authoring rules** section below — it captures the architectural constraints that earlier rounds of cleanup have established and that future changes must preserve.
 
+**Eval suite.** Test coverage lives in [`evals/`](evals/) and is wired to the [skill-creator](https://github.com/anthropics/skills/tree/main/skill-creator) pipeline. The aggregated [`evals/evals.json`](evals/evals.json) covers all four task skills (`/proofread`, `/redline`, `/edit`, `/write`) in Swedish, British English, and American English, plus a fallback case in German, an overlay-loader case in Finland-Swedish, the two fast-path parity cases, the per-skill natural-language `--max-iterations` cases, and the last-resort floor case. When a new rule lands — a new language file, a new genre, a new mechanic — add at least one test case in `evals/` in the same commit; for a new language file, add at least three cases per affected skill. See [`evals/README.md`](evals/README.md) for the file layout, the scaling rule, and how to run the suite.
+
 ## Design principles
 
 - **DRY.** Shared rules live in one place. The proofread pass is described once across three layers. Language-specific conventions live only in the language layer files. No trigger keywords are duplicated between `SKILL.md` and content-type frontmatter.
