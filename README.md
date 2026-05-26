@@ -13,8 +13,8 @@ The plugin exposes seven skills, organised in three groups.
 **Slash-only task skills:**
 
 - `/redline` — critical editorial review with human-in-the-loop. Runs the same silent proofread pass as `/proofread`, then performs a critical-review pass against the full rule set (style, content type, technique, language) and presents each finding one at a time as a four-part proposal (marking, problem, solution, prompt). You accept, reject, counter, or delegate. Scope is from proofreading up to and including line editing.
-- `/edit` — AFK (away-from-keyboard) variant of `/redline`. Same proofread and critical-review passes, but findings are settled by an internal subagent — no question-by-question dialogue with you. The main agent and subagent iterate as colleagues for up to three rounds and deliver the polished text directly.
-- `/write` — four-phase content creation. Phase 1 acquires a brief over nine fields. Phase 2 presents the idea for structure, tone, technique, and address. Phase 3 writes the draft. Phase 4 applies the redline protocol with subagent settling — the same procedure `/edit` runs — so you receive only the polished final result.
+- `/edit` — AFK (away-from-keyboard) variant of `/redline`. Same proofread and critical-review passes, but no question-by-question dialogue with you. The main agent applies the finding list directly and delivers the polished text. Pass `--max-iterations=N` (or an equivalent natural-language phrase — *deep review*, *one round*, *kör djupt*) to add an opt-in subagent loop with that ceiling.
+- `/write` — four-phase content creation. Phase 1 acquires a brief over nine fields. Phase 2 presents the idea for structure, tone, technique, and address. Phase 3 writes the draft. Phase 4 applies the redline protocol to the draft — by default the main agent applies the findings directly and delivers the polished result; `--max-iterations=N` opts into a subagent loop just as in `/edit`.
 
 **Slash-only context loaders:**
 
@@ -109,20 +109,28 @@ Phase 1 runs silently — the technical corrections are baked into the final res
 - **Accept** — the proposal is applied.
 - **Reject** — the proposal is dropped.
 - **Counter** — the plugin evaluates your objection against the rule set and either stands its ground with motivation or accepts your counter.
-- **Delegate** (*just do it*, *gör vad du tycker är bäst*) — the plugin activates its subagent protocol on the remaining open findings and delivers the polished result without reporting the internal dialogue. From that point the run is `/edit`-like for the tail of the list.
+- **Delegate** (*just do it*, *gör vad du tycker är bäst*) — the plugin settles the remaining open findings without further dialogue and delivers the polished result. The default is direct main-agent application; passing `--max-iterations=N` (or a natural-language equivalent) on the original `/redline` invocation switches the tail to an opt-in subagent loop with that ceiling.
 
-Scope is from proofreading up to and including line editing. When the text is so far from publication that line editing cannot fix it, `/redline` raises a single last-resort finding describing what the writer should do instead, rather than silently rewriting at the developmental level.
+Scope is from proofreading up to and including line editing. When the text is so far from publication that line editing cannot fix it, `/redline` raises a single last-resort finding describing what the writer should do instead, rather than silently rewriting at the developmental level. A last-resort finding raises the subagent floor to 1 — one sanity-check round before the closing note reaches you — even when no `--max-iterations` flag was set.
 
 ### `/edit`
 
-AFK (away-from-keyboard) variant of `/redline`. Same proofread and critical-review passes, but findings are settled by an internal subagent — no question-by-question dialogue with you.
+AFK (away-from-keyboard) variant of `/redline`. Same proofread and critical-review passes, no question-by-question dialogue with you.
 
 ```
 /edit @draft.md
 /edit en_GB @draft.md
+/edit --max-iterations=2 @draft.md
 ```
 
-Phase 1 and Phase 2 are identical to `/redline`. Phase 3 settles the findings via the subagent protocol: the main agent points out, the subagent improves, for up to three rounds, early consensus preferred. You receive only the polished final text. The single exception is the last-resort finding described under `/redline` — if the text requires developmental work, the plugin surfaces that single decision to you as a closing note.
+Phase 1 and Phase 2 are identical to `/redline`. Phase 3 is opt-in:
+
+- **Default (`--max-iterations=0`).** The main agent applies the finding list directly to the corrected text and delivers the polished result. No subagent runs.
+- **`--max-iterations=1` / `=2` / `=3`.** The subagent loop in `protocols/subagent.md` runs with that ceiling on iterations (clamped to 3). The subagent's convergence rules still apply — if main agent and subagent agree after an earlier round, the loop stops there.
+
+Natural-language phrases parse to the same value as the flag (flag wins on conflict): *deep review* / *kör djupt* / *iterate up to three times* → 3, *max två rundor* / *two rounds max* → 2, *one round* / *en runda räcker* → 1, *skip subagent* / *hoppa över subagent* → 0.
+
+If the redline pass surfaces the last-resort developmental finding — the text wants a different content type, or sits below the line-editing repair threshold — the subagent floor is raised to 1 even when the flag is 0. One round to sanity-check the observation, then the closing note reaches you.
 
 ### `/write`
 
@@ -142,7 +150,7 @@ If no language argument is given, `/write` proposes a target language based on t
 
 **Phase 3 — draft.** The plugin writes the draft per the content-type file, the technique file, and the loaded language files.
 
-**Phase 4 — redline review with subagent settling.** The plugin applies the same procedure `/edit` runs — `protocols/redline.md` plus `protocols/subagent.md` — to the draft. Main agent and subagent iterate for up to three rounds, early consensus encouraged. You see only the polished final result — the internal dialogue is not reported.
+**Phase 4 — redline review.** The plugin applies the same procedure `/edit` runs to the draft. By default the main agent applies the findings directly and delivers the polished result. Pass `--max-iterations=N` on the original `/write` invocation (or use an equivalent natural-language phrase) to opt into a subagent loop with that ceiling. The last-resort floor of 1 applies here too.
 
 `/write` has no follow-up user-facing dialogue. If you want to review the delivered text yourself, run `/redline` separately. If you want another AFK pass, run `/edit`.
 
@@ -219,8 +227,8 @@ The three review skills form a strict inheritance hierarchy. Each deeper skill i
 | Skill | Phase 1 (silent) | Phase 2 (critical review) | Phase 3 (settling) |
 |---|---|---|---|
 | `/proofread` | `protocols/proofread.md` against `rules/writing.md` (plus the matching sections of `rules/constructions.md`) + the *Mechanics* section of the loaded `<lang>.md` (or `default-mechanics.md`) | — | — |
-| `/redline` | same as `/proofread` | `protocols/redline.md` against `rules/style.md` + the *Style* section of the loaded `<lang>.md` + applicable `genres/<type>.md` + applicable `techniques/<technique>.md` | `protocols/dialogue.md` (one finding at a time, you decide) |
-| `/edit` | same as `/proofread` | same as `/redline` | `protocols/subagent.md` (AFK, max three iterations) |
+| `/redline` | same as `/proofread` | `protocols/redline.md` against `rules/style.md` + the *Style* section of the loaded `<lang>.md` + applicable `genres/<type>.md` + applicable `techniques/<technique>.md` | `protocols/dialogue.md` (one finding at a time, you decide); on delegation the main agent applies directly, or — with `--max-iterations=N` — invokes `protocols/subagent.md` with that ceiling |
+| `/edit` | same as `/proofread` | same as `/redline` | Default: main agent applies directly. Opt-in via `--max-iterations=N`: `protocols/subagent.md` runs with that ceiling. Last-resort finding raises the floor to 1 |
 
 `/write` Phase 4 invokes the same Phase 2 + Phase 3 directly — so the inheritance also covers the post-draft polish of newly written text.
 
@@ -324,7 +332,7 @@ Before editing any files under `skills/` or `lib/`, read the **Authoring rules**
 - **Tools, not algorithms.** The skill files describe outcomes and rules. They do not specify matching algorithms or file-search heuristics — the plugin solves the mechanics with standard tools (Glob, Grep, Read, Edit, Write, Bash).
 - **The user, not the author.** All skill-internal text addresses *the user*. The plugin is generic; the house voice it embodies is documented in metadata, not embedded in the skill text.
 - **English baseline, language layer for the rest.** Everything outside `lib/languages/` is written in British English. Per-language conventions, examples, and overrides live in `lib/languages/<lang>.md` (with mechanics and style as named sections).
-- **Token-aware.** The subagent is invoked once per `/write` (Phase 4, auto), once per `/edit` (Phase 3, auto), and once per `/redline` invocation when the user delegates an open finding. Maximum three iterations per invocation, early termination preferred. Skills load one language file per run (`/proofread` applies only its *Mechanics* section; `/redline`, `/edit`, and `/write` apply both sections) plus `rules/constructions.md`, whose four sections are applied cognitively only when the matching construction appears in the input.
+- **Token-aware.** The subagent is opt-in by default — `/edit` Phase 3, `/write` Phase 4, and `/redline`'s delegation tail all apply findings directly unless the user passes `--max-iterations=N` (or an equivalent natural-language phrase) on the invocation. A last-resort developmental finding from the redline pass raises the floor to one round automatically; otherwise no subagent fires. The protocol ceiling is three iterations, early termination preferred. Skills load one language file per run (`/proofread` applies only its *Mechanics* section; `/redline`, `/edit`, and `/write` apply both sections) plus `rules/constructions.md`, whose four sections are applied cognitively only when the matching construction appears in the input. `/edit` and `/redline` additionally take a genre fast-path: when the input has no structural markers (no H1, standfirst, byline, or attributed-quote pattern) and the prompt contains no genre word, the skills commit to `general` directly and skip both the `_index.md` and the matched-genre reads. Files-to-read batches are issued in parallel where dependencies allow.
 
 ## Authoring rules
 
@@ -367,7 +375,7 @@ These rules govern how to edit the files in this plugin. They exist to prevent a
 
 ## Requirements
 
-The plugin requires Claude Code or Cowork with support for slash commands, YAML frontmatter with `disable-model-invocation`, and subagents (for `/write` Phase 4, `/edit` Phase 3, and `/redline` when the user delegates). No external libraries or MCP servers are required — the plugin is self-contained.
+The plugin requires Claude Code or Cowork with support for slash commands, YAML frontmatter with `disable-model-invocation`, and subagents (opt-in via `--max-iterations=N` in `/edit`, `/write`, and `/redline`, plus the automatic floor of one round when the redline pass surfaces a last-resort finding). No external libraries or MCP servers are required — the plugin is self-contained.
 
 ## License
 
