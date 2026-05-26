@@ -1,6 +1,6 @@
 ---
 name: redline
-description: Three-phase critical editorial review with human-in-the-loop settling — proofread ⊂ redline ⊂ edit, the middle skill. Phase 1 silently applies the conservative proofread pass. Phase 2 produces a finding list per protocols/redline.md against rules/style.md, the applicable content-type and technique files, and the loaded language file. Phase 3 settles each finding with the user one at a time via protocols/dialogue.md (accept / reject / counter / delegate); on delegation, the `--max-iterations=N` flag (0–3, default 0) controls whether the remaining tail is applied directly by the main agent or routed through the subagent loop. Optional language argument (`/redline sv`, `/redline en_GB`). Scope from proofreading up to and including line editing; substantive editing surfaces only as a single last-resort finding. Activates only via the explicit `/redline` slash command.
+description: Three-phase critical editorial review — silent proofread, then a finding list, then settle each finding with the user one at a time via accept / reject / counter / delegate. Human-in-the-loop counterpart of `/edit`, which runs the same passes without the dialogue. Optional flags: see SKILL.md body for `--max-iterations`. Activates only via the explicit `/redline` slash command.
 disable-model-invocation: true
 ---
 

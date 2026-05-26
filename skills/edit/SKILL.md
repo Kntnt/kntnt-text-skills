@@ -1,6 +1,6 @@
 ---
 name: edit
-description: AFK (away-from-keyboard) variant of /redline — proofread ⊂ redline ⊂ edit, the deepest skill. Same Phase 1 (silent proofread) and Phase 2 (critical review per protocols/redline.md) as /redline; Phase 3 by default applies the findings directly without user dialogue. The subagent loop in protocols/subagent.md is opt-in via `--max-iterations=N` (0–3, default 0); a last-resort developmental finding raises the floor to 1. Optional language argument (`/edit sv`, `/edit en_GB`). Scope from proofreading up to and including line editing; substantive editing surfaces only as a single last-resort note. Activates only via the explicit `/edit` slash command.
+description: Three-phase critical editorial review that settles the finding list directly without user dialogue, delivering the polished text. AFK (away-from-keyboard) variant of `/redline`, which settles each finding with the user one at a time. Optional flags: see SKILL.md body for `--max-iterations`. Activates only via the explicit `/edit` slash command.
 disable-model-invocation: true
 ---
 

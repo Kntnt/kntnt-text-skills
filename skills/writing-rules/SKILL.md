@@ -1,6 +1,6 @@
 ---
 name: writing-rules
-description: Manual context loader that loads the plugin's writing rules and general style guidance into the current session, optionally for a specific language. After invocation, the agent has the typographic, grammatical, and stylistic rule set available for any ad-hoc writing the user does in the same session — without invoking /write or /edit. Accepts an optional language argument (e.g. `/writing-rules sv`, `/writing-rules en_GB`); without one, loads all installed language files so that any subsequent language is covered. Activates only via the explicit /writing-rules slash command.
+description: Manual context loader that loads the plugin's writing rules and style guidance into the current session, optionally scoped to a given language. Activates only via the explicit `/writing-rules` slash command.
 disable-model-invocation: true
 ---
 

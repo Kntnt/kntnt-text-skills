@@ -1,6 +1,6 @@
 ---
 name: write
-description: Four-phase content creation. Phase 1 acquires a brief over nine fields the user accepts, modifies, or discusses. Phase 2 presents the idea (structure, tone, ABT/PAC plan, address, length). Phase 3 writes the draft against the applicable content-type, technique, and language files. Phase 4 polishes via the redline pass and by default applies the findings directly; the subagent loop in protocols/subagent.md is opt-in via `--max-iterations=N` (0–3, default 0), and a last-resort developmental finding raises the floor to 1. Only the polished final text is delivered. Optional language argument (`/write sv`, `/write en_GB`); without it the skill proposes a target language and asks the user to confirm. Blog posts disambiguate to article or column. Activates only via the explicit `/write` slash command.
+description: Content creation from scratch or from source material. Four phases — brief acquisition across nine fields, idea presentation, draft, and an automatic redline polish — gate the run so the user shapes the brief and idea before drafting begins. Optional flags: see SKILL.md body for `--max-iterations`. Activates only via the explicit `/write` slash command.
 disable-model-invocation: true
 ---
 
