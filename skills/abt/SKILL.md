@@ -1,6 +1,6 @@
 ---
 name: abt
-description: Manual context loader that loads the ABT technique (And, But, Therefore — narrative arc) into the current session. After invocation, the agent can apply or reference ABT outside /write or /edit — for ad-hoc structuring questions, technique discussions, or applying the arc to an existing text. Activates only via the explicit /abt slash command.
+description: Manual context loader that loads the ABT technique (And, But, Therefore — narrative arc) into the current session. Activates only via the explicit `/abt` slash command.
 disable-model-invocation: true
 ---
 

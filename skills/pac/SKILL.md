@@ -1,6 +1,6 @@
 ---
 name: pac
-description: Manual context loader that loads the PAC technique (Premise, Analysis, Conclusion — analytical arc) into the current session. After invocation, the agent can apply or reference PAC outside /write or /edit — for structuring reports and analytical sections, discussing the arc, or applying it to an existing text. Activates only via the explicit /pac slash command.
+description: Manual context loader that loads the PAC technique (Premise, Analysis, Conclusion — analytical arc) into the current session. Activates only via the explicit `/pac` slash command.
 disable-model-invocation: true
 ---
 
