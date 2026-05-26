@@ -41,9 +41,13 @@ A short paragraph with none of those constructions loads only `writing.md`.
 
 > The list below is a coverage requirement, not a sequence of unconditional reads. Before each Read, check whether the file's content is already in your conversation context — from any prior turn, phase, or skill invocation in this session. If it is, skip it. The user's input file or URL is always fetched fresh.
 
-1. `../../lib/protocols/proofread.md` — the procedure and the full scope.
-2. `../../lib/rules/writing.md` — universal punctuation rules.
-3. Whichever construction-scoped rule files match the input (`quotation.md`, `abbreviations.md`, `headed-text.md`, `lists.md`) per *Conditional rule loading* above.
-4. `../../lib/languages/<lang>-mechanics.md` — the specific mechanics file determined above. If none exists for the determined language, use `../../lib/languages/default-mechanics.md` instead.
-5. `../../lib/protocols/input.md` — to determine the input form (inline text, file, or URL).
-6. `../../lib/protocols/output-inline.md` if the input is inline; otherwise `../../lib/protocols/output-files.md` — to deliver the result.
+> Reads that are not skipped above fire in batches. Each batch below groups files with no mutual dependency; issue all of them as a single parallel tool call, then advance to the next batch when the previous returns.
+
+**Batch 1.** Issue these reads in parallel:
+
+- `../../lib/protocols/proofread.md` — the procedure and the full scope.
+- `../../lib/rules/writing.md` — universal punctuation rules.
+- Whichever construction-scoped rule files match the input (`quotation.md`, `abbreviations.md`, `headed-text.md`, `lists.md`) per *Conditional rule loading* above.
+- `../../lib/languages/<lang>-mechanics.md` — the specific mechanics file determined above. If none exists for the determined language, use `../../lib/languages/default-mechanics.md` instead.
+- `../../lib/protocols/input.md` — to determine the input form (inline text, file, or URL).
+- Both `../../lib/protocols/output-inline.md` and `../../lib/protocols/output-files.md` — loaded speculatively so the matching one is ready once the input form is known.

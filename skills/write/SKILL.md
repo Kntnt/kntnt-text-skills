@@ -96,16 +96,28 @@ Once the type is confirmed, read the content-type file. Skip sections preceded b
 
 > The list below is a coverage requirement, not a sequence of unconditional reads. Before each Read, check whether the file's content is already in your conversation context — from any prior turn, phase, or skill invocation in this session. If it is, skip it. The user's input file or URL is always fetched fresh.
 
-Read in this order when the user invokes `/write`:
+> Reads that are not skipped above fire in batches. Each batch below groups files with no mutual dependency; issue all of them as a single parallel tool call, then advance to the next batch when the previous returns.
 
-1. `../../lib/genres/_index.md` — for content-type detection.
-2. The matching `../../lib/genres/<type>.md` — once the type is confirmed in Phase 1.
-3. `../../lib/techniques/<technique>.md` — once the technique is confirmed.
-4. `../../lib/rules/style.md`, `../../lib/rules/writing.md`, and the language files determined above (specific `lib/languages/<lang>-mechanics.md` plus `lib/languages/<lang>-style.md` where it exists, otherwise `lib/languages/default-mechanics.md`) — for the draft.
-5. `../../lib/protocols/input.md` — to determine the input form when source material is provided.
-6. `../../lib/protocols/proofread.md` and `../../lib/protocols/redline.md` — for Phase 4 review of the draft. Load the construction-scoped rule files (`quotation.md`, `abbreviations.md`, `headed-text.md`, `lists.md`) only for the constructions present in the draft per *Conditional rule loading for Phase 4* above.
-7. `../../lib/protocols/subagent.md` — for Phase 4 settling.
-8. `../../lib/protocols/output-inline.md` if the input is inline; otherwise `../../lib/protocols/output-files.md` — to deliver the result.
+**Batch 0.** Before Phase 1 begins:
+
+- `../../lib/genres/_index.md` — for Phase 1 content-type detection.
+
+**Batch 1.** After Phase 1 confirms the content type and technique:
+
+- The matching `../../lib/genres/<type>.md`.
+- The matching `../../lib/techniques/<technique>.md`.
+
+**Batch 2.** After Phase 2 confirmation, issue all remaining reads in parallel:
+
+- `../../lib/rules/style.md` — substantive style guidance for drafting and Phase 4 review.
+- `../../lib/rules/writing.md` — universal punctuation rules.
+- The language files determined above: `../../lib/languages/<lang>-mechanics.md` plus `../../lib/languages/<lang>-style.md` where it exists (otherwise `../../lib/languages/default-mechanics.md`).
+- `../../lib/protocols/proofread.md` — for Phase 4a.
+- `../../lib/protocols/redline.md` — for Phase 4b.
+- `../../lib/protocols/subagent.md` — for Phase 4 settling.
+- `../../lib/protocols/input.md` — to determine the input form when source material is provided.
+- Both `../../lib/protocols/output-inline.md` and `../../lib/protocols/output-files.md` — loaded speculatively so the matching one is ready once the input form is known.
+- **Aggressively speculative**: all conditional rule files — `../../lib/rules/quotation.md`, `../../lib/rules/abbreviations.md`, `../../lib/rules/headed-text.md`, `../../lib/rules/lists.md` — regardless of draft contents. The draft does not yet exist when Batch 2 fires, so the conditional application from *Conditional rule loading for Phase 4* happens cognitively in Phase 4 against an already-loaded rule set.
 
 ## Special handling
 

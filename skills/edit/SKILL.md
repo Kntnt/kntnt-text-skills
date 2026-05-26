@@ -54,15 +54,25 @@ The single exception is the last-resort finding from `protocols/redline.md` — 
 
 > The list below is a coverage requirement, not a sequence of unconditional reads. Before each Read, check whether the file's content is already in your conversation context — from any prior turn, phase, or skill invocation in this session. If it is, skip it. The user's input file or URL is always fetched fresh.
 
-Read in this order:
+> Reads that are not skipped above fire in batches. Each batch below groups files with no mutual dependency; issue all of them as a single parallel tool call, then advance to the next batch when the previous returns.
 
-1. `../../lib/protocols/proofread.md` — Phase 1 procedure.
-2. `../../lib/rules/writing.md` plus whichever construction-scoped rule files match the input (`quotation.md`, `abbreviations.md`, `headed-text.md`, `lists.md`), and the language mechanics file determined above (specific `lib/languages/<lang>-mechanics.md`, otherwise `lib/languages/default-mechanics.md`) — Phase 1.
-3. `../../lib/genres/_index.md` — to identify the content type.
-4. The matching `../../lib/genres/<type>.md` and `../../lib/techniques/<technique>.md`.
-5. `../../lib/rules/style.md`, the language style file `../../lib/languages/<lang>-style.md` where it exists, and `../../lib/protocols/redline.md` — Phase 2.
-6. `../../lib/protocols/subagent.md` — Phase 3.
-7. `../../lib/protocols/input.md` — to determine the input form. Then `../../lib/protocols/output-inline.md` if the input is inline; otherwise `../../lib/protocols/output-files.md`.
+**Batch 1.** Issue these reads in parallel:
+
+- `../../lib/protocols/proofread.md` — Phase 1 procedure.
+- `../../lib/protocols/redline.md` — Phase 2 procedure.
+- `../../lib/protocols/subagent.md` — Phase 3 settling protocol.
+- `../../lib/rules/writing.md` — universal punctuation rules.
+- Whichever construction-scoped rule files match the input (`quotation.md`, `abbreviations.md`, `headed-text.md`, `lists.md`) per *Conditional rule loading* above.
+- `../../lib/languages/<lang>-mechanics.md` and `../../lib/languages/<lang>-style.md` where it exists (otherwise `../../lib/languages/default-mechanics.md`).
+- `../../lib/genres/_index.md` — to identify the content type.
+- `../../lib/rules/style.md` — Phase 2 universal style foundation.
+- `../../lib/protocols/input.md` — to determine the input form.
+- Both `../../lib/protocols/output-inline.md` and `../../lib/protocols/output-files.md` — loaded speculatively so the matching one is ready once the input form is known.
+
+**Batch 2.** After the genre and technique are identified from Batch 1's `_index.md`:
+
+- The matching `../../lib/genres/<type>.md`.
+- The matching `../../lib/techniques/<technique>.md`.
 
 ## Output
 

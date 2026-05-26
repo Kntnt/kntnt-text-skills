@@ -20,12 +20,14 @@ Without an argument, load every `*-mechanics.md` and `*-style.md` file in `../..
 
 > The list below is a coverage requirement, not a sequence of unconditional reads. Before each Read, check whether the file's content is already in your conversation context — from any prior turn, phase, or skill invocation in this session. If it is, skip it. The user's input file or URL is always fetched fresh.
 
-This loader provides full session coverage and reads every rule file regardless of input (no conditional rule loading):
+> Reads that are not skipped above fire in batches. Each batch below groups files with no mutual dependency; issue all of them as a single parallel tool call, then advance to the next batch when the previous returns.
 
-1. `../../lib/rules/writing.md` — universal punctuation: comma, dash, parenthesis.
-2. `../../lib/rules/quotation.md` — quotation (run-in, block, dialogue).
-3. `../../lib/rules/abbreviations.md` — initialisms and acronyms.
-4. `../../lib/rules/headed-text.md` — body-text self-sufficiency.
-5. `../../lib/rules/lists.md` — list punctuation and capitalisation.
-6. `../../lib/rules/style.md` — substantive style guidance: organising principle, repetition rule, techniques, cognitive load, understatement, precision, transitions, address and voice, pedagogy, attributed quotes, AI-tell principle, training-language interference, global rules (source fabrication ban, AI metaphor ban, rhetorical question rule).
-7. `../../lib/languages/<lang>-mechanics.md` and `../../lib/languages/<lang>-style.md` — the language files per the determination above. When the named language has no specific files, `../../lib/languages/default-mechanics.md` is loaded instead.
+**Batch 1.** Issue every rule file in parallel (this loader provides full session coverage and reads every rule file regardless of input — no conditional rule loading):
+
+- `../../lib/rules/writing.md` — universal punctuation: comma, dash, parenthesis.
+- `../../lib/rules/quotation.md` — quotation (run-in, block, dialogue).
+- `../../lib/rules/abbreviations.md` — initialisms and acronyms.
+- `../../lib/rules/headed-text.md` — body-text self-sufficiency.
+- `../../lib/rules/lists.md` — list punctuation and capitalisation.
+- `../../lib/rules/style.md` — substantive style guidance: organising principle, repetition rule, techniques, cognitive load, understatement, precision, transitions, address and voice, pedagogy, attributed quotes, AI-tell principle, training-language interference, global rules (source fabrication ban, AI metaphor ban, rhetorical question rule).
+- `../../lib/languages/<lang>-mechanics.md` and `../../lib/languages/<lang>-style.md` — the language files per the determination above. When the named language has no specific files, `../../lib/languages/default-mechanics.md` is loaded instead.
