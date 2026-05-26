@@ -20,7 +20,7 @@ The boundary between line editing and developmental editing is the test: can the
 
 ## Files in play
 
-The redline pass operates against the substantive style foundation, the loaded language files (the mechanics layer plus, where it exists, the style layer), the applicable content-type rules, and the applicable technique rules — all loaded by the calling skill. The objective writing rules already loaded by the prior proofread pass remain in scope for borderline cases that touch both objective rules and substantive style.
+The redline pass operates against the substantive style foundation, the loaded language file (both its mechanics and style sections, where the style section exists), the applicable content-type rules, and the applicable technique rules — all loaded by the calling skill. The objective writing rules already loaded by the prior proofread pass remain in scope for borderline cases that touch both objective rules and substantive style.
 
 When no language-specific file exists for the determined language, the calling skill falls back to the default mechanics file. The redline pass then operates against the default mechanics only — there is no companion default style file, because the style layer (address, AI-tell manifestations, interference patterns, genre adjustments) is inherently language-and-culture-bound and has no meaningful baseline.
 

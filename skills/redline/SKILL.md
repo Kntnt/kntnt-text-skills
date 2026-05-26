@@ -14,31 +14,25 @@ Source the language from the input text (detect mode). The resolution procedure:
 
 1. **Argument.** If the user passed a language argument (e.g. `sv`, `sv_SE`, `en`, `en_GB`, `en_US`), use it as the candidate. A bare argument (`sv`, `en`) that matches no file directly but matches several territorial variants goes to the disambiguation question below.
 2. **Detect.** Without an argument, infer the language from the input text.
-3. **Inventory.** Look for `<lang>-mechanics.md` (and, where the pass needs it, `<lang>-style.md`) in `../../lib/languages/` for the candidate:
-   - One match: use it. If only the mechanics file exists for the language, Phase 2 proceeds without a language-specific style overlay.
+3. **Inventory.** Look for `<lang>.md` in `../../lib/languages/` for the candidate:
+   - One match: use it. The file carries both layers in named sections; the calling phase determines which section applies. If the file contains no *Style* section for the language, Phase 2 proceeds without a language-specific style overlay.
    - Several matches: ask the user which to use.
    - No match: fall back to `../../lib/languages/default-mechanics.md` and mention this in the reply (in English):
-     > No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>-mechanics.md` and `lib/languages/<code>-style.md` for stricter control.
+     > No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>.md` for stricter control.
 
-Phase 1 (proofread) applies only the mechanics file. Phase 2 (redline) applies both mechanics and style. When only `default-mechanics.md` is available, Phase 2 still runs but without language-specific style overlays — the universal style foundation in `rules/style.md` carries the pass.
+Phase 1 (proofread) applies only the *Mechanics* section. Phase 2 (redline) applies both the *Mechanics* and *Style* sections. When only `default-mechanics.md` is available, Phase 2 still runs but without language-specific style overlays — the universal style foundation in `rules/style.md` carries the pass.
 
-## Conditional rule loading
+## Rule application
 
-Inspect the input before loading rule files. Load only the construction-scoped rule files that match constructions actually present in the input:
-
-- Always: `../../lib/rules/writing.md` — the universal punctuation rules (comma, dash, parenthesis).
-- If the input contains quotation marks, dialogue, or block quotations: `../../lib/rules/quotation.md`.
-- If the input contains initialisms or acronyms: `../../lib/rules/abbreviations.md`.
-- If the input contains H1, headings, subheadings, or a standfirst structure: `../../lib/rules/headed-text.md`.
-- If the input contains bulleted, numbered, or definition lists: `../../lib/rules/lists.md`.
+Apply the universal punctuation rules in `../../lib/rules/writing.md` always. Apply the matching sections of `../../lib/rules/constructions.md` (quotation, abbreviation, headed-text, lists) only when the input contains those constructions. Section-level filtering is cognitive — the file is loaded in full and the relevant sections are read against the input.
 
 ## Phase 1 — silent proofread
 
-Apply `../../lib/protocols/proofread.md` against the loaded rule files (per *Conditional rule loading* above) and the loaded language mechanics file. The corrected text flows directly into Phase 2 — it is not delivered as a separate intermediate output.
+Apply `../../lib/protocols/proofread.md` against the loaded rule files and the *Mechanics* section of the loaded language file. The corrected text flows directly into Phase 2 — it is not delivered as a separate intermediate output.
 
 ## Phase 2 — critical review
 
-Apply `../../lib/protocols/redline.md` against `../../lib/rules/style.md`, the loaded language style file (where it exists), the applicable file in `../../lib/genres/`, and the applicable file in `../../lib/techniques/`. The pass produces a finding list.
+Apply `../../lib/protocols/redline.md` against `../../lib/rules/style.md`, the *Style* section of the loaded language file (where it exists), the applicable file in `../../lib/genres/`, and the applicable file in `../../lib/techniques/`. The pass produces a finding list.
 
 If no genre matches clearly via triggers or semantic likeness, use the genre whose frontmatter has `default: true`. Do not read multiple genre files in full to compare — the frontmatter inventory plus the fallback flag is sufficient to decide.
 
@@ -74,12 +68,11 @@ Settle each finding via `../../lib/protocols/dialogue.md`. The user accepts, rej
 - `../../lib/protocols/redline.md` — Phase 2 procedure.
 - `../../lib/protocols/dialogue.md` — Phase 3 settling protocol.
 - `../../lib/rules/writing.md` — universal punctuation rules.
-- Whichever construction-scoped rule files match the input (`quotation.md`, `abbreviations.md`, `headed-text.md`, `lists.md`) per *Conditional rule loading* above.
-- `../../lib/languages/<lang>-mechanics.md` and `../../lib/languages/<lang>-style.md` where it exists (otherwise `../../lib/languages/default-mechanics.md`).
+- `../../lib/rules/constructions.md` — construction-scoped rules; apply the sections that match constructions in the input.
+- `../../lib/languages/<lang>.md` (otherwise `../../lib/languages/default-mechanics.md`).
 - `../../lib/genres/_index.md` — to identify the content type.
 - `../../lib/rules/style.md` — Phase 2 universal style foundation.
-- `../../lib/protocols/input.md` — to determine the input form.
-- Both `../../lib/protocols/output-inline.md` and `../../lib/protocols/output-files.md` — loaded speculatively so the matching one is ready once the input form is known.
+- `../../lib/protocols/io.md` — input detection and output routing.
 - `../../lib/protocols/subagent.md` — loaded speculatively (only used on delegation in Phase 3).
 
 **Batch 2.** After the genre and technique are identified from Batch 1's `_index.md`:

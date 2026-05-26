@@ -26,53 +26,52 @@ The slash-only skills (both task skills and context loaders) carry `disable-mode
 
 ## Languages
 
-The plugin separates universal rules from language-specific realisations. Files in `lib/rules/`, `lib/genres/`, `lib/techniques/`, and `lib/protocols/` are language-agnostic (all examples in British English). Per-language conventions live in `lib/languages/` as one file per layer: a `<lang>-mechanics.md` file with the proofread-scope conventions, and a `<lang>-style.md` file with the redline / edit-scope conventions. The ship set:
+The plugin separates universal rules from language-specific realisations. Files in `lib/rules/`, `lib/genres/`, `lib/techniques/`, and `lib/protocols/` are language-agnostic (all examples in British English). Per-language conventions live in `lib/languages/` as one file per language. Each file carries both layers in named sections — a `<!-- layer: mechanics -->` section with the proofread-scope conventions and a `<!-- layer: style -->` section with the redline / edit-scope conventions. The ship set:
 
-- `default-mechanics.md` — international baseline (fallback when no language-specific mechanics file exists)
-- `sv-mechanics.md`, `sv-style.md` — Swedish
-- `en_GB-mechanics.md`, `en_GB-style.md` — British English
-- `en_US-mechanics.md`, `en_US-style.md` — American English
+- `default-mechanics.md` — international baseline (fallback when no language-specific file exists)
+- `sv.md` — Swedish
+- `en_GB.md` — British English
+- `en_US.md` — American English
 
-Naming follows the POSIX locale form `language_TERRITORY` with the layer suffix. Both bare language codes (`sv`, `en`) and territorial variants (`sv_SE`, `sv_FI`, `en_GB`, `en_US`) are accepted as skill arguments. The resolver maps a language code `<lang>` to the pair `<lang>-mechanics.md` and `<lang>-style.md`; skills decide which of the pair they load based on the pass they run.
+Naming follows the POSIX locale form `language_TERRITORY`. Both bare language codes (`sv`, `en`) and territorial variants (`sv_SE`, `sv_FI`, `en_GB`, `en_US`) are accepted as skill arguments. The resolver maps a language code `<lang>` to the single file `<lang>.md`; skills decide which section they apply (mechanics, style, or both) based on the pass they run.
 
-A territorial variant is reserved to declare an inheritance relationship with its base — for a future `sv_FI-mechanics.md` / `sv_FI-style.md` pair the frontmatter would read:
+A territorial variant is reserved to declare an inheritance relationship with its base — for a future `sv_FI.md` the frontmatter would read:
 
 ```yaml
 ---
 name: sv_FI
 language: Finland Swedish
-layer: mechanics
-inherits: "@sv-mechanics.md"
+inherits: "@sv.md"
 ---
 ```
 
 The overlay loader is not implemented today (no territorial variant ships yet). When the first real variant lands, the loader is added with that variant as the test case for the overlay rules.
 
-### Mechanics and Style layers
+### Mechanics and Style sections
 
-The two-file layout enforces the split between layers. The mechanics file carries proofread-scope conventions (typography, quotation, punctuation, grammar, greetings); the style file carries redline / edit-scope conventions (address and voice, AI-tell manifestations, interference patterns, genre adjustments).
+The two-section layout enforces the split between layers within a single file. The *Mechanics* section carries proofread-scope conventions (typography, quotation, punctuation, grammar, greetings); the *Style* section carries redline / edit-scope conventions (address and voice, AI-tell manifestations, interference patterns, genre adjustments).
 
-`/proofread` loads only the mechanics file. `/redline`, `/edit`, and `/write` load both layers. The proofread pass cannot drift into stylistic touch-ups because the style file is not in the read set.
+`/proofread` applies only the *Mechanics* section. `/redline`, `/edit`, and `/write` apply both. The proofread pass cannot drift into stylistic touch-ups because the *Style* section is explicitly out of its scope.
 
 ### Default fallback
 
-When no language-specific mechanics file exists for the determined language, skills fall back to `lib/languages/default-mechanics.md`. It carries international-standard typography (ISO 8601 dates, SI unit conventions) plus internationally neutral defaults for ambiguous cases (straight ASCII quotation marks, EN-dash with spaces for parentheticals, no Oxford comma, British-style punctuation relative to quotes). There is no companion `default-style.md` because address, AI-tell manifestations, interference, and genre adjustments are inherently language-and-culture-bound and have no meaningful baseline.
+When no language-specific file exists for the determined language, skills fall back to `lib/languages/default-mechanics.md`. It carries international-standard typography (ISO 8601 dates, SI unit conventions) plus internationally neutral defaults for ambiguous cases (straight ASCII quotation marks, EN-dash with spaces for parentheticals, no Oxford comma, British-style punctuation relative to quotes). There is no companion `default-style.md` because address, AI-tell manifestations, interference, and genre adjustments are inherently language-and-culture-bound and have no meaningful baseline.
 
-Loading is either-or: a skill loads the specific language files if they exist, otherwise `default-mechanics.md`. They are not mixed.
+Loading is either-or: a skill loads the specific language file if it exists, otherwise `default-mechanics.md`. They are not mixed.
 
 When `default-mechanics.md` is used, the skill mentions in its reply (in English):
 
-> No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>-mechanics.md` and `lib/languages/<code>-style.md` for stricter control.
+> No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>.md` for stricter control.
 
 ### Language determination flow
 
 The resolution procedure lives inline in each consuming SKILL.md. In summary:
 
-1. **Argument.** If the user passes a language argument (e.g. `/proofread sv`, `/edit en_GB`), use it. A bare argument that matches no file pair directly but matches several territorial variants (e.g. `en` matches both `en_GB-*` and `en_US-*`) triggers a disambiguation question.
+1. **Argument.** If the user passes a language argument (e.g. `/proofread sv`, `/edit en_GB`), use it. A bare argument that matches no file directly but matches several territorial variants (e.g. `en` matches both `en_GB.md` and `en_US.md`) triggers a disambiguation question.
 2. **Source step.** Without an argument, the skill picks a source mode: *detect mode* (`/proofread`, `/redline`, `/edit` — source from the input text) or *propose mode* (`/write` — propose from the prompt's language and confirm).
-3. **Inventory.** Check `lib/languages/` for matching files. If multiple language matches arise, ask the user which to use. If a single language matches, load the layer(s) the pass requires. If none, fall back to `default-mechanics.md` and report the absence.
+3. **Inventory.** Check `lib/languages/` for matching files. If multiple language matches arise, ask the user which to use. If a single language matches, load the file and apply the section(s) the pass requires. If none, fall back to `default-mechanics.md` and report the absence.
 
-The manual context loader `/writing-rules` loads either the specified language's files or every installed language file.
+The manual context loader `/writing-rules` loads either the specified language's file or every installed language file.
 
 ## Installation
 
@@ -181,27 +180,19 @@ kntnt-text-skills/
 ├── lib/
 │   ├── languages/
 │   │   ├── default-mechanics.md
-│   │   ├── sv-mechanics.md
-│   │   ├── sv-style.md
-│   │   ├── en_GB-mechanics.md
-│   │   ├── en_GB-style.md
-│   │   ├── en_US-mechanics.md
-│   │   └── en_US-style.md
+│   │   ├── sv.md
+│   │   ├── en_GB.md
+│   │   └── en_US.md
 │   ├── rules/
 │   │   ├── writing.md
-│   │   ├── quotation.md
-│   │   ├── abbreviations.md
-│   │   ├── headed-text.md
-│   │   ├── lists.md
+│   │   ├── constructions.md
 │   │   └── style.md
 │   ├── protocols/
 │   │   ├── proofread.md
 │   │   ├── redline.md
 │   │   ├── dialogue.md
 │   │   ├── subagent.md
-│   │   ├── input.md
-│   │   ├── output-inline.md
-│   │   └── output-files.md
+│   │   └── io.md
 │   ├── genres/
 │   │   ├── _index.md
 │   │   ├── article.md
@@ -227,8 +218,8 @@ The three review skills form a strict inheritance hierarchy. Each deeper skill i
 
 | Skill | Phase 1 (silent) | Phase 2 (critical review) | Phase 3 (settling) |
 |---|---|---|---|
-| `/proofread` | `protocols/proofread.md` against `rules/writing.md` (plus the construction-scoped rule files matched by the input) + the loaded `<lang>-mechanics.md` (or `default-mechanics.md`) | — | — |
-| `/redline` | same as `/proofread` | `protocols/redline.md` against `rules/style.md` + the loaded `<lang>-style.md` + applicable `genres/<type>.md` + applicable `techniques/<technique>.md` | `protocols/dialogue.md` (one finding at a time, you decide) |
+| `/proofread` | `protocols/proofread.md` against `rules/writing.md` (plus the matching sections of `rules/constructions.md`) + the *Mechanics* section of the loaded `<lang>.md` (or `default-mechanics.md`) | — | — |
+| `/redline` | same as `/proofread` | `protocols/redline.md` against `rules/style.md` + the *Style* section of the loaded `<lang>.md` + applicable `genres/<type>.md` + applicable `techniques/<technique>.md` | `protocols/dialogue.md` (one finding at a time, you decide) |
 | `/edit` | same as `/proofread` | same as `/redline` | `protocols/subagent.md` (AFK, max three iterations) |
 
 `/write` Phase 4 invokes the same Phase 2 + Phase 3 directly — so the inheritance also covers the post-draft polish of newly written text.
@@ -237,9 +228,9 @@ The procedure and rule files are arranged in three layers with distinct responsi
 
 | Layer | File | Content |
 |---|---|---|
-| Rules — what | `lib/rules/writing.md`, `lib/rules/quotation.md`, `lib/rules/abbreviations.md`, `lib/rules/headed-text.md`, `lib/rules/lists.md`, `lib/rules/style.md`, `lib/languages/<lang>-mechanics.md`, `lib/languages/<lang>-style.md`, `lib/genres/*.md`, `lib/techniques/*.md` | The universal punctuation rules, construction-scoped rules loaded only when the matching construction is in the input, the substantive style foundation, the per-language realisations split into mechanics and style layers, the content-type-specific rules, and the narrative or analytical arcs. |
-| Procedure — how | `lib/protocols/proofread.md`, `lib/protocols/redline.md`, `lib/protocols/dialogue.md`, `lib/protocols/subagent.md` | The proofread pass procedure, the redline pass procedure (including the shared finding format), the human-in-the-loop settling procedure, the subagent settling procedure. The language-resolution procedure is inlined into each consuming SKILL.md. |
-| Skill — entry | `skills/proofread/SKILL.md`, `skills/redline/SKILL.md`, `skills/edit/SKILL.md` | Each composes one or more procedure files and carries its own language-resolution and conditional-rule-loading logic. No skill duplicates rule content or pass procedure; rules and pass procedures are by reference. |
+| Rules — what | `lib/rules/writing.md`, `lib/rules/constructions.md`, `lib/rules/style.md`, `lib/languages/<lang>.md`, `lib/genres/*.md`, `lib/techniques/*.md` | The universal punctuation rules, the construction-scoped rules (quotation, abbreviation, headed-text, lists) whose sections are applied only when the matching construction is in the input, the substantive style foundation, the per-language realisations split into mechanics and style sections inside a single file, the content-type-specific rules, and the narrative or analytical arcs. |
+| Procedure — how | `lib/protocols/proofread.md`, `lib/protocols/redline.md`, `lib/protocols/dialogue.md`, `lib/protocols/subagent.md`, `lib/protocols/io.md` | The proofread pass procedure, the redline pass procedure (including the shared finding format), the human-in-the-loop settling procedure, the subagent settling procedure, the I/O protocol (input detection plus inline-output and file/URL-output routing). The language-resolution procedure is inlined into each consuming SKILL.md. |
+| Skill — entry | `skills/proofread/SKILL.md`, `skills/redline/SKILL.md`, `skills/edit/SKILL.md` | Each composes one or more procedure files and carries its own language-resolution logic. No skill duplicates rule content or pass procedure; rules and pass procedures are by reference. |
 
 Changing a rule requires editing exactly one place. Adding a new content type, technique, or language requires no `SKILL.md` change. The inheritance is enforced by composition — `/redline` and `/edit` reference the same `protocols/proofread.md` and `protocols/redline.md` files that `/proofread` and `/redline` use respectively.
 
@@ -319,7 +310,7 @@ Finally, add a matching block for the new genre to `lib/genres/_index.md` so the
 
 **New technique.** Create a file `lib/techniques/<name>.md` with the corresponding frontmatter. Describe the technique in parallel with ABT and PAC: the carrying parts, variants, where it applies, concrete examples.
 
-**New language.** Create two files: `lib/languages/<lang>-mechanics.md` (proofread scope — typography, quotation marks, quotation conventions, punctuation conventions, grammar specifics, greetings and closings) and `lib/languages/<lang>-style.md` (redline / edit scope — address and voice, AI-tell manifestations, interference from other languages, genre adjustments). Name the language part per the POSIX locale form (`sv`, `sv_SE`, `nb_NO`, `de_DE`, etc.). Use the existing language pairs as a template. The mechanics file must always exist; the style file is optional (a language with no meaningful style layer can ship mechanics only, as `default-mechanics.md` does). For territorial variants, see the inheritance note under *Languages* above — the overlay loader is not yet implemented.
+**New language.** Create one file: `lib/languages/<lang>.md`. The file carries both layers in named sections — a `<!-- layer: mechanics -->` section for proofread scope (typography, quotation marks, quotation conventions, punctuation conventions, grammar specifics, greetings and closings) and a `<!-- layer: style -->` section for redline / edit scope (address and voice, AI-tell manifestations, interference from other languages, genre adjustments). Name the language part per the POSIX locale form (`sv`, `sv_SE`, `nb_NO`, `de_DE`, etc.). Use the existing language files as a template. The *Mechanics* section must always exist; the *Style* section is optional (a language with no meaningful style layer can ship mechanics only, as `default-mechanics.md` does). For territorial variants, see the inheritance note under *Languages* above — the overlay loader is not yet implemented.
 
 `/write`, `/redline`, and `/edit` resolve content types through `lib/genres/_index.md` — a static, hand-maintained index that mirrors the frontmatter of every file in `lib/genres/`. When you add, rename, or remove a genre file, update `_index.md` to match. The skills read the index directly; they do not regenerate it. Languages are still discovered automatically through directory inventory of `lib/languages/`.
 
@@ -328,12 +319,12 @@ Before editing any files under `skills/` or `lib/`, read the **Authoring rules**
 ## Design principles
 
 - **DRY.** Shared rules live in one place. The proofread pass is described once across three layers. Language-specific conventions live only in the language layer files. No trigger keywords are duplicated between `SKILL.md` and content-type frontmatter.
-- **Modular.** New content type = one new file (plus a row in `lib/genres/_index.md`). New technique = one new file. New language = two new files (`<lang>-mechanics.md` + `<lang>-style.md`; the style file is optional for languages with no meaningful style layer). No `SKILL.md` needs to change.
+- **Modular.** New content type = one new file (plus a row in `lib/genres/_index.md`). New technique = one new file. New language = one new file (`<lang>.md` with `<!-- layer: mechanics -->` and optionally `<!-- layer: style -->` sections). No `SKILL.md` needs to change.
 - **Manual context loaders.** `/writing-rules`, `/abt`, `/pac` fire only on explicit slash commands. Their descriptions document what they do — not when to invoke them.
 - **Tools, not algorithms.** The skill files describe outcomes and rules. They do not specify matching algorithms or file-search heuristics — the plugin solves the mechanics with standard tools (Glob, Grep, Read, Edit, Write, Bash).
 - **The user, not the author.** All skill-internal text addresses *the user*. The plugin is generic; the house voice it embodies is documented in metadata, not embedded in the skill text.
-- **English baseline, language layer for the rest.** Everything outside `lib/languages/` is written in British English. Per-language conventions, examples, and overrides live in `lib/languages/<lang>-mechanics.md` and `lib/languages/<lang>-style.md`.
-- **Token-aware.** The subagent is invoked once per `/write` (Phase 4, auto), once per `/edit` (Phase 3, auto), and once per `/redline` invocation when the user delegates an open finding. Maximum three iterations per invocation, early termination preferred. Skills load only the language layers each pass needs (`/proofread` reads mechanics; `/redline`, `/edit`, and `/write` read both) plus the construction-scoped rule files that match constructions present in the input.
+- **English baseline, language layer for the rest.** Everything outside `lib/languages/` is written in British English. Per-language conventions, examples, and overrides live in `lib/languages/<lang>.md` (with mechanics and style as named sections).
+- **Token-aware.** The subagent is invoked once per `/write` (Phase 4, auto), once per `/edit` (Phase 3, auto), and once per `/redline` invocation when the user delegates an open finding. Maximum three iterations per invocation, early termination preferred. Skills load one language file per run (`/proofread` applies only its *Mechanics* section; `/redline`, `/edit`, and `/write` apply both sections) plus `rules/constructions.md`, whose four sections are applied cognitively only when the matching construction appears in the input.
 
 ## Authoring rules
 
@@ -349,7 +340,7 @@ These rules govern how to edit the files in this plugin. They exist to prevent a
 
 **5. Universal rules in `lib/rules/`, language rules in `lib/languages/`.** A rule that holds across languages (the principle of avoiding AI-tell, the body-text-self-sufficiency rule, the PAC visibility tolerance) goes in `rules/` or in a content-type file. A rule whose realisation depends on the language (which character renders an attribution, which substitutions to make against training-language interference) goes in the language layer files. When a universal rule references a language-specific realisation, it does so by saying *see the loaded language file*.
 
-**5a. Mechanics vs style as separate language files.** Each language is represented by two sibling files: `<lang>-mechanics.md` (proofread scope — typography, quotation marks, quotation conventions, punctuation, grammar specifics, greetings) and `<lang>-style.md` (redline / edit scope — address and voice, AI-tell manifestations, interference patterns, genre adjustments). The proofread protocol loads only the mechanics file; the redline and edit protocols load both. Place each new language rule under the layer that matches its scope by editing the matching file. A language with no meaningful style layer (the international baseline) can ship mechanics only — there is no companion `default-style.md`. The construction-scoped universal rule files (`rules/quotation.md`, `rules/abbreviations.md`, `rules/headed-text.md`, `rules/lists.md`) are loaded conditionally by each skill based on which constructions actually appear in the input.
+**5a. Mechanics vs style as named sections inside one language file.** Each language is represented by a single file `<lang>.md` carrying both layers in named sections: a `<!-- layer: mechanics -->` section (proofread scope — typography, quotation marks, quotation conventions, punctuation, grammar specifics, greetings) and a `<!-- layer: style -->` section (redline / edit scope — address and voice, AI-tell manifestations, interference patterns, genre adjustments). The proofread protocol applies only the *Mechanics* section; the redline and edit protocols apply both. Place each new language rule under the section that matches its scope. A language with no meaningful style layer (the international baseline) can ship mechanics only — `default-mechanics.md` retains its standalone-file name and has no `<!-- layer: -->` markers because no companion style layer exists for it. The construction-scoped universal rules live in a single file `rules/constructions.md` with four `<!-- construction: -->` sections (quotation, abbreviation, headed-text, lists); the file is always loaded and the sections are applied cognitively when the matching construction appears in the input.
 
 **6. No false equivalence claims.** If two skills differ in scope, behaviour, or settling mechanism, they are not *the same thing with one difference*. Describe each honestly. *Phase 1 identical to /proofread* is false if /proofread loads one rule file and Phase 1 loads two — even if both follow the same protocol.
 
@@ -366,8 +357,8 @@ These rules govern how to edit the files in this plugin. They exist to prevent a
 - Search for skill names (`/proofread`, `/redline`, `/edit`, `/write`, `/writing-rules`, `/abt`, `/pac`) in `lib/protocols/*.md`. The only legitimate match is in `lib/protocols/subagent.md`, which describes the subagent role within a parent skill.
 - Search for skill names in another skill's *body* (not just file references like `protocols/proofread.md`, but `/proofread` itself).
 - Compare `skills/redline/SKILL.md` and `skills/edit/SKILL.md` — Phase 1 and Phase 2 sections should not be duplicated verbatim. Shared procedure belongs in a shared protocol file.
-- Search for specific rule-file names (`rules/writing.md`, `rules/style.md`, the construction-scoped rule files, the language layer files) inside protocol files. They should not appear; protocols speak of *the loaded rule files* and *the loaded language file*.
-- Confirm `lib/languages/` contains a `<lang>-mechanics.md` per installed language and a companion `<lang>-style.md` for every language that has a meaningful style layer. The default fallback ships mechanics only (`default-mechanics.md`). The mechanics file carries proofread-scope conventions; the style file carries redline / edit-scope conventions. Place a new convention in the file that matches its layer.
+- Search for specific rule-file names (`rules/writing.md`, `rules/constructions.md`, `rules/style.md`, the language files) inside protocol files. They should not appear; protocols speak of *the loaded rule files* and *the loaded language file*.
+- Confirm `lib/languages/` contains a `<lang>.md` per installed language, each with `<!-- layer: mechanics -->` and (where the language has a meaningful style layer) `<!-- layer: style -->` section markers. The default fallback ships as `default-mechanics.md` — a standalone mechanics-only file with no `<!-- layer: -->` markers. Place a new convention under the section that matches its layer.
 - Confirm `lib/genres/_index.md` lists every genre file in `lib/genres/` with matching frontmatter (`name`, `swedish_term`, `default_technique`, `triggers`, plus `default`, `not_triggers`, and `disambiguation` where set). Exactly one genre carries `default: true`.
 - Open each genre file and confirm sections are annotated with `<!-- scope: write -->` or `<!-- scope: review -->` markers where the section is relevant to only one phase. Sections relevant to both (purpose, trigger keywords) stay unmarked.
 - Search for Swedish-only or English-only prose outside `lib/languages/`. All files outside the language directory should be in British English with no embedded Swedish examples (canonical Swedish triggers in genre frontmatter, which are user-input matchers, are the documented exception).

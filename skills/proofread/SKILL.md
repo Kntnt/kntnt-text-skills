@@ -13,29 +13,21 @@ Source the language from the input text (detect mode). The resolution procedure:
 
 1. **Argument.** If the user passed a language argument (e.g. `sv`, `sv_SE`, `en`, `en_GB`, `en_US`), use it as the candidate. A bare argument (`sv`, `en`) that matches no file directly but matches several territorial variants (e.g. `en` matches `en_GB` and `en_US`) goes to the disambiguation question below.
 2. **Detect.** Without an argument, infer the language from the input text.
-3. **Inventory.** Look for `<lang>-mechanics.md` in `../../lib/languages/` for the candidate:
+3. **Inventory.** Look for `<lang>.md` in `../../lib/languages/` for the candidate:
    - One match: use it.
-   - Several matches (e.g. `en` matches `en_GB-mechanics.md` and `en_US-mechanics.md`): ask the user which to use.
+   - Several matches (e.g. `en` matches `en_GB.md` and `en_US.md`): ask the user which to use.
    - No match: fall back to `../../lib/languages/default-mechanics.md` and mention this in the reply (in English):
-     > No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>-mechanics.md` for stricter control.
+     > No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>.md` for stricter control.
 
-Only the mechanics file applies to this skill. The style file (`<lang>-style.md`) is out of scope here — it is used by the redline / edit passes.
+Only the *Mechanics* section of the loaded language file applies to this skill. The *Style* section is out of scope here — it is used by the redline / edit passes.
 
 ## Genre selection
 
 This skill does not consult a genre file — only mechanics apply. The plugin-wide fallback rule still holds: if any genre selection becomes necessary, use the genre whose frontmatter has `default: true`.
 
-## Conditional rule loading
+## Rule application
 
-Inspect the input before loading rule files. Load only the rule files that match constructions actually present in the input:
-
-- Always: `../../lib/rules/writing.md` — the universal punctuation rules (comma, dash, parenthesis).
-- If the input contains quotation marks, dialogue, or block quotations: `../../lib/rules/quotation.md`.
-- If the input contains initialisms or acronyms: `../../lib/rules/abbreviations.md`.
-- If the input contains H1, headings, subheadings, or a standfirst structure: `../../lib/rules/headed-text.md`.
-- If the input contains bulleted, numbered, or definition lists: `../../lib/rules/lists.md`.
-
-A short paragraph with none of those constructions loads only `writing.md`.
+Apply the universal punctuation rules in `../../lib/rules/writing.md` always. Apply the matching sections of `../../lib/rules/constructions.md` (quotation, abbreviation, headed-text, lists) only when the input contains those constructions. Section-level filtering is cognitive — the file is loaded in full and the relevant sections are read against the input.
 
 ## Files to read
 
@@ -47,7 +39,6 @@ A short paragraph with none of those constructions loads only `writing.md`.
 
 - `../../lib/protocols/proofread.md` — the procedure and the full scope.
 - `../../lib/rules/writing.md` — universal punctuation rules.
-- Whichever construction-scoped rule files match the input (`quotation.md`, `abbreviations.md`, `headed-text.md`, `lists.md`) per *Conditional rule loading* above.
-- `../../lib/languages/<lang>-mechanics.md` — the specific mechanics file determined above. If none exists for the determined language, use `../../lib/languages/default-mechanics.md` instead.
-- `../../lib/protocols/input.md` — to determine the input form (inline text, file, or URL).
-- Both `../../lib/protocols/output-inline.md` and `../../lib/protocols/output-files.md` — loaded speculatively so the matching one is ready once the input form is known.
+- `../../lib/rules/constructions.md` — construction-scoped rules; apply the sections that match constructions in the input.
+- `../../lib/languages/<lang>.md` — the specific language file determined above (apply only its mechanics section). If none exists for the determined language, use `../../lib/languages/default-mechanics.md` instead.
+- `../../lib/protocols/io.md` — input detection and output routing.

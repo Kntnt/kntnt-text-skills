@@ -2,12 +2,7 @@
 
 Universal writing conventions that apply across languages. The loaded language file specifies the language-specific realisations — typographic characters, punctuation conventions, quotation marks, grammar specifics, and address conventions. The rules below describe principles that hold regardless of language; the loaded language file overrides or refines them where the language deviates.
 
-This file carries only the universal punctuation rules for comma, dash, and parenthesis — the rules that apply to any text regardless of its construction. Construction-scoped rules live in companion files loaded conditionally by the calling skill:
-
-- `rules/quotation.md` — when the input contains quotation.
-- `rules/abbreviations.md` — when the input contains initialisms or acronyms.
-- `rules/headed-text.md` — when the input has headings or a standfirst structure.
-- `rules/lists.md` — when the input contains lists.
+This file carries only the universal punctuation rules for comma, dash, and parenthesis — the rules that apply to any text regardless of its construction. Construction-scoped rules live in `rules/constructions.md`, which gathers four sections (quotation, abbreviation, headed-text, lists). The calling skill loads that file always and applies each section cognitively when the matching construction appears in the input.
 
 ## Punctuation: comma, dash, parenthesis
 

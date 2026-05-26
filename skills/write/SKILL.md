@@ -14,15 +14,15 @@ Propose a target language and confirm with the user (propose mode). The resoluti
 
 1. **Argument.** If the user passed a language argument (e.g. `sv`, `sv_SE`, `en`, `en_GB`, `en_US`), use it as the candidate. A bare argument (`sv`, `en`) that matches no file directly but matches several territorial variants goes to the disambiguation question below.
 2. **Propose.** Without an argument, propose a target language based on the prompt's language (Swedish prompt → Swedish text) and any source material, and ask the user to confirm.
-3. **Inventory.** Look for `<lang>-mechanics.md` and `<lang>-style.md` in `../../lib/languages/` for the candidate:
-   - One language match: load both layers if both exist; if only the mechanics file exists, drafting proceeds without a language-specific style overlay.
+3. **Inventory.** Look for `<lang>.md` in `../../lib/languages/` for the candidate:
+   - One language match: load the file; both layers live in named sections. If the file contains no *Style* section, drafting proceeds without a language-specific style overlay.
    - Several language matches: ask the user which to use.
    - No match: fall back to `../../lib/languages/default-mechanics.md` and mention this in the reply (in English):
-     > No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>-mechanics.md` and `lib/languages/<code>-style.md` for stricter control.
+     > No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>.md` for stricter control.
 
 Honour the chosen language for the rest of the run.
 
-Phase 3 (draft) and Phase 4 (redline + subagent) use both layers (`<lang>-mechanics.md` and `<lang>-style.md`). When only `default-mechanics.md` is available, drafting proceeds with the universal style foundation in `rules/style.md` carrying the style layer.
+Phase 3 (draft) and Phase 4 (redline + subagent) use both the *Mechanics* and *Style* sections of the loaded language file. When only `default-mechanics.md` is available, drafting proceeds with the universal style foundation in `rules/style.md` carrying the style layer.
 
 ## Phase 1 — brief acquisition
 
@@ -60,17 +60,11 @@ Write the draft per the applicable content-type file, technique file, and langua
 
 Apply the same review machinery as `/edit` to the draft.
 
-### Conditional rule loading for Phase 4
+### Rule application for Phase 4
 
-Inspect the drafted text before loading the construction-scoped rule files. Load only the rule files that match constructions actually present in the draft:
+Apply the universal punctuation rules in `../../lib/rules/writing.md` always. Apply the matching sections of `../../lib/rules/constructions.md` (quotation, abbreviation, headed-text, lists) only when the draft contains those constructions. Section-level filtering is cognitive — the file is loaded in full as part of Batch 2 below and the relevant sections are read against the draft once it exists.
 
-- Always: `../../lib/rules/writing.md` — the universal punctuation rules (comma, dash, parenthesis).
-- If the draft contains quotation marks, dialogue, or block quotations: `../../lib/rules/quotation.md`.
-- If the draft contains initialisms or acronyms: `../../lib/rules/abbreviations.md`.
-- If the draft contains H1, headings, subheadings, or a standfirst structure: `../../lib/rules/headed-text.md`.
-- If the draft contains bulleted, numbered, or definition lists: `../../lib/rules/lists.md`.
-
-Then apply `../../lib/protocols/proofread.md` (silent Phase 4a) against those rule files and the language mechanics file, followed by `../../lib/protocols/redline.md` (Phase 4b) against `../../lib/rules/style.md`, the language style file, the chosen genre file, and the chosen technique file — producing a finding list.
+Then apply `../../lib/protocols/proofread.md` (silent Phase 4a) against those rule files and the *Mechanics* section of the loaded language file, followed by `../../lib/protocols/redline.md` (Phase 4b) against `../../lib/rules/style.md`, the *Style* section of the language file, the chosen genre file, and the chosen technique file — producing a finding list.
 
 ### Settling
 
@@ -130,13 +124,12 @@ Once the type is confirmed, read the content-type file. Skip sections preceded b
 
 - `../../lib/rules/style.md` — substantive style guidance for drafting and Phase 4 review.
 - `../../lib/rules/writing.md` — universal punctuation rules.
-- The language files determined above: `../../lib/languages/<lang>-mechanics.md` plus `../../lib/languages/<lang>-style.md` where it exists (otherwise `../../lib/languages/default-mechanics.md`).
+- `../../lib/rules/constructions.md` — construction-scoped rules; the relevant sections are applied cognitively in Phase 4 against the draft.
+- The language file determined above: `../../lib/languages/<lang>.md` (otherwise `../../lib/languages/default-mechanics.md`).
 - `../../lib/protocols/proofread.md` — for Phase 4a.
 - `../../lib/protocols/redline.md` — for Phase 4b.
 - `../../lib/protocols/subagent.md` — for Phase 4 settling.
-- `../../lib/protocols/input.md` — to determine the input form when source material is provided.
-- Both `../../lib/protocols/output-inline.md` and `../../lib/protocols/output-files.md` — loaded speculatively so the matching one is ready once the input form is known.
-- **Aggressively speculative**: all conditional rule files — `../../lib/rules/quotation.md`, `../../lib/rules/abbreviations.md`, `../../lib/rules/headed-text.md`, `../../lib/rules/lists.md` — regardless of draft contents. The draft does not yet exist when Batch 2 fires, so the conditional application from *Conditional rule loading for Phase 4* happens cognitively in Phase 4 against an already-loaded rule set.
+- `../../lib/protocols/io.md` — input detection and output routing.
 
 ## Special handling
 
