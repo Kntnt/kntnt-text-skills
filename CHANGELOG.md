@@ -17,6 +17,7 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 - README *Authoring rules* and *Audit checklist* updated to remove the prior exception for inline language resolution. Resolution is now treated like any other shared procedure: the protocol lives in `lib/protocols/`, and each consuming `SKILL.md` references it.
 - README *Audit checklist* now carries `(auto)` / `(manual)` markers per item and a brief note on installing the pre-commit hook.
 - `lib/protocols/proofread.md` rephrased to remove the prior naming of sibling skills (the previous line referred to *the redline / edit passes*); the protocol now speaks generically of *deeper review passes*, restoring caller-agnosticism per authoring rule 1.
+- Extracted the genre fast-path into `lib/protocols/genre-resolution.md` (behaviour-neutral refactor). The inline *Genre fast-path* section in `skills/redline/SKILL.md` and `skills/edit/SKILL.md` — including the duplicated trigger-word enumeration — is replaced by a short reference to the protocol; Files-to-read marks `_index.md`, the matched genre file, and the matched technique file as conditional per the protocol's fast-path exit.
 
 ## [0.3.0] — 2026-05-25
 
