@@ -94,6 +94,8 @@ Once the type is confirmed, read the content-type file. Skip sections preceded b
 
 ## Files to read
 
+> The list below is a coverage requirement, not a sequence of unconditional reads. Before each Read, check whether the file's content is already in your conversation context — from any prior turn, phase, or skill invocation in this session. If it is, skip it. The user's input file or URL is always fetched fresh.
+
 Read in this order when the user invokes `/write`:
 
 1. `../../lib/genres/_index.md` — for content-type detection.

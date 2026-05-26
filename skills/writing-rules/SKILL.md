@@ -18,6 +18,8 @@ Without an argument, load every `*-mechanics.md` and `*-style.md` file in `../..
 
 ## Files to read
 
+> The list below is a coverage requirement, not a sequence of unconditional reads. Before each Read, check whether the file's content is already in your conversation context — from any prior turn, phase, or skill invocation in this session. If it is, skip it. The user's input file or URL is always fetched fresh.
+
 This loader provides full session coverage and reads every rule file regardless of input (no conditional rule loading):
 
 1. `../../lib/rules/writing.md` — universal punctuation: comma, dash, parenthesis.

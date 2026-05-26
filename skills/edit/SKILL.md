@@ -52,6 +52,8 @@ The single exception is the last-resort finding from `protocols/redline.md` — 
 
 ## Files to read
 
+> The list below is a coverage requirement, not a sequence of unconditional reads. Before each Read, check whether the file's content is already in your conversation context — from any prior turn, phase, or skill invocation in this session. If it is, skip it. The user's input file or URL is always fetched fresh.
+
 Read in this order:
 
 1. `../../lib/protocols/proofread.md` — Phase 1 procedure.

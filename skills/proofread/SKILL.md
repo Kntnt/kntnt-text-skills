@@ -39,6 +39,8 @@ A short paragraph with none of those constructions loads only `writing.md`.
 
 ## Files to read
 
+> The list below is a coverage requirement, not a sequence of unconditional reads. Before each Read, check whether the file's content is already in your conversation context — from any prior turn, phase, or skill invocation in this session. If it is, skip it. The user's input file or URL is always fetched fresh.
+
 1. `../../lib/protocols/proofread.md` — the procedure and the full scope.
 2. `../../lib/rules/writing.md` — universal punctuation rules.
 3. Whichever construction-scoped rule files match the input (`quotation.md`, `abbreviations.md`, `headed-text.md`, `lists.md`) per *Conditional rule loading* above.
