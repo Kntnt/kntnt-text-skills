@@ -10,11 +10,9 @@ Load the rule files into context, then confirm briefly that the rules are ready.
 
 ## Language determination
 
-If the user passed a language argument (e.g. `sv`, `sv_SE`, `en`, `en_GB`, `en_US`), load that language's file (`<lang>.md`) — both layers live in named sections inside the file. If the named language has no specific file in `../../lib/languages/`, load `../../lib/languages/default-mechanics.md` and mention this in the reply (in English):
+When the user passes a language argument, resolve it via `../../lib/protocols/language-resolution.md` — the argument step of the protocol applies; no source-mode inference is needed because the argument is present (the protocol's *detect* and *propose* modes are only consulted when no argument is given).
 
-> No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>.md` for stricter control.
-
-Without an argument, load every `<lang>.md` file in `../../lib/languages/` (plus `default-mechanics.md`) so the session has full coverage for any subsequent ad-hoc writing.
+Without an argument, this loader skips resolution entirely and loads every `<lang>.md` file in `../../lib/languages/` (plus `default-mechanics.md`) so the session has full coverage for any subsequent ad-hoc writing. Apply the overlay procedure in the protocol to any variant file whose frontmatter declares `inherits` before the session uses it.
 
 ## Files to read
 
@@ -24,7 +22,8 @@ Without an argument, load every `<lang>.md` file in `../../lib/languages/` (plus
 
 **Batch 1.** Issue every rule file in parallel (this loader provides full session coverage and reads every rule file regardless of input — no conditional rule loading):
 
+- `../../lib/protocols/language-resolution.md` — argument step, file inventory, overlay loader, fallback reporting (used when an argument is given).
 - `../../lib/rules/writing.md` — universal punctuation: comma, dash, parenthesis.
 - `../../lib/rules/constructions.md` — construction-scoped rules: quotation (run-in, block, dialogue), initialisms and acronyms, body-text self-sufficiency, list punctuation and capitalisation.
 - `../../lib/rules/style.md` — substantive style guidance: organising principle, repetition rule, techniques, cognitive load, understatement, precision, transitions, address and voice, pedagogy, attributed quotes, AI-tell principle, training-language interference, global rules (source fabrication ban, AI metaphor ban, rhetorical question rule).
-- `../../lib/languages/<lang>.md` — the language file per the determination above. When the named language has no specific file, `../../lib/languages/default-mechanics.md` is loaded instead.
+- `../../lib/languages/<lang>.md` — the language file per the determination above. When the named language has no specific file, `../../lib/languages/default-mechanics.md` is loaded instead. With no argument, every `<lang>.md` plus `default-mechanics.md` is loaded.

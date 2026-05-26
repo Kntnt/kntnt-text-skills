@@ -9,17 +9,7 @@ Apply the procedure in `../../lib/protocols/proofread.md` to the user's input.
 
 ## Language determination
 
-Source the language from the input text (detect mode). The resolution procedure:
-
-1. **Argument.** If the user passed a language argument (e.g. `sv`, `sv_SE`, `en`, `en_GB`, `en_US`), use it as the candidate. A bare argument (`sv`, `en`) that matches no file directly but matches several territorial variants (e.g. `en` matches `en_GB` and `en_US`) goes to the disambiguation question below.
-2. **Detect.** Without an argument, infer the language from the input text.
-3. **Inventory.** Look for `<lang>.md` in `../../lib/languages/` for the candidate:
-   - One match: use it.
-   - Several matches (e.g. `en` matches `en_GB.md` and `en_US.md`): ask the user which to use.
-   - No match: fall back to `../../lib/languages/default-mechanics.md` and mention this in the reply (in English):
-     > No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>.md` for stricter control.
-
-Only the *Mechanics* section of the loaded language file applies to this skill. The *Style* section is out of scope here — it is used by the redline / edit passes.
+Resolve the language via `../../lib/protocols/language-resolution.md` in *detect mode* — the source language is inferred from the input text. Only the *Mechanics* section of the loaded language file applies to this skill; the *Style* section is out of scope.
 
 ## Genre selection
 
@@ -37,8 +27,9 @@ Apply the universal punctuation rules in `../../lib/rules/writing.md` always. Ap
 
 **Batch 1.** Issue these reads in parallel:
 
+- `../../lib/protocols/io.md` — input detection and output routing.
+- `../../lib/protocols/language-resolution.md` — language candidate, file inventory, overlay loader, fallback reporting.
 - `../../lib/protocols/proofread.md` — the procedure and the full scope.
 - `../../lib/rules/writing.md` — universal punctuation rules.
 - `../../lib/rules/constructions.md` — construction-scoped rules; apply the sections that match constructions in the input.
 - `../../lib/languages/<lang>.md` — the specific language file determined above (apply only its mechanics section). If none exists for the determined language, use `../../lib/languages/default-mechanics.md` instead.
-- `../../lib/protocols/io.md` — input detection and output routing.

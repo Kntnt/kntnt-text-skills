@@ -6,9 +6,14 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+### Added
+
+- `lib/protocols/language-resolution.md` — shared language-resolution protocol covering the argument step, source mode (*detect* / *propose*), file inventory, the overlay loader for territorial variants (`inherits: "@<base>.md"`), and fallback reporting. Inline `## Language determination` sections in `/proofread`, `/redline`, `/edit`, `/write`, and `/writing-rules` are replaced by a short reference to the protocol. Overlay semantics: H2 sections under `<!-- layer: mechanics -->` and `<!-- layer: style -->` are the unit of override; H3 sub-sections cannot be overridden in isolation; no partial within-section merges; one step deep only. The current shipped language files declare no `inherits` field, so the protocol is a no-op for them until the first territorial variant lands.
+
 ### Changed
 
 - License changed from proprietary to Apache 2.0.
+- README *Authoring rules* and *Audit checklist* updated to remove the prior exception for inline language resolution. Resolution is now treated like any other shared procedure: the protocol lives in `lib/protocols/`, and each consuming `SKILL.md` references it.
 
 ## [0.3.0] — 2026-05-25
 

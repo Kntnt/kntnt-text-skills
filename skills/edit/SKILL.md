@@ -10,17 +10,9 @@ Three-phase critical editorial review settled by an internal subagent.
 
 ## Language determination
 
-Source the language from the input text (detect mode). The resolution procedure:
+Resolve the language via `../../lib/protocols/language-resolution.md` in *detect mode* — the source language is inferred from the input text.
 
-1. **Argument.** If the user passed a language argument (e.g. `sv`, `sv_SE`, `en`, `en_GB`, `en_US`), use it as the candidate. A bare argument (`sv`, `en`) that matches no file directly but matches several territorial variants goes to the disambiguation question below.
-2. **Detect.** Without an argument, infer the language from the input text.
-3. **Inventory.** Look for `<lang>.md` in `../../lib/languages/` for the candidate:
-   - One match: use it. The file carries both layers in named sections; the calling phase determines which section applies. If the file contains no *Style* section for the language, Phase 2 proceeds without a language-specific style overlay.
-   - Several matches: ask the user which to use.
-   - No match: fall back to `../../lib/languages/default-mechanics.md` and mention this in the reply (in English):
-     > No language file found for [language]. Baseline conventions from `default-mechanics.md` apply. Add `lib/languages/<code>.md` for stricter control.
-
-Phase 1 (proofread) applies only the *Mechanics* section. Phase 2 (redline) applies both the *Mechanics* and *Style* sections. When only `default-mechanics.md` is available, Phase 2 still runs but without language-specific style overlays — the universal style foundation in `rules/style.md` carries the pass.
+Phase 1 (proofread) applies only the *Mechanics* section of the loaded language file. Phase 2 (redline) applies both the *Mechanics* and *Style* sections. When the file has no *Style* section (or when only `default-mechanics.md` is loaded), Phase 2 still runs but without language-specific style overlays — the universal style foundation in `rules/style.md` carries the pass.
 
 ## Rule application
 
@@ -78,14 +70,15 @@ Trigger 1 from the redline last-resort floor remains the safety net: if the fast
 
 **Batch 1.** Issue these reads in parallel:
 
+- `../../lib/protocols/io.md` — input detection and output routing.
+- `../../lib/protocols/language-resolution.md` — language candidate, file inventory, overlay loader, fallback reporting.
 - `../../lib/protocols/proofread.md` — Phase 1 procedure.
 - `../../lib/protocols/redline.md` — Phase 2 procedure.
 - `../../lib/protocols/subagent.md` — Phase 3 settling protocol.
-- `../../lib/rules/writing.md` — universal punctuation rules.
 - `../../lib/rules/constructions.md` — construction-scoped rules; apply the sections that match constructions in the input.
-- `../../lib/languages/<lang>.md` (otherwise `../../lib/languages/default-mechanics.md`).
 - `../../lib/rules/style.md` — Phase 2 universal style foundation.
-- `../../lib/protocols/io.md` — input detection and output routing.
+- `../../lib/rules/writing.md` — universal punctuation rules.
+- `../../lib/languages/<lang>.md` (otherwise `../../lib/languages/default-mechanics.md`).
 - One of the following based on the *Genre fast-path* check above:
   - **Fast-path (both conditions hold):** `../../lib/genres/general.md` — committed genre. No `_index.md` read.
   - **Standard (either condition broken):** `../../lib/genres/_index.md` — to identify the content type.
