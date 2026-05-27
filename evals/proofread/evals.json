@@ -196,7 +196,8 @@
       "expectations": [
         "Currency uses *£100* (no space, symbol before).",
         "Temperature uses no-break space: *25 °C* not *25°C*.",
-        "Decimal separator is the full stop (123.45), thousands separator is the comma."
+        "Decimal separator is the full stop (123.45).",
+        "Thousands separator is the comma (1,234,567)."
       ]
     },
     {
@@ -292,7 +293,8 @@
       "expectations": [
         "Currency uses *$100* (no space, symbol before).",
         "Temperature has no space between number and degree-letter combination: *77°F* not *77 °F*.",
-        "Decimal separator is the full stop, thousands separator is the comma."
+        "Decimal separator is the full stop (123.45).",
+        "Thousands separator is the comma (1,234,567)."
       ]
     },
     {

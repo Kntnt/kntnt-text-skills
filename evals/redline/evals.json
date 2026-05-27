@@ -244,8 +244,15 @@
       "expectations": [
         "*In a world where…*, *It's worth noting that…*, *Let me be perfectly clear* are flagged.",
         "*delve into*, *leverage* (as a verb), *multifaceted*, *tapestry*, *robust*, *comprehensive*, *ultimately*, *unprecedented*, *streamline* are flagged as AI vocabulary tells.",
-        "American-specific AI tells *game-changer*, *paradigm shift*, *next-generation* are flagged.",
-        "Management jargon *circle back*, *touch base*, *holistic approach*, *strategic*, *proactive*, *synergies* are flagged."
+        "American-specific AI tell *game-changer* is flagged.",
+        "American-specific AI tell *paradigm shift* is flagged.",
+        "American-specific AI tell *next-generation* is flagged.",
+        "Management jargon *circle back* is flagged.",
+        "Management jargon *touch base* is flagged.",
+        "Management jargon *holistic approach* is flagged.",
+        "Management jargon *strategic* is flagged.",
+        "Management jargon *proactive* is flagged.",
+        "Management jargon *synergies* is flagged."
       ]
     },
     {
