@@ -6,6 +6,14 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.5.4] — 2026-05-28
+
+### Changed
+
+- Three eval fixtures gained one sentence each so every assertion has an observable trigger in the input: `evals/fixtures/en_GB-typography-errors.md` now contains `£12,450.75` and `3.5%`; `evals/fixtures/en_US-typography-errors.md` now contains `CEO`, `FY`, `$12,450.75`, and `3.5%`; `evals/fixtures/en_US-style-errors.md` now contains the previously-absent AI-tells *next-generation*, *touch base*, *strategic*, *proactive*, *synergies*, plus the concrete series *usability, performance, and accessibility* used by the Oxford-comma-in-output check. No existing case content changed; only added sentences.
+- Four conjunction-style assertions in `evals/evals.json` were split into per-term sub-assertions so future regressions point at the exact term that dropped instead of "the conjunction did not fully pass": en_GB-12 and en_US-18 decimal/thousands split (2 sub-assertions each); en_US-115 #3 split into 3 American AI-tell terms; en_US-115 #4 split into 6 management-jargon terms. Per-skill mirrors regenerated. Total assertion count: 290 → 299.
+- `evals/baseline.md` refreshed against version 0.5.4: aggregate with-skill 299 / 299 (100 %), without-skill 152 / 299 (50.8 %), delta +49.2 pp. Every skill and every language at 100 % with-skill. README scaffold line updated.
+
 ## [0.5.3] — 2026-05-28
 
 ### Changed
