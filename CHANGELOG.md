@@ -6,6 +6,13 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.5.3] — 2026-05-28
+
+### Changed
+
+- `evals/baseline.md` now carries real numbers from the skill-creator eval pipeline run against 0.5.2 (Sonnet executor and grader, one run per configuration). Aggregate with-skill 282 / 290 (97.2 %), without-skill 132 / 290 (45.5 %), delta +51.7 pp. All eight required cases pass every with-skill expectation. The README scaffold line is updated to point at the populated baseline.
+- Three test assertions in `evals/evals.json` (403 #4, 404 #5, 405 #2 and #3) were reworded from invariant or counterfactual claims that could not be verified from a single executor transcript, to transcript-content claims that a single run can demonstrate. The protocol intent is preserved — the fast-path is documented as a downstream-rule dedup, and subagent invocation remains delegation-gated — only the verification framing changes. Original wording is preserved in git history. Per-skill `evals/redline/evals.json` mirror regenerated.
+
 ## [0.5.2] — 2026-05-27
 
 ### Changed
