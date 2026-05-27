@@ -6,12 +6,23 @@ The colleague-consultation mechanic for settling editorial work without user-fac
 
 This protocol is opt-in. The calling skill invokes it only when one of the following triggers fires:
 
-- **Explicit `--max-iterations=N` flag (or natural-language equivalent) in the calling skill's invocation.** `N=0` means do not invoke this protocol; `N=1`, `=2`, `=3` set the ceiling on iterations for the current run. `N > 3` is clamped to 3. The calling skill is responsible for parsing the flag and natural-language equivalents (e.g. *iterate up to three times* → 3, *one round* → 1, *skip subagent* → 0) and passing the resulting ceiling into this protocol.
+- **Explicit `--max-iterations=N` flag (or natural-language equivalent) in the calling skill's invocation.** `N=0` means do not invoke this protocol; `N=1`, `=2`, `=3` set the ceiling on iterations for the current run. `N > 3` is clamped to 3. The calling skill is responsible for parsing the flag and the natural-language equivalents enumerated under *Natural-language parity* below, and passing the resulting ceiling into this protocol.
 - **Last-resort finding from the redline pass raises the floor to 1.** When the redline pass produces a developmental observation per `redline.md` (the text is structured as one content type but the material wants another, or is below the line-editing repair threshold), the calling skill raises the iteration floor to 1 — one round of subagent sanity-check — even if the flag was 0. The closing note to the user about the last-resort decision is delivered after that round.
 
 When neither trigger fires, the calling skill applies the redline findings directly without invoking this protocol. The default behaviour of the calling skill is therefore no subagent round.
 
 The iteration ceiling passed in is an upper bound, not a target. The convergence rules in *Iteration rules* below still apply — early termination is desirable.
+
+## Natural-language parity
+
+The calling skill parses these expressions in its prompt to the same value as the `--max-iterations=N` flag. The flag wins on conflict; ask the user if the prompt is ambiguous.
+
+- *iterera max tre gånger* / *iterate up to three times* / *kör djupt* / *deep review* → 3
+- *max två rundor* / *two rounds max* → 2
+- *en runda räcker* / *one round* → 1
+- *hoppa över subagent* / *skip subagent* → 0
+
+This enumeration is the single source of truth. Skills reference it rather than restating it inline.
 
 ## The subagent
 

@@ -43,12 +43,7 @@ Settle each finding via `../../lib/protocols/dialogue.md`. The user accepts, rej
 - `--max-iterations=0` (default): on delegation, the main agent applies the remaining open findings directly and delivers the polished text. No subagent is invoked.
 - `--max-iterations=1` / `=2` / `=3`: on delegation, the remaining open findings are handed to `../../lib/protocols/subagent.md` with that ceiling on iterations. The subagent's convergence rules still apply — early consensus stops the loop. `N > 3` is clamped to 3.
 
-**Natural-language parity.** The model parses these expressions in the prompt to the same value as the flag (flag wins on conflict; ask if ambiguous):
-
-- *iterera max tre gånger* / *iterate up to three times* / *kör djupt* / *deep review* → 3
-- *max två rundor* / *two rounds max* → 2
-- *en runda räcker* / *one round* → 1
-- *hoppa över subagent* / *skip subagent* → 0
+**Natural-language parity.** For the phrases that map to `N`, see *Natural-language parity* in `../../lib/protocols/subagent.md` (loaded as part of Batch 1). The flag wins on conflict; ask if the prompt is ambiguous.
 
 **Last-resort floor.** When the redline pass surfaces the last-resort developmental finding, the subagent floor is raised to 1 even if the flag is 0 — one round to sanity-check the observation before it reaches the user as a closing note.
 

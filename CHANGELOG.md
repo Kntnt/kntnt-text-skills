@@ -6,6 +6,12 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.5.2] — 2026-05-27
+
+### Changed
+
+- The `--max-iterations` natural-language parity list now lives in a single authoritative section, `## Natural-language parity` in `lib/protocols/subagent.md`. The four bullets that were duplicated verbatim across `skills/write/SKILL.md`, `skills/redline/SKILL.md`, and `skills/edit/SKILL.md` are replaced by a one-line reference to that section, removing the drift risk where adding, removing, or rewording a phrase silently diverged the three skills. Closes [#37](https://github.com/Kntnt/kntnt-text-skills/issues/37).
+
 ## [0.5.1] — 2026-05-27
 
 ### Fixed

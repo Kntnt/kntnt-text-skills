@@ -66,12 +66,7 @@ Then apply `../../lib/protocols/proofread.md` (silent Phase 4a) against those ru
 - `--max-iterations=1` / `=2` / `=3`: invoke the subagent with that ceiling. The subagent's convergence rules in `subagent.md` still apply — if main agent and subagent agree after an earlier round, the loop stops there.
 - `N > 3` is clamped to 3 (the protocol maximum).
 
-**Natural-language parity.** The model parses these expressions in the prompt to the same value as the flag (flag wins on conflict; ask if ambiguous):
-
-- *iterera max tre gånger* / *iterate up to three times* / *kör djupt* / *deep review* → 3
-- *max två rundor* / *two rounds max* → 2
-- *en runda räcker* / *one round* → 1
-- *hoppa över subagent* / *skip subagent* → 0
+**Natural-language parity.** For the phrases that map to `N`, see *Natural-language parity* in `../../lib/protocols/subagent.md` (loaded as part of Batch 2). The flag wins on conflict; ask if the prompt is ambiguous.
 
 **Last-resort floor.** When the redline pass produces the last-resort finding from `protocols/redline.md`, the subagent floor is raised to 1 even if the flag is 0 — one round to sanity-check the observation before it reaches the user as a closing note.
 
