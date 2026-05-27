@@ -6,6 +6,14 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.4.1] — 2026-05-27
+
+### Fixed
+
+- README *Authoring rules* point 8 now lists all four shared protocols (`protocols/proofread.md`, `protocols/redline.md`, `protocols/language-resolution.md`, `protocols/genre-resolution.md`) rather than only the original two. The two protocols added in 0.4.0 capture real abstractions in the same anda; the rule's example list had not caught up.
+- README *Audit checklist* — the trigger-list-duplication bullet no longer describes its `_index.md`-cites-exemption as *slated for removal*; the exemption is reframed as a forward-compat safety net, which reflects what the check in `scripts/audit.py` actually does after the fast-path-dedup landed in 0.4.0.
+- README *File structure* tree now lists every top-level repo artefact: `.github/` (issue template + audit workflow), `scripts/audit.py`, the `evals/` suite, `.pre-commit-config.yaml`, `.gitignore`, `CHANGELOG.md`, `CONTRIBUTING.md`, `LICENSE`, and `NOTICE`. Previously the tree only depicted the plugin core (`skills/`, `lib/`, `.claude-plugin/plugin.json`, `README.md`).
+
 ## [0.4.0] — 2026-05-27
 
 ### Added

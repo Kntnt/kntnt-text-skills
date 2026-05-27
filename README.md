@@ -193,7 +193,13 @@ The plugin briefly confirms that the module is loaded. The rules then apply for 
 ```
 kntnt-text-skills/
 ├── .claude-plugin/
-│   └── plugin.json
+│   ├── plugin.json
+│   └── marketplace.json
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   └── bug.md
+│   └── workflows/
+│       └── audit.yml
 ├── skills/
 │   ├── write/SKILL.md
 │   ├── edit/SKILL.md
@@ -234,6 +240,23 @@ kntnt-text-skills/
 │   └── techniques/
 │       ├── abt.md
 │       └── pac.md
+├── scripts/
+│   └── audit.py
+├── evals/
+│   ├── README.md
+│   ├── baseline.md
+│   ├── evals.json
+│   ├── proofread/evals.json
+│   ├── redline/evals.json
+│   ├── edit/evals.json
+│   ├── write/evals.json
+│   └── fixtures/
+├── .pre-commit-config.yaml
+├── .gitignore
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── LICENSE
+├── NOTICE
 └── README.md
 ```
 
@@ -393,7 +416,7 @@ These rules govern how to edit the files in this plugin. They exist to prevent a
 
 **7. Progressive disclosure in SKILL.md.** Frontmatter is always in context — put the full description and trigger logic there. The body is loaded when the skill triggers — keep it lean: one or two imperative sentences plus the file list. Body prose should not duplicate the frontmatter or the file list.
 
-**8. DRY where the abstraction is real, duplicate where it isn't.** A shared file is justified when multiple callers genuinely follow the same procedure or apply the same rules. The current shared protocols (`protocols/proofread.md`, `protocols/redline.md`) capture real abstractions — both are followed identically by their callers, varying only in which rule files are loaded. Do not introduce shared files for accidental similarity; do not duplicate when the shared abstraction is real.
+**8. DRY where the abstraction is real, duplicate where it isn't.** A shared file is justified when multiple callers genuinely follow the same procedure or apply the same rules. The current shared protocols (`protocols/proofread.md`, `protocols/redline.md`, `protocols/language-resolution.md`, `protocols/genre-resolution.md`) capture real abstractions — each is followed identically by its callers, varying only in which rule files are loaded or which caller-side bits the protocol cannot know. Do not introduce shared files for accidental similarity; do not duplicate when the shared abstraction is real.
 
 **9. Lean prose, imperative with whys.** Four sentences saying the same thing differently is overwork. Prefer one imperative followed by a short explanation of why, rather than ALL-CAPS, MUSTs, or stacked redundant clauses. Today's models do better with reasoning than with commands.
 
@@ -413,7 +436,7 @@ Items marked **(auto)** are enforced by `scripts/audit.py`, which runs as a pre-
 - **(auto)** Confirm each genre file carries at least one `<!-- scope: write -->` and one `<!-- scope: review -->` marker. **(manual)** Whether each individual section is annotated with the correct marker — sections relevant to both (purpose, trigger keywords) stay unmarked.
 - **(auto)** Confirm `.claude-plugin/plugin.json` parses as JSON, carries the `name`, `version`, and `description` fields, and that `version` matches the latest non-`[Unreleased]` heading in `CHANGELOG.md`.
 - **(auto)** Confirm every `../../lib/...` reference in `skills/*/SKILL.md` resolves to an actual file (placeholders like `<lang>.md` and `<type>.md` are skipped — they expand at runtime).
-- **(auto)** Confirm trigger words from `lib/genres/_index.md` do not appear as inline lists in `skills/*/SKILL.md` or `lib/protocols/*.md`. A paragraph that explicitly cites `_index.md` is exempt — that pattern is a documented duplication slated for removal by the fast-path-dedup refactor; a naked enumeration without the citation is flagged.
+- **(auto)** Confirm trigger words from `lib/genres/_index.md` do not appear as inline lists in `skills/*/SKILL.md` or `lib/protocols/*.md`. A paragraph that explicitly cites `_index.md` is exempt — the exemption is a forward-compat safety net (so a future shared procedure file that *references* the index does not trip the scan), not a free pass; a naked enumeration without the citation is flagged.
 - **(manual)** Search for Swedish-only or English-only prose outside `lib/languages/`. All files outside the language directory should be in British English with no embedded Swedish examples (canonical Swedish triggers in genre frontmatter, which are user-input matchers, are the documented exception).
 - **(manual)** Read each skill body. If it summarises content also covered in a referenced file, pick one location and remove the duplicate.
 - **(manual)** Read each frontmatter description. Does it overstate equivalence between skills? Does it differentiate this skill from siblings clearly enough that Claude knows when to pick it?
