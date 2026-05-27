@@ -6,6 +6,14 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.5.1] — 2026-05-27
+
+### Fixed
+
+- README *What the plugin does* now reflects the eight-skill, four-group reality after `/kntnt-text-skills` landed in 0.5.0. The opener, the group enumeration, and the post-list note about `disable-model-invocation: true` are updated; a new *Slash-only help* group lists the help command alongside the existing *task skill*, *task skills*, and *context loaders* groups.
+- README *File structure* tree now lists `skills/kntnt-text-skills/SKILL.md`.
+- README *Usage* section gains a `/kntnt-text-skills` subsection with examples, matching the per-skill structure used by the surrounding entries.
+
 ## [0.5.0] — 2026-05-27
 
 ### Added

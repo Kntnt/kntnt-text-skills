@@ -1,10 +1,10 @@
 # kntnt-text-skills
 
-A plugin for Claude Code and Cowork that provides seven interconnected skills for writing, reviewing, editing, and proofreading text. The plugin embodies Kntnt's house style but is built generically — every skill-internal text addresses *the user*, so the plugin works for anyone who wants to write in the same vein. Language-specific conventions (typography, punctuation, address, AI-tell manifestations, interference patterns) live in per-language files under `lib/languages/`; the plugin ships with Swedish, British English, and American English and can be extended with one file per additional language.
+A plugin for Claude Code and Cowork that provides eight interconnected skills for writing, reviewing, editing, and proofreading text. The plugin embodies Kntnt's house style but is built generically — every skill-internal text addresses *the user*, so the plugin works for anyone who wants to write in the same vein. Language-specific conventions (typography, punctuation, address, AI-tell manifestations, interference patterns) live in per-language files under `lib/languages/`; the plugin ships with Swedish, British English, and American English and can be extended with one file per additional language.
 
 ## What the plugin does
 
-The plugin exposes seven skills, organised in three groups.
+The plugin exposes eight skills, organised in four groups.
 
 **Automatically-triggered task skill:**
 
@@ -22,7 +22,11 @@ The plugin exposes seven skills, organised in three groups.
 - `/abt` — loads the ABT technique (And, But, Therefore — narrative arc).
 - `/pac` — loads the PAC technique (Premise, Analysis, Conclusion — analytical arc).
 
-The slash-only skills (both task skills and context loaders) carry `disable-model-invocation: true` in their frontmatter and therefore activate only on the exact slash command — never through the model deciding on its own that they would be useful.
+**Slash-only help:**
+
+- `/kntnt-text-skills` — manpage-style help for the plugin itself. Bare invocation renders an overview of every skill (commands, arguments, flags, input modes, languages). Passing a skill name (e.g. `/kntnt-text-skills write`) renders a detail view for that skill. The version is read live from `plugin.json`; the rest of the help text is static.
+
+All slash-only skills carry `disable-model-invocation: true` in their frontmatter and therefore activate only on the exact slash command — never through the model deciding on its own that they would be useful.
 
 ## Languages
 
@@ -188,6 +192,18 @@ Context loaders. They do no work of their own — they only load the relevant ru
 
 The plugin briefly confirms that the module is loaded. The rules then apply for the rest of the session's output.
 
+### `/kntnt-text-skills`
+
+Manpage-style help for the plugin itself. Bare invocation renders an overview of every skill; passing a skill name renders a detail view for that one.
+
+```
+/kntnt-text-skills
+/kntnt-text-skills write
+/kntnt-text-skills proofread
+```
+
+The version is read live from `plugin.json`; the rest of the help text is static and maintained by hand when skills or languages change.
+
 ## File structure
 
 ```
@@ -207,7 +223,8 @@ kntnt-text-skills/
 │   ├── proofread/SKILL.md
 │   ├── writing-rules/SKILL.md
 │   ├── abt/SKILL.md
-│   └── pac/SKILL.md
+│   ├── pac/SKILL.md
+│   └── kntnt-text-skills/SKILL.md
 ├── lib/
 │   ├── languages/
 │   │   ├── default-mechanics.md
