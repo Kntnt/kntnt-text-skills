@@ -6,6 +6,13 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.4.2] — 2026-05-27
+
+### Changed
+
+- Plugin descriptions in `plugin.json` and `marketplace.json` now attribute the writing style to *Kntnt* rather than to *Thomas Barregren* personally — the plugin is a company artefact, not a personal one.
+- Swedish press-release fixture (`evals/fixtures/sv-press-release.md`) no longer quotes Thomas Barregren by name; the fictional spokesperson is now Anna Lindberg, keeping the fixture free of real-person attributions.
+
 ## [0.4.1] — 2026-05-27
 
 ### Fixed
