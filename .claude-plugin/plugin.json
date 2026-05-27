@@ -1,6 +1,6 @@
 {
   "name": "kntnt-text-skills",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Writing, redlining, editing, and proofreading skills modelled on Kntnt's style. Ships with language files for Swedish, British English, and American English; extensible with one file per additional language. The three review skills form a strict inheritance hierarchy — proofread ⊂ redline ⊂ edit. Includes context-loader skills for the writing rules, ABT, and PAC techniques.",
   "author": {
     "name": "Thomas Barregren",

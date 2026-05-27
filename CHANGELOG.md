@@ -6,6 +6,13 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-05-27
+
+### Added
+
+- `/kntnt-text-skills` — manpage-style help command. Bare invocation renders an overview of every skill in the plugin (commands, arguments, flags, input modes, language list). Passing a skill name (e.g. `/kntnt-text-skills write`) renders a detail view for that skill. The version is read live from `plugin.json`; the rest of the help text is static and maintained by hand. Marked `disable-model-invocation: true` — manual trigger only.
+- CONTRIBUTING.md point 6 reminds contributors to update `skills/kntnt-text-skills/SKILL.md` when adding a new skill or language file so `/kntnt-text-skills` keeps showing accurate help.
+
 ## [0.4.2] — 2026-05-27
 
 ### Changed
