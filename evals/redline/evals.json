@@ -330,7 +330,7 @@
         "The fast-path exits before reading `lib/genres/_index.md` — the input has no H1, no standfirst, no byline, no attributed-quote pattern, and the prompt has no genre word.",
         "Genre commits to `general` (the genre with `default: true`).",
         "The default technique is `none`, so no technique file is loaded.",
-        "Output (with or without findings) is identical to what the standard-flow path would have produced for the same input — the fast-path is a dedup, not a behaviour change."
+        "The fast-path output reflects the `general` genre fallback (`default_technique: none`); no behaviour beyond what the general genre prescribes is introduced — the fast-path is a dedup of the same downstream rules, not a behaviour change."
       ]
     },
     {
@@ -348,7 +348,7 @@
         "`lib/genres/_index.md` is read and trigger-matched.",
         "Genre commits to `article` and the corresponding `lib/genres/article.md` is read.",
         "The default technique `abt` is loaded.",
-        "Output is identical to what the fast-path would have produced if the input had been short and unsignalled — the fast-path is a dedup, not a behaviour change."
+        "The standard-flow output reflects the article-genre review-scoped rules from `lib/genres/article.md`; no behaviour beyond what the article genre prescribes is introduced by the genre-resolution detour — the fast-path is a dedup of the same downstream rules, not a behaviour change."
       ]
     },
     {
@@ -363,8 +363,8 @@
       "expected_output": "Phase 3 delegation invokes the subagent with a ceiling of 1 (natural-language *en runda* → 1).",
       "expectations": [
         "On delegation, the natural-language phrase *en runda räcker* is parsed to 1 — the same value as the `--max-iterations=1` flag.",
-        "The subagent loop in `lib/protocols/subagent.md` is invoked with a ceiling of 1.",
-        "Without delegation, no subagent runs — the main agent applies the remaining open findings directly.",
+        "The transcript states that on delegation, `lib/protocols/subagent.md` would be invoked with a ceiling of 1 — the parsed value of N from *en runda räcker*.",
+        "The transcript states the subagent ceiling N=1 only takes effect on delegation; without an explicit delegate-finding step the main agent applies the remaining open findings directly, no subagent invocation is recorded.",
         "If the flag and the natural-language phrase conflict, the flag wins; if ambiguous, ask the user."
       ]
     }
