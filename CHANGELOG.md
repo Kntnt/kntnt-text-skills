@@ -6,6 +6,8 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-05-27
+
 ### Added
 
 - Eval suite under `evals/` wired to the skill-creator pipeline. Aggregated `evals/evals.json` (80 cases) covers `/proofread`, `/redline`, `/edit`, and `/write` in Swedish, British English, and American English (≥6 cases per shipped language per skill), with the required fallback, overlay, fast-path parity, per-skill natural-language `--max-iterations`, and last-resort-floor cases. Per-skill `evals/<skill>/evals.json` files mirror the aggregated source for runners that expect the canonical per-skill schema. Fixtures live under `evals/fixtures/` (committed); `evals/workspace/` is gitignored. `evals/README.md` documents the layout, run instructions, and scaling rule for new languages. `evals/baseline.md` is the structural baseline scaffold for 0.3.0 — populate the numbers by running the pipeline locally.
