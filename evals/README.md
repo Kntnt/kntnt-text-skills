@@ -7,7 +7,7 @@ Test cases that exercise the four task skills — `/proofread`, `/redline`, `/ed
 - `evals.json` — single aggregated suite. Every case carries `skill_name`, so it can be routed per skill while keeping one canonical list.
 - `<skill>/evals.json` — per-skill files (`proofread`, `redline`, `edit`, `write`) generated from the aggregated file. Each matches the per-skill schema in `skill-creator/references/schemas.md`. Use these when the runner expects one `evals.json` per skill directory.
 - `fixtures/` — committed input files referenced by `evals[].files`. Includes an overlay-loader fixture at `fixtures/lib/languages/sv_FI.md`.
-- `baseline.md` — populated baseline for version 0.5.2 (generated 2026-05-28).
+- `baseline.md` — populated baseline for version 0.5.4 (generated 2026-05-28); 299 assertions, 100 % with-skill across every skill and language.
 - `workspace/` — runner output (per-iteration directories, grading JSON, HTML viewer). Gitignored.
 
 The aggregated `evals.json` is the source of truth. Regenerate the per-skill files when the aggregated file changes:
