@@ -7,3 +7,5 @@ The team will organise the launch and analyse the metrics in three phases.
 She called it "revolutionary", noting that the council's "approach has been bold".
 
 The product is available in red, white and blue.
+
+The CEO announced that the FY budget totaled $12,450.75, marking a 3.5% increase.

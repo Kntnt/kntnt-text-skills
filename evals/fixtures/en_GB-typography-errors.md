@@ -7,3 +7,5 @@ The team will organize the launch and analyze the metrics, then realize the camp
 She called it "revolutionary," noting that the council's "approach has been bold."
 
 The product is available in red, white, and blue.
+
+The total budget is £12,450.75, representing a 3.5% increase year on year.
