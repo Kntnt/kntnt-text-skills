@@ -273,9 +273,11 @@ def main() -> int:
         case_ids = {int(x) for x in args.case_ids.split(",") if x.strip()}
 
     # Smoke-test that claude -p auth and tool access work before launching
-    # hundreds of jobs. Both stdout and stderr are surfaced — `claude -p`
-    # writes structured errors to stdout under `--output-format json`,
-    # while CLI-level errors (bad flags, missing binary) go to stderr.
+    # hundreds of jobs. The CLI always wraps its response in a JSON envelope
+    # under `--output-format json`; auth failure shows up as is_error=true
+    # plus a non-null api_error_status. Parse the envelope rather than
+    # grepping its raw text, since fields like "api_error_status":null are
+    # present on every success too.
     print("Pre-flight: testing claude -p auth ...")
     try:
         check = subprocess.run(
@@ -284,13 +286,19 @@ def main() -> int:
         )
         out = check.stdout.strip()
         err = check.stderr.strip()
-        is_auth_fail = (
-            check.returncode != 0
-            or "401" in out + err
-            or '"is_error":true' in out
-            or "Invalid authentication" in out + err
-            or '"api_error_status"' in out
-        )
+        envelope: dict | None = None
+        try:
+            envelope = json.loads(out)
+        except json.JSONDecodeError:
+            envelope = None
+        is_auth_fail = check.returncode != 0
+        if envelope is not None:
+            if envelope.get("is_error"):
+                is_auth_fail = True
+            if envelope.get("api_error_status") is not None:
+                is_auth_fail = True
+        if "Invalid authentication" in (out + err):
+            is_auth_fail = True
         if is_auth_fail:
             print("FAIL — claude -p returned an error. "
                   "Run this script in a terminal where `claude` is signed in "
@@ -301,7 +309,8 @@ def main() -> int:
             print(f"  stdout: {out[:800]}", file=sys.stderr)
             print(f"  stderr: {err[:800]}", file=sys.stderr)
             return 2
-        print(f"  ok — `{out[:120]}`\n")
+        reply = envelope.get("result", out) if envelope else out
+        print(f"  ok — `{reply[:120]}`\n")
     except subprocess.TimeoutExpired:
         print("FAIL — auth check timed out after 30s", file=sys.stderr)
         return 2
