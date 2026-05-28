@@ -76,10 +76,13 @@ class ExecJob:
 
 
 def build_job_list(iteration: int, runs: int, skill_filter: str | None,
+                   case_ids: set[int] | None,
                    limit: int | None) -> list[ExecJob]:
     jobs: list[ExecJob] = []
     for case in SUITE["evals"]:
         if skill_filter and case["skill_name"] != skill_filter:
+            continue
+        if case_ids is not None and case["id"] not in case_ids:
             continue
         for cfg in ("with_skill", "without_skill"):
             for run_n in range(1, runs + 1):
@@ -102,7 +105,8 @@ def render_prompt(cfg_arg: str, case_id: int, iteration: int, run_n: int) -> str
     return subprocess.run(cmd, capture_output=True, text=True, check=True).stdout
 
 
-def run_one_executor(job: ExecJob, budget_usd: float, timeout_s: int) -> tuple[ExecJob, bool, str]:
+def run_one_executor(job: ExecJob, budget_usd: float, timeout_s: int,
+                     model: str) -> tuple[ExecJob, bool, str]:
     if job.done_exec:
         return job, True, "skipped"
     job.run_dir.mkdir(parents=True, exist_ok=True)
@@ -117,6 +121,7 @@ def run_one_executor(job: ExecJob, budget_usd: float, timeout_s: int) -> tuple[E
              "--max-budget-usd", str(budget_usd),
              "--output-format", "json",
              "--add-dir", str(REPO),
+             "--model", model,
              ],
             input=prompt, capture_output=True, text=True,
             timeout=timeout_s, check=False,
@@ -132,13 +137,14 @@ def run_one_executor(job: ExecJob, budget_usd: float, timeout_s: int) -> tuple[E
 
 
 def run_executors(jobs: list[ExecJob], parallel: int,
-                  budget_usd: float, timeout_s: int) -> dict[str, int]:
+                  budget_usd: float, timeout_s: int,
+                  model: str) -> dict[str, int]:
     stats = {"ok": 0, "skipped": 0, "fail": 0}
     n = len(jobs)
-    print(f"\n=== Executors: {n} jobs, {parallel} parallel, ${budget_usd}/job budget ===")
+    print(f"\n=== Executors: {n} jobs, {parallel} parallel, ${budget_usd}/job budget, model={model} ===")
     t0 = time.time()
     with concurrent.futures.ThreadPoolExecutor(max_workers=parallel) as pool:
-        futures = {pool.submit(run_one_executor, j, budget_usd, timeout_s): j for j in jobs}
+        futures = {pool.submit(run_one_executor, j, budget_usd, timeout_s, model): j for j in jobs}
         for i, fut in enumerate(concurrent.futures.as_completed(futures), start=1):
             job, ok, msg = fut.result()
             if msg == "skipped":
@@ -182,7 +188,7 @@ def grader_batch_prompt(jobs: list[ExecJob]) -> str:
 
 
 def run_one_grader_batch(jobs: list[ExecJob], budget_usd: float,
-                         timeout_s: int) -> tuple[list[ExecJob], int]:
+                         timeout_s: int, model: str) -> tuple[list[ExecJob], int]:
     """Submit one batched grader call covering several jobs."""
     prompt = grader_batch_prompt(jobs)
     try:
@@ -192,6 +198,7 @@ def run_one_grader_batch(jobs: list[ExecJob], budget_usd: float,
              "--max-budget-usd", str(budget_usd),
              "--output-format", "json",
              "--add-dir", str(REPO),
+             "--model", model,
              ],
             input=prompt, capture_output=True, text=True,
             timeout=timeout_s, check=False,
@@ -203,7 +210,7 @@ def run_one_grader_batch(jobs: list[ExecJob], budget_usd: float,
 
 
 def run_graders(jobs: list[ExecJob], parallel: int, batch_size: int,
-                budget_usd: float, timeout_s: int) -> dict[str, int]:
+                budget_usd: float, timeout_s: int, model: str) -> dict[str, int]:
     # Filter to jobs that have outputs but no grading yet.
     pending = [j for j in jobs if j.done_exec and not j.done_grade]
     stats = {"graded": 0, "missing": 0}
@@ -211,13 +218,13 @@ def run_graders(jobs: list[ExecJob], parallel: int, batch_size: int,
         print("\n=== Graders: nothing pending ===")
         return stats
     print(f"\n=== Graders: {len(pending)} pending, batches of {batch_size}, "
-          f"{parallel} parallel, ${budget_usd}/batch budget ===")
+          f"{parallel} parallel, ${budget_usd}/batch budget, model={model} ===")
     # Group into batches of `batch_size` per call, batching by skill+run for cohesion.
     pending.sort(key=lambda j: (j.skill, j.run_n, j.config, j.case_id))
     batches = [pending[i:i+batch_size] for i in range(0, len(pending), batch_size)]
     t0 = time.time()
     with concurrent.futures.ThreadPoolExecutor(max_workers=parallel) as pool:
-        futures = {pool.submit(run_one_grader_batch, b, budget_usd, timeout_s): b
+        futures = {pool.submit(run_one_grader_batch, b, budget_usd, timeout_s, model): b
                    for b in batches}
         for i, fut in enumerate(concurrent.futures.as_completed(futures), start=1):
             batch, graded = fut.result()
@@ -246,6 +253,13 @@ def main() -> int:
     parser.add_argument("--grader-timeout", type=int, default=600)
     parser.add_argument("--skill", default=None,
                         help="Run only one skill (proofread, redline, edit, write)")
+    parser.add_argument("--case-ids", default=None,
+                        help="Comma-separated list of case ids to run "
+                             "(e.g. '404,409,410,411'). Default: all cases.")
+    parser.add_argument("--model", default="claude-sonnet-4-6",
+                        help="Claude model id for both executor and grader. "
+                             "Default: claude-sonnet-4-6 (the latest Sonnet "
+                             "as of 2026-05-28; matches v0.5.4 baseline).")
     parser.add_argument("--limit", type=int, default=None,
                         help="Cap total executor jobs (debug)")
     parser.add_argument("--skip-executors", action="store_true",
@@ -254,41 +268,64 @@ def main() -> int:
                         help="Skip grader pass; only run executors")
     args = parser.parse_args()
 
-    # Smoke-test that claude -p auth works before launching hundreds of jobs.
+    case_ids: set[int] | None = None
+    if args.case_ids:
+        case_ids = {int(x) for x in args.case_ids.split(",") if x.strip()}
+
+    # Smoke-test that claude -p auth and tool access work before launching
+    # hundreds of jobs. Both stdout and stderr are surfaced — `claude -p`
+    # writes structured errors to stdout under `--output-format json`,
+    # while CLI-level errors (bad flags, missing binary) go to stderr.
     print("Pre-flight: testing claude -p auth ...")
     try:
         check = subprocess.run(
-            ["claude", "-p", "--output-format", "json"],
-            input="reply with the single word: ok", capture_output=True, text=True,
-            timeout=30, check=False,
+            ["claude", "-p", "--output-format", "json", "--", "reply with the single word: ok"],
+            capture_output=True, text=True, timeout=30, check=False,
         )
-        if check.returncode != 0 or "401" in (check.stdout + check.stderr):
-            print("FAIL — claude -p returned auth error. "
-                  "Run this script in a terminal where you are signed in to "
-                  "claude (e.g. after `claude --login` succeeded). Do NOT run "
-                  "it from inside a Claude Code session — nested invocations "
-                  "strip auth.", file=sys.stderr)
-            print(f"  stderr: {check.stderr[:400]}", file=sys.stderr)
+        out = check.stdout.strip()
+        err = check.stderr.strip()
+        is_auth_fail = (
+            check.returncode != 0
+            or "401" in out + err
+            or '"is_error":true' in out
+            or "Invalid authentication" in out + err
+            or '"api_error_status"' in out
+        )
+        if is_auth_fail:
+            print("FAIL — claude -p returned an error. "
+                  "Run this script in a terminal where `claude` is signed in "
+                  "(test with `claude -p \"say ok\"`). Do NOT run it from "
+                  "inside a Claude Code session — nested invocations strip "
+                  "auth and return 401.", file=sys.stderr)
+            print(f"  return code: {check.returncode}", file=sys.stderr)
+            print(f"  stdout: {out[:800]}", file=sys.stderr)
+            print(f"  stderr: {err[:800]}", file=sys.stderr)
             return 2
-        print("  ok\n")
+        print(f"  ok — `{out[:120]}`\n")
     except subprocess.TimeoutExpired:
-        print("FAIL — auth check timed out", file=sys.stderr)
+        print("FAIL — auth check timed out after 30s", file=sys.stderr)
+        return 2
+    except FileNotFoundError:
+        print("FAIL — `claude` binary not found in PATH", file=sys.stderr)
         return 2
 
-    jobs = build_job_list(args.iteration, args.runs, args.skill, args.limit)
+    jobs = build_job_list(args.iteration, args.runs, args.skill, case_ids, args.limit)
+    case_count = len({j.case_id for j in jobs})
     print(f"Job list: {len(jobs)} executor jobs "
-          f"({len(jobs)//6}-ish cases × 2 configs × {args.runs} runs)")
+          f"({case_count} cases × 2 configs × {args.runs} runs)")
 
     if not args.skip_executors:
         exec_stats = run_executors(jobs, args.parallel,
-                                   args.executor_budget, args.executor_timeout)
+                                   args.executor_budget, args.executor_timeout,
+                                   args.model)
         print(f"\nExecutor summary: ok={exec_stats['ok']} "
               f"skipped={exec_stats['skipped']} fail={exec_stats['fail']}")
 
     if not args.skip_graders:
         grade_stats = run_graders(jobs, max(1, args.parallel // 2),
                                   args.grader_batch_size,
-                                  args.grader_budget, args.grader_timeout)
+                                  args.grader_budget, args.grader_timeout,
+                                  args.model)
         print(f"\nGrader summary: graded={grade_stats['graded']} "
               f"missing={grade_stats['missing']}")
 
