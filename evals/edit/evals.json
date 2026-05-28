@@ -81,7 +81,8 @@
       "expectations": [
         "The H1 is shortened to a readable length (under 60 characters where the meaning allows).",
         "At least one over-long H2 is shortened.",
-        "The body text under each heading remains substantively unchanged — only headings and obviously broken sentences are touched."
+        "The body text under each heading remains substantively unchanged — only headings and obviously broken sentences are touched.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
       ]
     },
     {
@@ -179,7 +180,8 @@
       "expected_output": "Headings shortened; body preserved.",
       "expectations": [
         "The H1 is shortened to a readable length.",
-        "Body text under each heading remains substantively unchanged."
+        "Body text under each heading remains substantively unchanged.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
       ]
     },
     {
@@ -229,7 +231,8 @@
         "*In a world where…*, *it's worth noting that*, *Let me be perfectly clear* are removed.",
         "*delve into*, *leverage* (verb), *multifaceted*, *tapestry*, *robust*, *comprehensive*, *ultimately*, *unprecedented*, *streamline* are replaced or removed.",
         "*game-changer*, *paradigm shift*, *holistic approach*, *circle back* are removed or replaced.",
-        "Polished output uses Oxford comma in series."
+        "Polished output uses Oxford comma in series.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
       ]
     },
     {
@@ -245,7 +248,8 @@
       "expectations": [
         "Outer quotation marks use \"…\" (double curly); inner '…' (single curly).",
         "Commas and full stops are placed inside the closing quote regardless of whether they belong to the quoted material.",
-        "Question marks belonging to the spoken utterance stay inside the quotation."
+        "Question marks belonging to the spoken utterance stay inside the quotation.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
       ]
     },
     {
@@ -296,7 +300,26 @@
       "expectations": [
         "The H1 is shortened to a readable length.",
         "At least one over-long H2 is shortened.",
-        "Body text under each heading remains substantively unchanged."
+        "Body text under each heading remains substantively unchanged.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
+      ]
+    },
+    {
+      "id": 219,
+      "skill_name": "edit",
+      "name": "en_GB-negative-clean-essay",
+      "language": "en_GB",
+      "prompt": "/edit en_GB",
+      "files": [
+        "evals/fixtures/en_GB-clean-essay.md"
+      ],
+      "expected_output": "A clean British English essay-style text. Edit produces a polished version with minimal substantive changes; protocol fidelity is the testable signal, not the volume of edits.",
+      "expectations": [
+        "`## Findings` raises at most a small number of substantive items (no wall of false positives on clean prose).",
+        "British conventions are preserved: -ise spellings, no Oxford comma in standard series, single quotation marks, £ currency, metric units with no-break space (`21 °C`, `320 square metres`).",
+        "`## Genre / technique resolution` commits to the closest matching genre — `column` or `general` — and names a technique if the genre's `default_technique` is not `none`.",
+        "`## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation.",
+        "Any change applied in the edit is traceable to a finding in the transcript — no silent rewrites."
       ]
     },
     {

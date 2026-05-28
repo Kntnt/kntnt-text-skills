@@ -9,7 +9,9 @@
       "name": "sv-typography-mechanics",
       "language": "sv",
       "prompt": "/proofread sv",
-      "files": ["evals/fixtures/sv-typography-errors.md"],
+      "files": [
+        "evals/fixtures/sv-typography-errors.md"
+      ],
       "expected_output": "Corrected text with Swedish typography conventions applied; no style or word-order changes.",
       "expectations": [
         "Thousands separator uses thin no-break space (U+202F), not comma: 1 234 567.",
@@ -25,7 +27,9 @@
       "name": "sv-genitive-on-s-names",
       "language": "sv",
       "prompt": "/proofread sv",
-      "files": ["evals/fixtures/sv-typography-errors.md"],
+      "files": [
+        "evals/fixtures/sv-typography-errors.md"
+      ],
       "expected_output": "Apostrophe-s and apostrophe-only forms removed from names ending in -s; zero-marking is the first choice.",
       "expectations": [
         "*Marx's teorier* is corrected to *Marx teorier* (zero-marking).",
@@ -40,7 +44,9 @@
       "name": "sv-quotation-marks-and-dashes",
       "language": "sv",
       "prompt": "/proofread sv",
-      "files": ["evals/fixtures/sv-quotation-errors.md"],
+      "files": [
+        "evals/fixtures/sv-quotation-errors.md"
+      ],
       "expected_output": "Quotation marks normalised to ”…” (U+201D both sides); EN-dash with spaces, never EM-dash.",
       "expectations": [
         "Outer quotation marks use ”…” (U+201D on both sides), not \"…\" straight ASCII or curly “…”.",
@@ -54,13 +60,16 @@
       "name": "sv-grammar-de-dem-and-compounds",
       "language": "sv",
       "prompt": "/proofread sv",
-      "files": ["evals/fixtures/sv-grammar-errors.md"],
+      "files": [
+        "evals/fixtures/sv-grammar-errors.md"
+      ],
       "expected_output": "De/dem corrected per subject/object; split-compounds (särskrivning) joined into single words.",
       "expectations": [
         "*dom* is corrected to *de* (subject) or *dem* (object) per its syntactic role.",
         "*sjukvårds personal* is joined into *sjukvårdspersonal* (single compound).",
         "*sjuk husen* is joined into *sjukhusen*.",
-        "*schema läggning* is joined into *schemaläggning*."
+        "*schema läggning* is joined into *schemaläggning*.",
+        "`## Language resolution` in the transcript names `lib/languages/sv.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -69,13 +78,16 @@
       "name": "sv-particskrivning-broad",
       "language": "sv",
       "prompt": "/proofread sv",
-      "files": ["evals/fixtures/sv-particskrivning.md"],
+      "files": [
+        "evals/fixtures/sv-particskrivning.md"
+      ],
       "expected_output": "All split-compound errors corrected to single compound words.",
       "expectations": [
         "*sjukvårds anställda* → *sjukvårdsanställda*.",
         "*sjuk sköterska* → *sjuksköterska*; *under sköterska* → *undersköterska*.",
         "*brand kåren* → *brandkåren*; *brand män* → *brandmän*.",
-        "No style or word-order changes are made — proofread scope only."
+        "No style or word-order changes are made — proofread scope only.",
+        "`## Language resolution` in the transcript names `lib/languages/sv.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -84,7 +96,9 @@
       "name": "sv-greetings-and-closings",
       "language": "sv",
       "prompt": "/proofread sv",
-      "files": ["evals/fixtures/sv-typography-errors.md"],
+      "files": [
+        "evals/fixtures/sv-typography-errors.md"
+      ],
       "expected_output": "Greeting uses ! not ,; closing salutation has no comma before the name.",
       "expectations": [
         "*Hej Susanne,* is corrected to *Hej Susanne!* (exclamation mark, not comma).",
@@ -97,7 +111,9 @@
       "name": "en_GB-typography-mechanics",
       "language": "en_GB",
       "prompt": "/proofread en_GB",
-      "files": ["evals/fixtures/en_GB-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_GB-typography-errors.md"
+      ],
       "expected_output": "Corrected text with British English typography conventions applied.",
       "expectations": [
         "Thousands separator uses comma: 1,234,567.",
@@ -113,7 +129,9 @@
       "name": "en_GB-oxford-comma-omitted",
       "language": "en_GB",
       "prompt": "/proofread en_GB",
-      "files": ["evals/fixtures/en_GB-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_GB-typography-errors.md"
+      ],
       "expected_output": "Oxford comma is removed in series; British convention favours no Oxford comma.",
       "expectations": [
         "*red, white, and blue* is corrected to *red, white and blue* (no Oxford comma).",
@@ -126,7 +144,9 @@
       "name": "en_GB-quotation-marks-and-punctuation",
       "language": "en_GB",
       "prompt": "/proofread en_GB",
-      "files": ["evals/fixtures/en_GB-quotation-errors.md"],
+      "files": [
+        "evals/fixtures/en_GB-quotation-errors.md"
+      ],
       "expected_output": "Single curly quotes outer, double curly inner; punctuation outside the quote unless part of quoted material.",
       "expectations": [
         "Outer quotation marks use ‘…’ (U+2018, U+2019), not \"…\" straight or “…” double.",
@@ -140,7 +160,9 @@
       "name": "en_GB-abbreviation-fullstops",
       "language": "en_GB",
       "prompt": "/proofread en_GB",
-      "files": ["evals/fixtures/en_GB-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_GB-typography-errors.md"
+      ],
       "expected_output": "Contraction abbreviations (Mr, Dr) carry no full stop; truncations (etc., vol.) do.",
       "expectations": [
         "*Mr. Smith* is corrected to *Mr Smith* (contraction — no full stop).",
@@ -154,13 +176,16 @@
       "name": "en_GB-ise-isation-spelling",
       "language": "en_GB",
       "prompt": "/proofread en_GB",
-      "files": ["evals/fixtures/en_GB-spelling-drift.md"],
+      "files": [
+        "evals/fixtures/en_GB-spelling-drift.md"
+      ],
       "expected_output": "American -ize/-ization spellings corrected to British -ise/-isation; American color/center to British colour/centre; American traveler to traveller; American favorite to favourite.",
       "expectations": [
         "*organize* → *organise*, *analyze* → *analyse*, *finalize* → *finalise*.",
         "*color* → *colour*; *favorite* → *favourite*; *center* → *centre*.",
         "*traveler* → *traveller* (double-l).",
-        "*on accident* → *by accident*."
+        "*on accident* → *by accident*.",
+        "`## Language resolution` in the transcript names `lib/languages/en_GB.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -169,13 +194,16 @@
       "name": "en_GB-currency-and-temperature",
       "language": "en_GB",
       "prompt": "/proofread en_GB",
-      "files": ["evals/fixtures/en_GB-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_GB-typography-errors.md"
+      ],
       "expected_output": "Currency before number with no space; temperature with no-break space between number and degree.",
       "expectations": [
         "Currency uses *£100* (no space, symbol before).",
         "Temperature uses no-break space: *25 °C* not *25°C*.",
         "Decimal separator is the full stop (123.45).",
-        "Thousands separator is the comma (1,234,567)."
+        "Thousands separator is the comma (1,234,567).",
+        "`## Language resolution` in the transcript names `lib/languages/en_GB.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -184,7 +212,9 @@
       "name": "en_US-typography-mechanics",
       "language": "en_US",
       "prompt": "/proofread en_US",
-      "files": ["evals/fixtures/en_US-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
       "expected_output": "Corrected text with American English typography conventions applied.",
       "expectations": [
         "Thousands separator uses comma: 1,234,567.",
@@ -200,11 +230,14 @@
       "name": "en_US-oxford-comma-required",
       "language": "en_US",
       "prompt": "/proofread en_US",
-      "files": ["evals/fixtures/en_US-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
       "expected_output": "Oxford comma is added in series; American convention requires it.",
       "expectations": [
         "*red, white and blue* is corrected to *red, white, and blue* (Oxford comma present).",
-        "No other word-order or content changes are made — proofread scope only."
+        "No other word-order or content changes are made — proofread scope only.",
+        "`## Language resolution` in the transcript names `lib/languages/en_US.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -213,12 +246,15 @@
       "name": "en_US-quotation-marks-and-punctuation",
       "language": "en_US",
       "prompt": "/proofread en_US",
-      "files": ["evals/fixtures/en_US-quotation-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-quotation-errors.md"
+      ],
       "expected_output": "Double curly quotes outer, single curly inner; punctuation inside the quote always.",
       "expectations": [
         "Outer quotation marks use “…” (U+201C, U+201D), not '…' or straight ASCII.",
         "Inner quotation marks use ‘…’, opposite of British convention.",
-        "Commas and full stops sit inside the closing quote regardless of whether they belong to the quoted material — *He called it “revolutionary.”*."
+        "Commas and full stops sit inside the closing quote regardless of whether they belong to the quoted material — *He called it “revolutionary.”*.",
+        "`## Language resolution` in the transcript names `lib/languages/en_US.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -227,12 +263,15 @@
       "name": "en_US-abbreviation-fullstops",
       "language": "en_US",
       "prompt": "/proofread en_US",
-      "files": ["evals/fixtures/en_US-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
       "expected_output": "Contraction abbreviations always carry a full stop in American English.",
       "expectations": [
         "*Mr Smith* is corrected to *Mr. Smith* (American always uses the full stop).",
         "*Dr Jones* is corrected to *Dr. Jones*.",
-        "Initialisms (CEO, HTML, NASA) carry no full stops."
+        "Initialisms (CEO, HTML, NASA) carry no full stops.",
+        "`## Language resolution` in the transcript names `lib/languages/en_US.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -241,11 +280,14 @@
       "name": "en_US-spelling-from-british-drift",
       "language": "en_US",
       "prompt": "/proofread en_US",
-      "files": ["evals/fixtures/en_US-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
       "expected_output": "British -ise/-isation drift corrected to American -ize/-ization.",
       "expectations": [
         "*organise* → *organize*; *analyse* → *analyze*.",
-        "No other word-order or content changes are made — proofread scope only."
+        "No other word-order or content changes are made — proofread scope only.",
+        "`## Language resolution` in the transcript names `lib/languages/en_US.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -254,13 +296,73 @@
       "name": "en_US-currency-and-temperature",
       "language": "en_US",
       "prompt": "/proofread en_US",
-      "files": ["evals/fixtures/en_US-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
       "expected_output": "Currency before number with no space; temperature with no space before degree.",
       "expectations": [
         "Currency uses *$100* (no space, symbol before).",
         "Temperature has no space between number and degree-letter combination: *77°F* not *77 °F*.",
         "Decimal separator is the full stop (123.45).",
-        "Thousands separator is the comma (1,234,567)."
+        "Thousands separator is the comma (1,234,567).",
+        "`## Language resolution` in the transcript names `lib/languages/en_US.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
+      ]
+    },
+    {
+      "id": 19,
+      "skill_name": "proofread",
+      "name": "sv-negative-clean-text",
+      "language": "sv",
+      "prompt": "/proofread sv",
+      "files": [
+        "evals/fixtures/sv-clean-text.md"
+      ],
+      "expected_output": "Input already follows Swedish mechanics conventions. Proofread delivers the text unchanged (or with at most a trivial change) and does not introduce false-positive 'corrections' such as removing the thin no-break space, converting curly quotes, or rewriting the time format.",
+      "expectations": [
+        "The output text is unchanged from the input, OR any change is limited to whitespace-equivalent normalisation (no semantic edits).",
+        "The thin no-break space (U+202F) inside `1 234 567` is preserved — not normalised to a regular space and not replaced by a comma or full stop.",
+        "Swedish quotation marks ”…” (U+201D both sides) are preserved — not converted to straight ASCII \"…\" and not to curly “…”.",
+        "Time `kl. 10.30` is preserved with a full stop — not changed to `10:30`.",
+        "Genitive `Marx teorier` (zero-marking on -s name) is preserved — no apostrophe-s is inserted.",
+        "`## Language resolution` in the transcript names `lib/languages/sv.md` and identifies the *Mechanics* section as the applied scope; the without-skill baseline lacks this record."
+      ]
+    },
+    {
+      "id": 20,
+      "skill_name": "proofread",
+      "name": "en_GB-negative-clean-text",
+      "language": "en_GB",
+      "prompt": "/proofread en_GB",
+      "files": [
+        "evals/fixtures/en_GB-clean-text.md"
+      ],
+      "expected_output": "Input already follows British English mechanics. Proofread preserves -ise/-our spellings, omits the Oxford comma in the list, and does not Americanise the text.",
+      "expectations": [
+        "The output text is unchanged from the input, OR any change is limited to whitespace-equivalent normalisation.",
+        "British spellings *analyse*, *refurbishment*, *metres* are preserved — not changed to *analyze*, *remodeling*, *meters*.",
+        "The series `readings, music and short workshops` is preserved without an Oxford comma (British convention).",
+        "Single quotation marks `'…'` around the librarian quote are preserved — not converted to double quotes.",
+        "The abbreviation `Department for Transport` and its currency format `£1,234,567` are preserved — not Americanised.",
+        "`## Language resolution` names `lib/languages/en_GB.md` and identifies the *Mechanics* section as the applied scope; the without-skill baseline lacks this record."
+      ]
+    },
+    {
+      "id": 21,
+      "skill_name": "proofread",
+      "name": "en_US-negative-clean-text",
+      "language": "en_US",
+      "prompt": "/proofread en_US",
+      "files": [
+        "evals/fixtures/en_US-clean-text.md"
+      ],
+      "expected_output": "Input already follows American English mechanics. Proofread preserves -ize/-or spellings, keeps the Oxford comma, and does not Britishise the text.",
+      "expectations": [
+        "The output text is unchanged from the input, OR any change is limited to whitespace-equivalent normalisation.",
+        "American spellings *analyze*, *renovation*, *feet* are preserved — not changed to British equivalents.",
+        "The series `readings, music, and short workshops` is preserved with the Oxford comma (American convention).",
+        "Double quotation marks `\"…\"` around the librarian quote are preserved — not converted to single quotes.",
+        "Time format `10:30 a.m.` is preserved with the colon and the lowercase periods (American convention).",
+        "`## Language resolution` names `lib/languages/en_US.md` and identifies the *Mechanics* section as the applied scope; the without-skill baseline lacks this record."
       ]
     },
     {
@@ -269,7 +371,9 @@
       "name": "sv-redline-typography-and-style",
       "language": "sv",
       "prompt": "/redline sv",
-      "files": ["evals/fixtures/sv-article.md"],
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
       "expected_output": "Finding list covering both mechanics and style for a Swedish article.",
       "expectations": [
         "Phase 1 (proofread) applies before Phase 2 — the corrected text flows into the critical review, not delivered separately.",
@@ -284,7 +388,9 @@
       "name": "sv-redline-genitive-on-s",
       "language": "sv",
       "prompt": "/redline sv",
-      "files": ["evals/fixtures/sv-article.md"],
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
       "expected_output": "Mechanics finding: *Marx teorier* and *CoMaps föregångare* — explicitly flagged as correct zero-marking; any apostrophe-s drift would be a finding.",
       "expectations": [
         "*Marx teorier* in the article body is recognised as correct Swedish zero-marking for an -s name.",
@@ -298,7 +404,9 @@
       "name": "sv-redline-press-release-attribution",
       "language": "sv",
       "prompt": "/redline sv",
-      "files": ["evals/fixtures/sv-press-release.md"],
+      "files": [
+        "evals/fixtures/sv-press-release.md"
+      ],
       "expected_output": "Findings flag that the press release uses straight ASCII quotation marks; speech dashes are the Swedish press-release standard for attribution.",
       "expectations": [
         "Straight ASCII quotation marks are flagged or corrected to ”…” (Swedish outer).",
@@ -312,7 +420,9 @@
       "name": "sv-redline-ai-tells",
       "language": "sv",
       "prompt": "/redline sv",
-      "files": ["evals/fixtures/sv-grammar-errors.md"],
+      "files": [
+        "evals/fixtures/sv-grammar-errors.md"
+      ],
       "expected_output": "Style-layer findings on AI-tell calques and anglicisms.",
       "expectations": [
         "*Det är värt att notera att…* is flagged as an AI-tell calque of *It's worth noting that…*.",
@@ -327,12 +437,15 @@
       "name": "sv-redline-overlong-heading",
       "language": "sv",
       "prompt": "/redline sv",
-      "files": ["evals/fixtures/overlong-heading.md"],
+      "files": [
+        "evals/fixtures/overlong-heading.md"
+      ],
       "expected_output": "Findings raise H1 length and H2 length as structural issues.",
       "expectations": [
         "The H1 (well over 60 characters) is flagged as too long for a readable headline.",
         "At least one of the over-long H2 headings is flagged.",
-        "The finding is concrete (line-editing scope) — not punted to the developmental last-resort finding."
+        "The finding is concrete (line-editing scope) — not punted to the developmental last-resort finding.",
+        "`## Genre / technique resolution` in the transcript names the committed genre and documents whether the fast-path exited or the standard flow read `lib/genres/_index.md` and the matching genre file. The without-skill baseline does not produce this resolution record — the skill's value is the explicit genre commitment that scopes the review pass."
       ]
     },
     {
@@ -341,7 +454,9 @@
       "name": "sv-redline-fabricated-source",
       "language": "sv",
       "prompt": "/redline sv",
-      "files": ["evals/fixtures/fabricated-source.md"],
+      "files": [
+        "evals/fixtures/fabricated-source.md"
+      ],
       "expected_output": "Findings flag the suspicious-looking references (specific publishers, journal names, dates) so the writer can verify them.",
       "expectations": [
         "At least one finding flags one or more of the source citations as unverifiable / likely fabricated, prompting the writer to verify.",
@@ -355,7 +470,9 @@
       "name": "en_GB-redline-typography-and-style",
       "language": "en_GB",
       "prompt": "/redline en_GB",
-      "files": ["evals/fixtures/en_GB-article.md"],
+      "files": [
+        "evals/fixtures/en_GB-article.md"
+      ],
       "expected_output": "Finding list covering both mechanics and style for a British English article.",
       "expectations": [
         "Phase 1 (proofread) is applied silently; corrected text flows into Phase 2.",
@@ -369,7 +486,9 @@
       "name": "en_GB-redline-quotation-attribution",
       "language": "en_GB",
       "prompt": "/redline en_GB",
-      "files": ["evals/fixtures/en_GB-quotation-errors.md"],
+      "files": [
+        "evals/fixtures/en_GB-quotation-errors.md"
+      ],
       "expected_output": "Findings on quotation-mark typography and punctuation placement.",
       "expectations": [
         "Outer single curly quotes are used; inner double curly quotes are used.",
@@ -383,7 +502,9 @@
       "name": "en_GB-redline-ai-tells",
       "language": "en_GB",
       "prompt": "/redline en_GB",
-      "files": ["evals/fixtures/en_GB-style-errors.md"],
+      "files": [
+        "evals/fixtures/en_GB-style-errors.md"
+      ],
       "expected_output": "Style-layer findings on AI-tell vocabulary and openings.",
       "expectations": [
         "*In a world where…* is flagged as an opening cliché.",
@@ -398,7 +519,9 @@
       "name": "en_GB-redline-american-drift",
       "language": "en_GB",
       "prompt": "/redline en_GB",
-      "files": ["evals/fixtures/en_GB-spelling-drift.md"],
+      "files": [
+        "evals/fixtures/en_GB-spelling-drift.md"
+      ],
       "expected_output": "Findings flag American spellings, American idioms, and American date drift.",
       "expectations": [
         "American -ize/-ization spellings flagged for the British -ise/-isation substitute.",
@@ -413,7 +536,9 @@
       "name": "en_GB-redline-overlong-heading",
       "language": "en_GB",
       "prompt": "/redline en_GB please review this draft",
-      "files": ["evals/fixtures/overlong-heading.md"],
+      "files": [
+        "evals/fixtures/overlong-heading.md"
+      ],
       "expected_output": "Findings raise heading length even when the source is Swedish (auto-detection should pick sv; with explicit en_GB the pass still flags structural issues).",
       "expectations": [
         "Headings over 60 characters are flagged as too long for a readable headline.",
@@ -427,7 +552,9 @@
       "name": "en_GB-redline-fast-path-short-text",
       "language": "en_GB",
       "prompt": "/redline en_GB",
-      "files": ["evals/fixtures/en_GB-short.md"],
+      "files": [
+        "evals/fixtures/en_GB-short.md"
+      ],
       "expected_output": "Fast-path commits to the `general` genre because the text has no structural markers and the prompt has no genre word.",
       "expectations": [
         "The fast-path exits before reading `lib/genres/_index.md`.",
@@ -442,7 +569,9 @@
       "name": "en_US-redline-typography-and-style",
       "language": "en_US",
       "prompt": "/redline en_US",
-      "files": ["evals/fixtures/en_US-article.md"],
+      "files": [
+        "evals/fixtures/en_US-article.md"
+      ],
       "expected_output": "Finding list covering both mechanics and style for an American English article.",
       "expectations": [
         "Genre resolves to `article` via standard flow (H1 + standfirst + byline present).",
@@ -457,12 +586,15 @@
       "name": "en_US-redline-quotation-and-punctuation",
       "language": "en_US",
       "prompt": "/redline en_US",
-      "files": ["evals/fixtures/en_US-quotation-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-quotation-errors.md"
+      ],
       "expected_output": "Findings on quotation-mark typography and the American inside-the-quote punctuation convention.",
       "expectations": [
         "Outer quotation marks should be \"…\" (double curly), inner '…' (single curly) — opposite of British.",
         "Commas and full stops always go inside the closing quote — *He called it \"revolutionary.\"* — regardless of whether the punctuation belongs to the quote.",
-        "Question marks belonging to the spoken utterance stay inside the quotation."
+        "Question marks belonging to the spoken utterance stay inside the quotation.",
+        "`## Genre / technique resolution` in the transcript names the committed genre and documents whether the fast-path exited or the standard flow read `lib/genres/_index.md` and the matching genre file. The without-skill baseline does not produce this resolution record — the skill's value is the explicit genre commitment that scopes the review pass."
       ]
     },
     {
@@ -471,7 +603,9 @@
       "name": "en_US-redline-ai-tells",
       "language": "en_US",
       "prompt": "/redline en_US",
-      "files": ["evals/fixtures/en_US-style-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-style-errors.md"
+      ],
       "expected_output": "Style-layer findings on AI-tell vocabulary and openings, including American-specific tells.",
       "expectations": [
         "*In a world where…*, *It's worth noting that…*, *Let me be perfectly clear* are flagged.",
@@ -484,7 +618,8 @@
         "Management jargon *holistic approach* is flagged.",
         "Management jargon *strategic* is flagged.",
         "Management jargon *proactive* is flagged.",
-        "Management jargon *synergies* is flagged."
+        "Management jargon *synergies* is flagged.",
+        "`## Genre / technique resolution` in the transcript names the committed genre and documents whether the fast-path exited or the standard flow read `lib/genres/_index.md` and the matching genre file. The without-skill baseline does not produce this resolution record — the skill's value is the explicit genre commitment that scopes the review pass."
       ]
     },
     {
@@ -493,12 +628,15 @@
       "name": "en_US-redline-oxford-comma-and-em-dash",
       "language": "en_US",
       "prompt": "/redline en_US",
-      "files": ["evals/fixtures/en_US-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
       "expected_output": "Findings raise the missing Oxford comma and the wrong parenthetical dash form.",
       "expectations": [
         "*red, white and blue* is flagged — the Oxford comma is required in American English: *red, white, and blue*.",
         "Parenthetical insertion uses EM-dash without spaces (*market—an increase*), not EN-dash with spaces (*market – an increase*).",
-        "Time format is 12-hour with AM/PM and colon (2:30 PM), not 24-hour with full stop."
+        "Time format is 12-hour with AM/PM and colon (2:30 PM), not 24-hour with full stop.",
+        "`## Genre / technique resolution` in the transcript names the committed genre and documents whether the fast-path exited or the standard flow read `lib/genres/_index.md` and the matching genre file. The without-skill baseline does not produce this resolution record — the skill's value is the explicit genre commitment that scopes the review pass."
       ]
     },
     {
@@ -507,7 +645,9 @@
       "name": "en_US-redline-fast-path-short-text",
       "language": "en_US",
       "prompt": "/redline en_US",
-      "files": ["evals/fixtures/en_US-short.md"],
+      "files": [
+        "evals/fixtures/en_US-short.md"
+      ],
       "expected_output": "Fast-path commits to the `general` genre because the text has no structural markers and the prompt has no genre word.",
       "expectations": [
         "The fast-path exits before reading `lib/genres/_index.md`.",
@@ -522,12 +662,33 @@
       "name": "en_US-redline-abbreviation-fullstops",
       "language": "en_US",
       "prompt": "/redline en_US",
-      "files": ["evals/fixtures/en_US-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
       "expected_output": "Findings flag missing full stops on contraction abbreviations.",
       "expectations": [
         "*Mr Smith* and *Dr Jones* are flagged — American English always uses the full stop: *Mr. Smith*, *Dr. Jones*.",
         "Initialisms (CEO, HTML, NASA) carry no full stops.",
-        "British -ise/-isation drift (*organise*, *analyse*) is flagged for the American substitute."
+        "British -ise/-isation drift (*organise*, *analyse*) is flagged for the American substitute.",
+        "`## Genre / technique resolution` in the transcript names the committed genre and documents whether the fast-path exited or the standard flow read `lib/genres/_index.md` and the matching genre file. The without-skill baseline does not produce this resolution record — the skill's value is the explicit genre commitment that scopes the review pass."
+      ]
+    },
+    {
+      "id": 119,
+      "skill_name": "redline",
+      "name": "sv-negative-clean-press-release",
+      "language": "sv",
+      "prompt": "/redline sv",
+      "files": [
+        "evals/fixtures/sv-clean-press-release.md"
+      ],
+      "expected_output": "A clean Swedish press release with proper genre conventions. Redline produces zero or near-zero findings. The dialogue phase is short or noted as not entered. No false-positive style findings are raised.",
+      "expectations": [
+        "`## Findings` is empty or contains at most one minor finding (no wall of false positives).",
+        "If any finding is raised, the transcript justifies it with a concrete citation from a loaded rule or genre file — no `## Findings` items are added on vibes.",
+        "`## Genre / technique resolution` commits to `press-release` (or the closest matching genre) based on the structural markers — not to the default `general` fallback.",
+        "Output is identical or near-identical to the input — no spurious style rewrites of clean sentences.",
+        "`## Phase log` records Phase 3 entered briefly (or skipped if no findings); the dialogue is not artificially inflated to demonstrate the protocol on a clean text."
       ]
     },
     {
@@ -536,7 +697,9 @@
       "name": "sv-edit-article-polish",
       "language": "sv",
       "prompt": "/edit sv",
-      "files": ["evals/fixtures/sv-article.md"],
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
       "expected_output": "Polished Swedish article — mechanics and style applied directly, no user dialogue.",
       "expectations": [
         "The main agent settles the finding list directly without invoking a subagent (default `--max-iterations=0`).",
@@ -551,7 +714,9 @@
       "name": "sv-edit-press-release-attribution",
       "language": "sv",
       "prompt": "/edit sv pressmeddelande",
-      "files": ["evals/fixtures/sv-press-release.md"],
+      "files": [
+        "evals/fixtures/sv-press-release.md"
+      ],
       "expected_output": "Polished Swedish press release with speech-dash attribution and Swedish outer quotation marks.",
       "expectations": [
         "Attributed speech is converted to speech-dash form (talstreck — EN-dash with space) or, where verbatim wording matters, kept in ”…” marks.",
@@ -566,7 +731,9 @@
       "name": "sv-edit-with-max-iterations-deep-natural-language",
       "language": "sv",
       "prompt": "/edit sv kör djupt på den här texten",
-      "files": ["evals/fixtures/sv-article.md"],
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
       "expected_output": "The natural-language phrase *kör djupt* maps to --max-iterations=3 and the subagent loop is invoked.",
       "expectations": [
         "The subagent loop in `lib/protocols/subagent.md` is invoked with a ceiling of 3 iterations.",
@@ -581,7 +748,9 @@
       "name": "sv-edit-ai-tells-and-anglicisms-applied",
       "language": "sv",
       "prompt": "/edit sv",
-      "files": ["evals/fixtures/sv-grammar-errors.md"],
+      "files": [
+        "evals/fixtures/sv-grammar-errors.md"
+      ],
       "expected_output": "Polished output replaces AI-tells and anglicisms with Swedish substitutes.",
       "expectations": [
         "*Det är värt att notera att…*, *I en värld där…*, *Sammanfattningsvis*, *Dyk djupare* are removed or rewritten.",
@@ -595,12 +764,15 @@
       "name": "sv-edit-overlong-heading",
       "language": "sv",
       "prompt": "/edit sv",
-      "files": ["evals/fixtures/overlong-heading.md"],
+      "files": [
+        "evals/fixtures/overlong-heading.md"
+      ],
       "expected_output": "Polished version shortens over-long headings while preserving meaning.",
       "expectations": [
         "The H1 is shortened to a readable length (under 60 characters where the meaning allows).",
         "At least one over-long H2 is shortened.",
-        "The body text under each heading remains substantively unchanged — only headings and obviously broken sentences are touched."
+        "The body text under each heading remains substantively unchanged — only headings and obviously broken sentences are touched.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
       ]
     },
     {
@@ -609,7 +781,9 @@
       "name": "sv-edit-fabricated-source-flagged-as-closing-note",
       "language": "sv",
       "prompt": "/edit sv",
-      "files": ["evals/fixtures/fabricated-source.md"],
+      "files": [
+        "evals/fixtures/fabricated-source.md"
+      ],
       "expected_output": "Polished text retains structure; suspicious source citations are flagged as a closing note for the writer to verify.",
       "expectations": [
         "Cited sources that look fabricated are preserved verbatim in the polished output (`/edit` does not invent or correct facts).",
@@ -623,7 +797,9 @@
       "name": "en_GB-edit-article-polish",
       "language": "en_GB",
       "prompt": "/edit en_GB",
-      "files": ["evals/fixtures/en_GB-article.md"],
+      "files": [
+        "evals/fixtures/en_GB-article.md"
+      ],
       "expected_output": "Polished British English article with mechanics and style applied directly.",
       "expectations": [
         "Genre resolves to `article` via standard flow.",
@@ -638,7 +814,9 @@
       "name": "en_GB-edit-style-cleanup",
       "language": "en_GB",
       "prompt": "/edit en_GB",
-      "files": ["evals/fixtures/en_GB-style-errors.md"],
+      "files": [
+        "evals/fixtures/en_GB-style-errors.md"
+      ],
       "expected_output": "Polished output strips AI-tell vocabulary and tightens the prose.",
       "expectations": [
         "*In a world where…*, *it's worth noting that*, *Let me be perfectly clear* are removed.",
@@ -653,7 +831,9 @@
       "name": "en_GB-edit-with-max-iterations-flag",
       "language": "en_GB",
       "prompt": "/edit en_GB --max-iterations=2",
-      "files": ["evals/fixtures/en_GB-article.md"],
+      "files": [
+        "evals/fixtures/en_GB-article.md"
+      ],
       "expected_output": "Subagent loop runs with a ceiling of 2 iterations.",
       "expectations": [
         "The `--max-iterations=2` flag is honoured.",
@@ -667,7 +847,9 @@
       "name": "en_GB-edit-american-drift-corrected",
       "language": "en_GB",
       "prompt": "/edit en_GB",
-      "files": ["evals/fixtures/en_GB-spelling-drift.md"],
+      "files": [
+        "evals/fixtures/en_GB-spelling-drift.md"
+      ],
       "expected_output": "Polished British English with -ise/-isation spellings, BrE idioms, and BrE date order.",
       "expectations": [
         "*organize* → *organise*; *analyze* → *analyse*; *finalize* → *finalise*.",
@@ -682,11 +864,14 @@
       "name": "en_GB-edit-overlong-heading",
       "language": "en_GB",
       "prompt": "/edit en_GB",
-      "files": ["evals/fixtures/overlong-heading.md"],
+      "files": [
+        "evals/fixtures/overlong-heading.md"
+      ],
       "expected_output": "Headings shortened; body preserved.",
       "expectations": [
         "The H1 is shortened to a readable length.",
-        "Body text under each heading remains substantively unchanged."
+        "Body text under each heading remains substantively unchanged.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
       ]
     },
     {
@@ -695,7 +880,9 @@
       "name": "en_GB-edit-fabricated-source-preserved-with-note",
       "language": "en_GB",
       "prompt": "/edit en_GB",
-      "files": ["evals/fixtures/fabricated-source.md"],
+      "files": [
+        "evals/fixtures/fabricated-source.md"
+      ],
       "expected_output": "Polished text preserves source citations verbatim; a closing note asks the writer to verify the citations.",
       "expectations": [
         "Cited sources are preserved verbatim in the polished output.",
@@ -709,7 +896,9 @@
       "name": "en_US-edit-article-polish",
       "language": "en_US",
       "prompt": "/edit en_US",
-      "files": ["evals/fixtures/en_US-article.md"],
+      "files": [
+        "evals/fixtures/en_US-article.md"
+      ],
       "expected_output": "Polished American English article with mechanics and style applied directly.",
       "expectations": [
         "Genre resolves to `article` via standard flow.",
@@ -724,13 +913,16 @@
       "name": "en_US-edit-style-cleanup",
       "language": "en_US",
       "prompt": "/edit en_US",
-      "files": ["evals/fixtures/en_US-style-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-style-errors.md"
+      ],
       "expected_output": "Polished output strips AI-tell vocabulary and tightens the prose.",
       "expectations": [
         "*In a world where…*, *it's worth noting that*, *Let me be perfectly clear* are removed.",
         "*delve into*, *leverage* (verb), *multifaceted*, *tapestry*, *robust*, *comprehensive*, *ultimately*, *unprecedented*, *streamline* are replaced or removed.",
         "*game-changer*, *paradigm shift*, *holistic approach*, *circle back* are removed or replaced.",
-        "Polished output uses Oxford comma in series."
+        "Polished output uses Oxford comma in series.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
       ]
     },
     {
@@ -739,12 +931,15 @@
       "name": "en_US-edit-quotation-applied",
       "language": "en_US",
       "prompt": "/edit en_US",
-      "files": ["evals/fixtures/en_US-quotation-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-quotation-errors.md"
+      ],
       "expected_output": "Polished version normalises to American conventions for quotation marks and punctuation placement.",
       "expectations": [
         "Outer quotation marks use \"…\" (double curly); inner '…' (single curly).",
         "Commas and full stops are placed inside the closing quote regardless of whether they belong to the quoted material.",
-        "Question marks belonging to the spoken utterance stay inside the quotation."
+        "Question marks belonging to the spoken utterance stay inside the quotation.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
       ]
     },
     {
@@ -753,7 +948,9 @@
       "name": "en_US-edit-with-max-iterations-flag-three",
       "language": "en_US",
       "prompt": "/edit en_US --max-iterations=3",
-      "files": ["evals/fixtures/en_US-article.md"],
+      "files": [
+        "evals/fixtures/en_US-article.md"
+      ],
       "expected_output": "Subagent loop runs with a ceiling of 3 iterations.",
       "expectations": [
         "The `--max-iterations=3` flag is honoured.",
@@ -768,7 +965,9 @@
       "name": "en_US-edit-typography-applied",
       "language": "en_US",
       "prompt": "/edit en_US",
-      "files": ["evals/fixtures/en_US-typography-errors.md"],
+      "files": [
+        "evals/fixtures/en_US-typography-errors.md"
+      ],
       "expected_output": "Polished version applies American typography conventions throughout.",
       "expectations": [
         "Thousands separator is the comma; percent in figures has no space.",
@@ -784,12 +983,33 @@
       "name": "en_US-edit-overlong-heading",
       "language": "en_US",
       "prompt": "/edit en_US",
-      "files": ["evals/fixtures/overlong-heading.md"],
+      "files": [
+        "evals/fixtures/overlong-heading.md"
+      ],
       "expected_output": "Headings shortened; body preserved.",
       "expectations": [
         "The H1 is shortened to a readable length.",
         "At least one over-long H2 is shortened.",
-        "Body text under each heading remains substantively unchanged."
+        "Body text under each heading remains substantively unchanged.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
+      ]
+    },
+    {
+      "id": 219,
+      "skill_name": "edit",
+      "name": "en_GB-negative-clean-essay",
+      "language": "en_GB",
+      "prompt": "/edit en_GB",
+      "files": [
+        "evals/fixtures/en_GB-clean-essay.md"
+      ],
+      "expected_output": "A clean British English essay-style text. Edit produces a polished version with minimal substantive changes; protocol fidelity is the testable signal, not the volume of edits.",
+      "expectations": [
+        "`## Findings` raises at most a small number of substantive items (no wall of false positives on clean prose).",
+        "British conventions are preserved: -ise spellings, no Oxford comma in standard series, single quotation marks, £ currency, metric units with no-break space (`21 °C`, `320 square metres`).",
+        "`## Genre / technique resolution` commits to the closest matching genre — `column` or `general` — and names a technique if the genre's `default_technique` is not `none`.",
+        "`## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation.",
+        "Any change applied in the edit is traceable to a finding in the transcript — no silent rewrites."
       ]
     },
     {
@@ -858,7 +1078,9 @@
       "name": "sv-write-teaser",
       "language": "sv",
       "prompt": "/write skriv en puff för artikeln om cykelnätet (länk till artikelutkastet finns i förra svaret) — accept all",
-      "files": ["evals/fixtures/sv-article.md"],
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
       "expected_output": "A short Swedish teaser (puff) using the ABT technique.",
       "expectations": [
         "Genre is committed to `teaser` (the Swedish term *puff* is in the trigger list).",
@@ -961,7 +1183,9 @@
       "name": "en_GB-write-teaser",
       "language": "en_GB",
       "prompt": "/write write a British English teaser/standfirst for an article on urban cycling — accept all",
-      "files": ["evals/fixtures/en_GB-article.md"],
+      "files": [
+        "evals/fixtures/en_GB-article.md"
+      ],
       "expected_output": "A short British English teaser using the ABT technique.",
       "expectations": [
         "Genre commits to `teaser`.",
@@ -1066,7 +1290,9 @@
       "name": "fallback-default-mechanics-on-german-text",
       "language": "de",
       "prompt": "/proofread",
-      "files": ["evals/fixtures/de-fallback.md"],
+      "files": [
+        "evals/fixtures/de-fallback.md"
+      ],
       "expected_output": "The skill falls back to `default-mechanics.md` because there is no `de.md`, reports the absence, and applies the baseline conventions to obvious mechanic errors.",
       "expectations": [
         "Language resolution detects German, finds no `lib/languages/de.md`, and falls back to `lib/languages/default-mechanics.md`.",
@@ -1081,7 +1307,10 @@
       "name": "overlay-loader-sv_FI-territorial-variant",
       "language": "sv_FI",
       "prompt": "/redline sv_FI",
-      "files": ["evals/fixtures/sv_FI-text.md", "evals/fixtures/lib/languages/sv_FI.md"],
+      "files": [
+        "evals/fixtures/sv_FI-text.md",
+        "evals/fixtures/lib/languages/sv_FI.md"
+      ],
       "expected_output": "The overlay loader applies `sv_FI.md` over `sv.md` per `lib/protocols/language-resolution.md`. The `Typography` H2 from the variant replaces the base; every other H2 under the layer markers is carried through from `sv.md` unchanged.",
       "expectations": [
         "Language resolution loads `sv_FI.md` and applies the overlay over `sv.md` because the variant declares `inherits: \"@sv.md\"`.",
@@ -1097,7 +1326,9 @@
       "name": "fast-path-hit-short-unsignalled-sv-text",
       "language": "sv",
       "prompt": "/redline sv",
-      "files": ["evals/fixtures/sv-short.md"],
+      "files": [
+        "evals/fixtures/sv-short.md"
+      ],
       "expected_output": "Fast-path commits to `general` and skips both the `_index.md` read and the matched-genre file read.",
       "expectations": [
         "The fast-path exits before reading `lib/genres/_index.md` — the input has no H1, no standfirst, no byline, no attributed-quote pattern, and the prompt has no genre word.",
@@ -1112,14 +1343,16 @@
       "name": "fast-path-standard-flow-on-structured-article",
       "language": "sv",
       "prompt": "/redline sv",
-      "files": ["evals/fixtures/sv-article.md"],
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
       "expected_output": "The standard flow kicks in because the input carries an H1, a standfirst, a byline, and attributed-quote patterns — the fast-path's structural-marker condition is broken.",
       "expectations": [
         "Either condition broken: structural markers present (H1, standfirst, byline, attributed quote).",
         "`lib/genres/_index.md` is read and trigger-matched.",
         "Genre commits to `article` and the corresponding `lib/genres/article.md` is read.",
         "The default technique `abt` is loaded.",
-        "The standard-flow output reflects the article-genre review-scoped rules from `lib/genres/article.md`; no behaviour beyond what the article genre prescribes is introduced by the genre-resolution detour — the fast-path is a dedup of the same downstream rules, not a behaviour change."
+        "The findings list (`## Findings` in the transcript) includes at least one finding that cites a review-scoped section of `lib/genres/article.md` — specifically the repetition rule between H1, standfirst, lead and first H2, OR one of the documented common pitfalls (visible ABT formula, standfirst and lead repeating each other, teasing subheadings, explicit bridges). This is the observable consequence of the standard flow loading the genre file's review-scoped sections."
       ]
     },
     {
@@ -1128,7 +1361,9 @@
       "name": "max-iterations-natural-language-redline",
       "language": "sv",
       "prompt": "/redline sv en runda räcker på den här artikeln",
-      "files": ["evals/fixtures/sv-article.md"],
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
       "expected_output": "Phase 3 delegation invokes the subagent with a ceiling of 1 (natural-language *en runda* → 1).",
       "expectations": [
         "On delegation, the natural-language phrase *en runda räcker* is parsed to 1 — the same value as the `--max-iterations=1` flag.",
@@ -1143,7 +1378,9 @@
       "name": "max-iterations-natural-language-edit",
       "language": "sv",
       "prompt": "/edit sv max två rundor på den här artikeln",
-      "files": ["evals/fixtures/sv-article.md"],
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
       "expected_output": "Phase 3 invokes the subagent with a ceiling of 2 (natural-language *max två rundor* → 2).",
       "expectations": [
         "The natural-language phrase *max två rundor* is parsed to 2 — the same value as the `--max-iterations=2` flag.",
@@ -1173,13 +1410,71 @@
       "name": "last-resort-floor-raises-to-one-when-flag-zero",
       "language": "sv",
       "prompt": "/edit sv --max-iterations=0",
-      "files": ["evals/fixtures/last-resort-developmental.md"],
+      "files": [
+        "evals/fixtures/last-resort-developmental.md"
+      ],
       "expected_output": "Despite `--max-iterations=0`, the subagent floor is raised to 1 because the redline pass produces the last-resort developmental finding.",
       "expectations": [
         "The redline pass identifies that the draft is below the line-editing repair threshold (vague claims, no concrete content, no hook, no source) and produces the last-resort finding from `lib/protocols/redline.md`.",
         "The subagent floor is raised to 1 even though the flag is set to 0 — one round to sanity-check the observation.",
         "The last-resort observation is delivered as a closing note to the user (e.g., *consider rewriting from richer source material*).",
         "The main agent does not silently rewrite the developmental issues — those are escalated, not auto-fixed."
+      ]
+    },
+    {
+      "id": 409,
+      "skill_name": "redline",
+      "name": "phase-3-dialogue-mixed-accept-reject-counter",
+      "language": "sv",
+      "prompt": "/redline sv. Du presenterar fynden ett i taget. För denna körning scriptar jag mina svar i förväg: jag accepterar fynd 1 (svar: ”OK, kör”), avvisar fynd 2 (svar: ”nej, lämna det”), kontrar fynd 3 med en alternativ formulering du själv väljer som passar texten och som du tycker är substansmässigt minst lika bra som ditt original (svar: ”jag föreslår istället: <din alternativa formulering>”). För fynd 4 och framåt: accept på allt. Visa hela dialog-loopen i `## Phase log` med en rad per fynd och min scriptade respons.",
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
+      "expected_output": "Final polished text reflecting the scripted decisions: finding 1 applied, finding 2 dropped, finding 3 applied in the executor's counter-form, findings 4+ applied. Transcript Phase log records each branch.",
+      "expectations": [
+        "`## Phase log` records Phase 3 entered with finding-by-finding presentation (one row per finding minimum).",
+        "Finding 1 is recorded as ACCEPTED in the Phase log; the proposed change appears in `output.md`.",
+        "Finding 2 is recorded as REJECTED in the Phase log; the proposed change does NOT appear in `output.md`.",
+        "Finding 3 is recorded as a COUNTER in the Phase log; the executor's alternative formulation is named in the transcript and that alternative (not the original proposal) appears in `output.md`.",
+        "Findings 4 and onward are recorded as ACCEPTED in the Phase log; those changes appear in `output.md`.",
+        "The without-skill baseline does not produce a structured Phase 3 record — the skill's value is the per-finding accountability."
+      ]
+    },
+    {
+      "id": 410,
+      "skill_name": "redline",
+      "name": "phase-3-dialogue-delegate-with-max-iterations",
+      "language": "en_GB",
+      "prompt": "/redline en_GB --max-iterations=2. You present the findings one at a time. My scripted responses for this run: I accept finding 1 ('OK'). I accept finding 2 ('yes, apply it'). After finding 2 I delegate the rest ('just do the rest, you decide'). Record the subagent ceiling N that `subagent.md` would be invoked with on the open tail — N comes from the `--max-iterations=2` flag, not natural language.",
+      "files": [
+        "evals/fixtures/en_GB-article.md"
+      ],
+      "expected_output": "Findings 1 and 2 settled in dialogue (both accepted). The remaining open tail is delegated to subagent.md with N=2 from the flag. The polished text is delivered without a user-facing summary of internal work.",
+      "expectations": [
+        "`## Phase log` records findings 1 and 2 as ACCEPTED via the dialogue protocol.",
+        "`## Phase log` records the user's delegation signal after finding 2 ('just do the rest' or close paraphrase).",
+        "`## Subagent ceiling` records N=2 and identifies the source as the `--max-iterations=2` flag (not a natural-language phrase, not the default 0, not the last-resort floor).",
+        "`## Phase log` notes that `lib/protocols/subagent.md` would be invoked on the open tail with N=2 (executor records what the subagent would do; no actual sub-subagent is spawned per the executor instructions).",
+        "`output.md` contains the polished text only — no user-facing summary of which findings were settled by the subagent."
+      ]
+    },
+    {
+      "id": 411,
+      "skill_name": "redline",
+      "name": "phase-3-dialogue-counter-defended",
+      "language": "sv",
+      "prompt": "/redline sv. Du presenterar fynden ett i taget. Scriptade svar: fynd 1 accept (”OK”). För fynd 2, om du föreslår ett mer publikvänligt språk: jag kontrar med argumentet att originalformuleringen är fackspråk som målgruppen (branschkollegor) förväntar sig (svar: ”nej, behåll original — fackspråk är vad målgruppen vill ha”). Du ska antingen försvara ditt ursprungliga förslag med en konkret hänvisning till en regel- eller genre-aspekt, eller acceptera mitt motargument och behålla originalet — och transkripten ska göra klart vilket. Resten av fynden: accept.",
+      "files": [
+        "evals/fixtures/sv-press-release.md"
+      ],
+      "expected_output": "Finding 1 accepted. Finding 2 — the executor either defends with a concrete citation from a loaded rule/genre file, or adopts the user's counter and drops the proposal. The choice and its justification are explicit in the transcript. Remaining findings accepted.",
+      "expectations": [
+        "Finding 1 is recorded as ACCEPTED in `## Phase log`.",
+        "The user's counter on finding 2 ('fackspråk är vad målgruppen vill ha' or close paraphrase) is quoted or summarised in the Phase log.",
+        "The executor's response on finding 2 is explicit: either (a) DEFENDS the original proposal with a concrete citation from a loaded file (a rule name + a one-line reason), or (b) ADOPTS the user's counter and drops the proposal. The transcript states which branch was taken.",
+        "If (a) defended: the original proposal appears in `output.md`. If (b) adopted: the original proposal does NOT appear in `output.md`.",
+        "Remaining findings (3+) are accepted in sequence; corresponding changes appear in `output.md`.",
+        "The transcript shows substantive engagement — no 'you're right, I agree' without analysis (sycophancy fail), no 'no, my proposal stands' without citation (stubborn fail)."
       ]
     }
   ]

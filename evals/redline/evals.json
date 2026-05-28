@@ -80,7 +80,8 @@
       "expectations": [
         "The H1 (well over 60 characters) is flagged as too long for a readable headline.",
         "At least one of the over-long H2 headings is flagged.",
-        "The finding is concrete (line-editing scope) — not punted to the developmental last-resort finding."
+        "The finding is concrete (line-editing scope) — not punted to the developmental last-resort finding.",
+        "`## Genre / technique resolution` in the transcript names the committed genre and documents whether the fast-path exited or the standard flow read `lib/genres/_index.md` and the matching genre file. The without-skill baseline does not produce this resolution record — the skill's value is the explicit genre commitment that scopes the review pass."
       ]
     },
     {
@@ -228,7 +229,8 @@
       "expectations": [
         "Outer quotation marks should be \"…\" (double curly), inner '…' (single curly) — opposite of British.",
         "Commas and full stops always go inside the closing quote — *He called it \"revolutionary.\"* — regardless of whether the punctuation belongs to the quote.",
-        "Question marks belonging to the spoken utterance stay inside the quotation."
+        "Question marks belonging to the spoken utterance stay inside the quotation.",
+        "`## Genre / technique resolution` in the transcript names the committed genre and documents whether the fast-path exited or the standard flow read `lib/genres/_index.md` and the matching genre file. The without-skill baseline does not produce this resolution record — the skill's value is the explicit genre commitment that scopes the review pass."
       ]
     },
     {
@@ -252,7 +254,8 @@
         "Management jargon *holistic approach* is flagged.",
         "Management jargon *strategic* is flagged.",
         "Management jargon *proactive* is flagged.",
-        "Management jargon *synergies* is flagged."
+        "Management jargon *synergies* is flagged.",
+        "`## Genre / technique resolution` in the transcript names the committed genre and documents whether the fast-path exited or the standard flow read `lib/genres/_index.md` and the matching genre file. The without-skill baseline does not produce this resolution record — the skill's value is the explicit genre commitment that scopes the review pass."
       ]
     },
     {
@@ -268,7 +271,8 @@
       "expectations": [
         "*red, white and blue* is flagged — the Oxford comma is required in American English: *red, white, and blue*.",
         "Parenthetical insertion uses EM-dash without spaces (*market—an increase*), not EN-dash with spaces (*market – an increase*).",
-        "Time format is 12-hour with AM/PM and colon (2:30 PM), not 24-hour with full stop."
+        "Time format is 12-hour with AM/PM and colon (2:30 PM), not 24-hour with full stop.",
+        "`## Genre / technique resolution` in the transcript names the committed genre and documents whether the fast-path exited or the standard flow read `lib/genres/_index.md` and the matching genre file. The without-skill baseline does not produce this resolution record — the skill's value is the explicit genre commitment that scopes the review pass."
       ]
     },
     {
@@ -301,7 +305,26 @@
       "expectations": [
         "*Mr Smith* and *Dr Jones* are flagged — American English always uses the full stop: *Mr. Smith*, *Dr. Jones*.",
         "Initialisms (CEO, HTML, NASA) carry no full stops.",
-        "British -ise/-isation drift (*organise*, *analyse*) is flagged for the American substitute."
+        "British -ise/-isation drift (*organise*, *analyse*) is flagged for the American substitute.",
+        "`## Genre / technique resolution` in the transcript names the committed genre and documents whether the fast-path exited or the standard flow read `lib/genres/_index.md` and the matching genre file. The without-skill baseline does not produce this resolution record — the skill's value is the explicit genre commitment that scopes the review pass."
+      ]
+    },
+    {
+      "id": 119,
+      "skill_name": "redline",
+      "name": "sv-negative-clean-press-release",
+      "language": "sv",
+      "prompt": "/redline sv",
+      "files": [
+        "evals/fixtures/sv-clean-press-release.md"
+      ],
+      "expected_output": "A clean Swedish press release with proper genre conventions. Redline produces zero or near-zero findings. The dialogue phase is short or noted as not entered. No false-positive style findings are raised.",
+      "expectations": [
+        "`## Findings` is empty or contains at most one minor finding (no wall of false positives).",
+        "If any finding is raised, the transcript justifies it with a concrete citation from a loaded rule or genre file — no `## Findings` items are added on vibes.",
+        "`## Genre / technique resolution` commits to `press-release` (or the closest matching genre) based on the structural markers — not to the default `general` fallback.",
+        "Output is identical or near-identical to the input — no spurious style rewrites of clean sentences.",
+        "`## Phase log` records Phase 3 entered briefly (or skipped if no findings); the dialogue is not artificially inflated to demonstrate the protocol on a clean text."
       ]
     },
     {
@@ -355,7 +378,7 @@
         "`lib/genres/_index.md` is read and trigger-matched.",
         "Genre commits to `article` and the corresponding `lib/genres/article.md` is read.",
         "The default technique `abt` is loaded.",
-        "The standard-flow output reflects the article-genre review-scoped rules from `lib/genres/article.md`; no behaviour beyond what the article genre prescribes is introduced by the genre-resolution detour — the fast-path is a dedup of the same downstream rules, not a behaviour change."
+        "The findings list (`## Findings` in the transcript) includes at least one finding that cites a review-scoped section of `lib/genres/article.md` — specifically the repetition rule between H1, standfirst, lead and first H2, OR one of the documented common pitfalls (visible ABT formula, standfirst and lead repeating each other, teasing subheadings, explicit bridges). This is the observable consequence of the standard flow loading the genre file's review-scoped sections."
       ]
     },
     {
@@ -373,6 +396,62 @@
         "The transcript states that on delegation, `lib/protocols/subagent.md` would be invoked with a ceiling of 1 — the parsed value of N from *en runda räcker*.",
         "The transcript states the subagent ceiling N=1 only takes effect on delegation; without an explicit delegate-finding step the main agent applies the remaining open findings directly, no subagent invocation is recorded.",
         "If the flag and the natural-language phrase conflict, the flag wins; if ambiguous, ask the user."
+      ]
+    },
+    {
+      "id": 409,
+      "skill_name": "redline",
+      "name": "phase-3-dialogue-mixed-accept-reject-counter",
+      "language": "sv",
+      "prompt": "/redline sv. Du presenterar fynden ett i taget. För denna körning scriptar jag mina svar i förväg: jag accepterar fynd 1 (svar: ”OK, kör”), avvisar fynd 2 (svar: ”nej, lämna det”), kontrar fynd 3 med en alternativ formulering du själv väljer som passar texten och som du tycker är substansmässigt minst lika bra som ditt original (svar: ”jag föreslår istället: <din alternativa formulering>”). För fynd 4 och framåt: accept på allt. Visa hela dialog-loopen i `## Phase log` med en rad per fynd och min scriptade respons.",
+      "files": [
+        "evals/fixtures/sv-article.md"
+      ],
+      "expected_output": "Final polished text reflecting the scripted decisions: finding 1 applied, finding 2 dropped, finding 3 applied in the executor's counter-form, findings 4+ applied. Transcript Phase log records each branch.",
+      "expectations": [
+        "`## Phase log` records Phase 3 entered with finding-by-finding presentation (one row per finding minimum).",
+        "Finding 1 is recorded as ACCEPTED in the Phase log; the proposed change appears in `output.md`.",
+        "Finding 2 is recorded as REJECTED in the Phase log; the proposed change does NOT appear in `output.md`.",
+        "Finding 3 is recorded as a COUNTER in the Phase log; the executor's alternative formulation is named in the transcript and that alternative (not the original proposal) appears in `output.md`.",
+        "Findings 4 and onward are recorded as ACCEPTED in the Phase log; those changes appear in `output.md`.",
+        "The without-skill baseline does not produce a structured Phase 3 record — the skill's value is the per-finding accountability."
+      ]
+    },
+    {
+      "id": 410,
+      "skill_name": "redline",
+      "name": "phase-3-dialogue-delegate-with-max-iterations",
+      "language": "en_GB",
+      "prompt": "/redline en_GB --max-iterations=2. You present the findings one at a time. My scripted responses for this run: I accept finding 1 ('OK'). I accept finding 2 ('yes, apply it'). After finding 2 I delegate the rest ('just do the rest, you decide'). Record the subagent ceiling N that `subagent.md` would be invoked with on the open tail — N comes from the `--max-iterations=2` flag, not natural language.",
+      "files": [
+        "evals/fixtures/en_GB-article.md"
+      ],
+      "expected_output": "Findings 1 and 2 settled in dialogue (both accepted). The remaining open tail is delegated to subagent.md with N=2 from the flag. The polished text is delivered without a user-facing summary of internal work.",
+      "expectations": [
+        "`## Phase log` records findings 1 and 2 as ACCEPTED via the dialogue protocol.",
+        "`## Phase log` records the user's delegation signal after finding 2 ('just do the rest' or close paraphrase).",
+        "`## Subagent ceiling` records N=2 and identifies the source as the `--max-iterations=2` flag (not a natural-language phrase, not the default 0, not the last-resort floor).",
+        "`## Phase log` notes that `lib/protocols/subagent.md` would be invoked on the open tail with N=2 (executor records what the subagent would do; no actual sub-subagent is spawned per the executor instructions).",
+        "`output.md` contains the polished text only — no user-facing summary of which findings were settled by the subagent."
+      ]
+    },
+    {
+      "id": 411,
+      "skill_name": "redline",
+      "name": "phase-3-dialogue-counter-defended",
+      "language": "sv",
+      "prompt": "/redline sv. Du presenterar fynden ett i taget. Scriptade svar: fynd 1 accept (”OK”). För fynd 2, om du föreslår ett mer publikvänligt språk: jag kontrar med argumentet att originalformuleringen är fackspråk som målgruppen (branschkollegor) förväntar sig (svar: ”nej, behåll original — fackspråk är vad målgruppen vill ha”). Du ska antingen försvara ditt ursprungliga förslag med en konkret hänvisning till en regel- eller genre-aspekt, eller acceptera mitt motargument och behålla originalet — och transkripten ska göra klart vilket. Resten av fynden: accept.",
+      "files": [
+        "evals/fixtures/sv-press-release.md"
+      ],
+      "expected_output": "Finding 1 accepted. Finding 2 — the executor either defends with a concrete citation from a loaded rule/genre file, or adopts the user's counter and drops the proposal. The choice and its justification are explicit in the transcript. Remaining findings accepted.",
+      "expectations": [
+        "Finding 1 is recorded as ACCEPTED in `## Phase log`.",
+        "The user's counter on finding 2 ('fackspråk är vad målgruppen vill ha' or close paraphrase) is quoted or summarised in the Phase log.",
+        "The executor's response on finding 2 is explicit: either (a) DEFENDS the original proposal with a concrete citation from a loaded file (a rule name + a one-line reason), or (b) ADOPTS the user's counter and drops the proposal. The transcript states which branch was taken.",
+        "If (a) defended: the original proposal appears in `output.md`. If (b) adopted: the original proposal does NOT appear in `output.md`.",
+        "Remaining findings (3+) are accepted in sequence; corresponding changes appear in `output.md`.",
+        "The transcript shows substantive engagement — no 'you're right, I agree' without analysis (sycophancy fail), no 'no, my proposal stands' without citation (stubborn fail)."
       ]
     }
   ]

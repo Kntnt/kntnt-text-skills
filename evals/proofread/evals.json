@@ -66,7 +66,8 @@
         "*dom* is corrected to *de* (subject) or *dem* (object) per its syntactic role.",
         "*sjukvårds personal* is joined into *sjukvårdspersonal* (single compound).",
         "*sjuk husen* is joined into *sjukhusen*.",
-        "*schema läggning* is joined into *schemaläggning*."
+        "*schema läggning* is joined into *schemaläggning*.",
+        "`## Language resolution` in the transcript names `lib/languages/sv.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -83,7 +84,8 @@
         "*sjukvårds anställda* → *sjukvårdsanställda*.",
         "*sjuk sköterska* → *sjuksköterska*; *under sköterska* → *undersköterska*.",
         "*brand kåren* → *brandkåren*; *brand män* → *brandmän*.",
-        "No style or word-order changes are made — proofread scope only."
+        "No style or word-order changes are made — proofread scope only.",
+        "`## Language resolution` in the transcript names `lib/languages/sv.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -180,7 +182,8 @@
         "*organize* → *organise*, *analyze* → *analyse*, *finalize* → *finalise*.",
         "*color* → *colour*; *favorite* → *favourite*; *center* → *centre*.",
         "*traveler* → *traveller* (double-l).",
-        "*on accident* → *by accident*."
+        "*on accident* → *by accident*.",
+        "`## Language resolution` in the transcript names `lib/languages/en_GB.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -197,7 +200,8 @@
         "Currency uses *£100* (no space, symbol before).",
         "Temperature uses no-break space: *25 °C* not *25°C*.",
         "Decimal separator is the full stop (123.45).",
-        "Thousands separator is the comma (1,234,567)."
+        "Thousands separator is the comma (1,234,567).",
+        "`## Language resolution` in the transcript names `lib/languages/en_GB.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -230,7 +234,8 @@
       "expected_output": "Oxford comma is added in series; American convention requires it.",
       "expectations": [
         "*red, white and blue* is corrected to *red, white, and blue* (Oxford comma present).",
-        "No other word-order or content changes are made — proofread scope only."
+        "No other word-order or content changes are made — proofread scope only.",
+        "`## Language resolution` in the transcript names `lib/languages/en_US.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -246,7 +251,8 @@
       "expectations": [
         "Outer quotation marks use “…” (U+201C, U+201D), not '…' or straight ASCII.",
         "Inner quotation marks use ‘…’, opposite of British convention.",
-        "Commas and full stops sit inside the closing quote regardless of whether they belong to the quoted material — *He called it “revolutionary.”*."
+        "Commas and full stops sit inside the closing quote regardless of whether they belong to the quoted material — *He called it “revolutionary.”*.",
+        "`## Language resolution` in the transcript names `lib/languages/en_US.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -262,7 +268,8 @@
       "expectations": [
         "*Mr Smith* is corrected to *Mr. Smith* (American always uses the full stop).",
         "*Dr Jones* is corrected to *Dr. Jones*.",
-        "Initialisms (CEO, HTML, NASA) carry no full stops."
+        "Initialisms (CEO, HTML, NASA) carry no full stops.",
+        "`## Language resolution` in the transcript names `lib/languages/en_US.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -277,7 +284,8 @@
       "expected_output": "British -ise/-isation drift corrected to American -ize/-ization.",
       "expectations": [
         "*organise* → *organize*; *analyse* → *analyze*.",
-        "No other word-order or content changes are made — proofread scope only."
+        "No other word-order or content changes are made — proofread scope only.",
+        "`## Language resolution` in the transcript names `lib/languages/en_US.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
       ]
     },
     {
@@ -294,7 +302,65 @@
         "Currency uses *$100* (no space, symbol before).",
         "Temperature has no space between number and degree-letter combination: *77°F* not *77 °F*.",
         "Decimal separator is the full stop (123.45).",
-        "Thousands separator is the comma (1,234,567)."
+        "Thousands separator is the comma (1,234,567).",
+        "`## Language resolution` in the transcript names `lib/languages/en_US.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
+      ]
+    },
+    {
+      "id": 19,
+      "skill_name": "proofread",
+      "name": "sv-negative-clean-text",
+      "language": "sv",
+      "prompt": "/proofread sv",
+      "files": [
+        "evals/fixtures/sv-clean-text.md"
+      ],
+      "expected_output": "Input already follows Swedish mechanics conventions. Proofread delivers the text unchanged (or with at most a trivial change) and does not introduce false-positive 'corrections' such as removing the thin no-break space, converting curly quotes, or rewriting the time format.",
+      "expectations": [
+        "The output text is unchanged from the input, OR any change is limited to whitespace-equivalent normalisation (no semantic edits).",
+        "The thin no-break space (U+202F) inside `1 234 567` is preserved — not normalised to a regular space and not replaced by a comma or full stop.",
+        "Swedish quotation marks ”…” (U+201D both sides) are preserved — not converted to straight ASCII \"…\" and not to curly “…”.",
+        "Time `kl. 10.30` is preserved with a full stop — not changed to `10:30`.",
+        "Genitive `Marx teorier` (zero-marking on -s name) is preserved — no apostrophe-s is inserted.",
+        "`## Language resolution` in the transcript names `lib/languages/sv.md` and identifies the *Mechanics* section as the applied scope; the without-skill baseline lacks this record."
+      ]
+    },
+    {
+      "id": 20,
+      "skill_name": "proofread",
+      "name": "en_GB-negative-clean-text",
+      "language": "en_GB",
+      "prompt": "/proofread en_GB",
+      "files": [
+        "evals/fixtures/en_GB-clean-text.md"
+      ],
+      "expected_output": "Input already follows British English mechanics. Proofread preserves -ise/-our spellings, omits the Oxford comma in the list, and does not Americanise the text.",
+      "expectations": [
+        "The output text is unchanged from the input, OR any change is limited to whitespace-equivalent normalisation.",
+        "British spellings *analyse*, *refurbishment*, *metres* are preserved — not changed to *analyze*, *remodeling*, *meters*.",
+        "The series `readings, music and short workshops` is preserved without an Oxford comma (British convention).",
+        "Single quotation marks `'…'` around the librarian quote are preserved — not converted to double quotes.",
+        "The abbreviation `Department for Transport` and its currency format `£1,234,567` are preserved — not Americanised.",
+        "`## Language resolution` names `lib/languages/en_GB.md` and identifies the *Mechanics* section as the applied scope; the without-skill baseline lacks this record."
+      ]
+    },
+    {
+      "id": 21,
+      "skill_name": "proofread",
+      "name": "en_US-negative-clean-text",
+      "language": "en_US",
+      "prompt": "/proofread en_US",
+      "files": [
+        "evals/fixtures/en_US-clean-text.md"
+      ],
+      "expected_output": "Input already follows American English mechanics. Proofread preserves -ize/-or spellings, keeps the Oxford comma, and does not Britishise the text.",
+      "expectations": [
+        "The output text is unchanged from the input, OR any change is limited to whitespace-equivalent normalisation.",
+        "American spellings *analyze*, *renovation*, *feet* are preserved — not changed to British equivalents.",
+        "The series `readings, music, and short workshops` is preserved with the Oxford comma (American convention).",
+        "Double quotation marks `\"…\"` around the librarian quote are preserved — not converted to single quotes.",
+        "Time format `10:30 a.m.` is preserved with the colon and the lowercase periods (American convention).",
+        "`## Language resolution` names `lib/languages/en_US.md` and identifies the *Mechanics* section as the applied scope; the without-skill baseline lacks this record."
       ]
     },
     {

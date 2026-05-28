@@ -18,22 +18,24 @@ python3 -c "import json,pathlib;d=json.load(open('evals/evals.json'));[pathlib.P
 
 ## Running the suite
 
+The pipeline lives entirely in `evals/workspace/`. From version 0.5.5 on, the runner uses headless `claude -p` invocations driven by `_runner.py`, which works around the fact that the previous skill-creator entry points (`scripts.run_loop`) target the description-improvement loop, not the full eval flow we need.
+
 ```bash
-# 1. Run the skill-creator runner per skill (with-skill and baseline are launched together)
-python -m scripts.run_loop --skill-path skills/<skill> --eval-set evals/<skill>/evals.json
+# 1. Scaffold the iteration tree (per-case eval_metadata.json + run-N directories)
+python3 evals/workspace/_setup.py --iteration 2 --runs 3
 
-# 2. Aggregate the iteration into a benchmark
-python -m scripts.aggregate_benchmark evals/workspace/<skill>/iteration-1 --skill-name <skill>
+# 2. Run executors and graders. MUST be invoked from your normal terminal —
+#    nested claude -p (inside another claude session) returns 401 because
+#    auth is stripped on nesting. Resumable; safe to Ctrl-C and rerun.
+python3 evals/workspace/_runner.py --iteration 2 --runs 3 --parallel 4
 
-# 3. Generate the static HTML viewer (no browser auto-open)
-python <skill-creator-path>/eval-viewer/generate_review.py \
-    evals/workspace/<skill>/iteration-1 \
-    --skill-name <skill> \
-    --benchmark evals/workspace/<skill>/iteration-1/benchmark.json \
-    --static evals/workspace/<skill>/iteration-1/review.html
+# 3. Aggregate the grading.json files into a markdown report with mean ± stddev
+python3 evals/workspace/_aggregate.py --iteration 2 --runs 3 > /tmp/baseline-draft.md
 ```
 
-The runner needs access to `skill-creator` itself; install it from the Anthropic skill marketplace and call its scripts as above.
+Subset flags exist for smoke-testing (`--skill proofread`, `--limit 4`, `--skip-graders`). Cost cap per invocation defaults to $1 executor / $3 grader batch — adjust with `--executor-budget` / `--grader-budget`.
+
+The runner is resumable: it skips jobs whose `outputs/output.md` (or `grading.json`) already exists. To redo a job, delete its run directory.
 
 ## Scaling rule for new languages
 
@@ -52,4 +54,7 @@ The cases below exist by issue contract and other slices depend on them. Names a
 - `fast-path-hit-short-unsignalled-sv-text` — id 403, redline, exercises the fast-path exit from slice #28.
 - `fast-path-standard-flow-on-structured-article` — id 404, redline, the standard-flow counterpart from slice #28.
 - `max-iterations-natural-language-redline` / `-edit` / `-write` — ids 405–407, exercise the natural-language parsing of `--max-iterations` per skill that has the flag.
+- `phase-3-dialogue-mixed-accept-reject-counter` — id 409, redline, scripts user responses across the four Phase 3 branches (accept, reject, counter, accept-rest).
+- `phase-3-dialogue-delegate-with-max-iterations` — id 410, redline, scripts a delegate-after-N pattern with `--max-iterations=2`.
+- `phase-3-dialogue-counter-defended` — id 411, redline, scripts a contested counter where the executor must either defend with a citation or adopt the user's argument.
 - `last-resort-floor-raises-to-one-when-flag-zero` — id 408, edit, exercises the subagent floor raise when a developmental finding lands with the flag at 0.
