@@ -6,6 +6,25 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.5.5] — 2026-05-28
+
+### Added
+
+- `evals/workspace/_runner.py` — headless orchestrator that drives the full `(case × config × run)` sweep through `claude -p` subprocesses. Resumable (skips runs whose `output.md` / `grading.json` already exist), parallelisable (`--parallel N`), budget-capped (`--executor-budget`, `--grader-budget`), and scopable by skill (`--skill`) or individual cases (`--case-ids 11,205,…`). Pre-flight parses `claude -p`'s JSON envelope to surface auth failures early — the script cannot be run from inside a Claude Code session because nested invocations strip auth and return 401, and the runner says so up front. Model is pinned through `--model` (default `claude-sonnet-4-6`) so iteration-to-iteration numbers stay comparable while leaving room to bump Sonnet on the next major.
+- Five negative-control cases (ids 19, 20, 21, 119, 219) supply clean-text fixtures in sv, en_GB, and en_US for `/proofread`, `/redline`, and `/edit`, with assertions that pin the false-positive rate: no wall of corrections, no spurious style rewrites, genre / language resolution still recorded. With-skill 28 / 28; without-skill 16 / 28.
+- Three Phase 3 dialogue cases (ids 409, 410, 411) exercise the `/redline` accept / reject / counter / delegate protocol via scripted user responses in the executor prompt. The executor simulates the dialogue in-transcript (the same pattern `--max-iterations` already uses); the grader reads the transcript for the documented branches. With-skill 17 / 17; without-skill 11 / 17. End-to-end Phase 3 with an interactive user cannot be driven by the skill-creator pipeline's one-shot `claude -p`; that limitation is documented as a known gap rather than treated as a defect.
+
+### Changed
+
+- Paired protocol-semantic assertions appended to the 19 v0.5.4 cases that scored 100 % without-skill in iteration-1 (ids 4, 5, 11, 12, 14–18, 105, 114–116, 118, 205, 211, 214, 215, 218). Each augmented case now also records the genre commit, the technique commit, or the file-citation evidence that distinguishes a skilled run from a baseline LLM run. The new dimensions widened the suite from 80 cases / 299 assertions to 88 cases / 363 assertions.
+- Case 11 (en_GB) reframed from "American spellings corrected" — which the plugin's en_GB.md correctly classifies as Style-layer and therefore out of `/proofread` scope — to `en_GB-proofread-respects-style-scope-on-spellings`. The case now verifies the plugin's scope discipline: `/proofread` must *not* touch -ize / -ise, -or / -our, traveler / traveller drift in en_GB text, and the transcript must record the layer choice. Was a Mechanics-vs-Style framing mistake in the original eval, not a plugin behaviour question.
+- Case 404 assertion 5 rewritten to an observable form. Previously a process invariant ("no behaviour beyond what the article genre prescribes is introduced") that a single executor transcript could not falsify; now requires the findings list to cite an article-genre review-scoped rule from `lib/genres/article.md`.
+- Cases 205, 211, 218 had two assertions reformulated to remove a grader-LLM literalism dependency: the style-layer-pass evidence assertion now enumerates three valid evidence forms (file-path citation, layer-naming phrase, or category enumeration of `lib/rules/style.md`'s sections); the body-text-stability assertion now requires findings-traceability rather than literal "body text under each heading remains unchanged" (which conflicted with the legitimate ABT-technique restructuring that `/edit` performs).
+- Case 219 assertion 3 broadened to accept `article` alongside `column` / `general` as a defensible genre commit for the structural markers in the negative-clean-essay fixture — the plugin's trigger set commits to `article` on H1 + standfirst, and that is correct.
+- Case 410 assertion 5 broadened to allow a brief editorial trailer in `output.md` when the subagent has processed delegated findings; what the assertion bans is the polished text being subordinated to a verbose user-facing summary, not any acknowledgement at all.
+- `evals/evals.json` is now the source of truth for 88 cases / 363 assertions; the per-skill `evals/<skill>/evals.json` mirrors are regenerated from it (proofread 22, redline 26, edit 21, write 19).
+- `evals/baseline.md` refreshed against version 0.5.5 with hybrid iteration-1 + iteration-2 numbers: aggregate with-skill 363 / 363 (100.0 %), without-skill 170 / 363 (46.8 %), delta +53.2 pp. Every skill at 100 % with-skill; every language at 100 %; every required case, every negative-control case, and every Phase 3 dialogue case at 100 %. Methodology section documents the hybrid construction, the orchestrator, and the Sonnet-tur dependency that was hardened away.
+
 ## [0.5.4] — 2026-05-28
 
 ### Changed

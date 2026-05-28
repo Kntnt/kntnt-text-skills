@@ -171,19 +171,19 @@
     {
       "id": 11,
       "skill_name": "proofread",
-      "name": "en_GB-ise-isation-spelling",
+      "name": "en_GB-proofread-respects-style-scope-on-spellings",
       "language": "en_GB",
       "prompt": "/proofread en_GB",
       "files": [
         "evals/fixtures/en_GB-spelling-drift.md"
       ],
-      "expected_output": "American -ize/-ization spellings corrected to British -ise/-isation; American color/center to British colour/centre; American traveler to traveller; American favorite to favourite.",
+      "expected_output": "Input text returned unchanged. American spelling drift (-ize, -or, traveler, on accident) is Style-layer per `lib/languages/en_GB.md` and out of `/proofread` scope; the case verifies scope discipline rather than spelling correction.",
       "expectations": [
-        "*organize* → *organise*, *analyze* → *analyse*, *finalize* → *finalise*.",
-        "*color* → *colour*; *favorite* → *favourite*; *center* → *centre*.",
-        "*traveler* → *traveller* (double-l).",
-        "*on accident* → *by accident*.",
-        "`## Language resolution` in the transcript names `lib/languages/en_GB.md` as the loaded language file and identifies the *Mechanics* section as the applied scope (proofread is Phase-1-only). The without-skill baseline does not produce this scope record — the skill's value is that the loaded rule set is documented, not just that the right corrections happen to be made."
+        "Output is identical to the input — no -ize → -ise corrections applied (style-layer item, out of /proofread mechanics scope).",
+        "No -or → -our corrections applied (organize/color/center retained as written).",
+        "No traveler → traveller correction applied.",
+        "Transcript records that /proofread loaded only the Mechanics section of `lib/languages/en_GB.md` and deliberately did not touch Style-layer items, including American spelling drift.",
+        "`## Language resolution` in the transcript names `lib/languages/en_GB.md` as the loaded language file."
       ]
     },
     {

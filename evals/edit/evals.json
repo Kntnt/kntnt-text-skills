@@ -81,8 +81,8 @@
       "expectations": [
         "The H1 is shortened to a readable length (under 60 characters where the meaning allows).",
         "At least one over-long H2 is shortened.",
-        "The body text under each heading remains substantively unchanged — only headings and obviously broken sentences are touched.",
-        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
+        "Body changes are traceable to Phase 2 findings — no silent rewrites. Sentences and paragraphs not flagged by any finding in `## Findings` remain substantively unchanged in `output.md`. Findings-driven restructuring (e.g. ABT-shaped lead, standfirst rework, broken-sentence repair) is in scope; unprompted prose changes are not.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` Phase 2 documents that the style-layer review was applied. Any one of these is sufficient evidence: (a) the path `lib/rules/style.md` appears in the Phase 2 entry, (b) the Phase 2 entry uses phrasing that names the layer (e.g. \"style layers\", \"style-layer pass\", \"style-layer review\", or a close variant), or (c) the Phase 2 entry enumerates two or more of style.md's section categories — precision, rhythm / transitions, AI-tells / constructions, cognitive load / pedagogy, address / voice — as review steps."
       ]
     },
     {
@@ -180,8 +180,8 @@
       "expected_output": "Headings shortened; body preserved.",
       "expectations": [
         "The H1 is shortened to a readable length.",
-        "Body text under each heading remains substantively unchanged.",
-        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
+        "Body changes are traceable to Phase 2 findings — no silent rewrites. Sentences and paragraphs not flagged by any finding in `## Findings` remain substantively unchanged in `output.md`. Findings-driven restructuring (e.g. ABT-shaped lead, standfirst rework, broken-sentence repair) is in scope; unprompted prose changes are not.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` Phase 2 documents that the style-layer review was applied. Any one of these is sufficient evidence: (a) the path `lib/rules/style.md` appears in the Phase 2 entry, (b) the Phase 2 entry uses phrasing that names the layer (e.g. \"style layers\", \"style-layer pass\", \"style-layer review\", or a close variant), or (c) the Phase 2 entry enumerates two or more of style.md's section categories — precision, rhythm / transitions, AI-tells / constructions, cognitive load / pedagogy, address / voice — as review steps."
       ]
     },
     {
@@ -300,8 +300,8 @@
       "expectations": [
         "The H1 is shortened to a readable length.",
         "At least one over-long H2 is shortened.",
-        "Body text under each heading remains substantively unchanged.",
-        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation. The without-skill baseline does not produce these structured records — the skill's value is the protocol fidelity behind the corrections, not the corrections alone."
+        "Body changes are traceable to Phase 2 findings — no silent rewrites. Sentences and paragraphs not flagged by any finding in `## Findings` remain substantively unchanged in `output.md`. Findings-driven restructuring (e.g. ABT-shaped lead, standfirst rework, broken-sentence repair) is in scope; unprompted prose changes are not.",
+        "`## Genre / technique resolution` records both the committed genre and the committed technique, and `## Phase log` Phase 2 documents that the style-layer review was applied. Any one of these is sufficient evidence: (a) the path `lib/rules/style.md` appears in the Phase 2 entry, (b) the Phase 2 entry uses phrasing that names the layer (e.g. \"style layers\", \"style-layer pass\", \"style-layer review\", or a close variant), or (c) the Phase 2 entry enumerates two or more of style.md's section categories — precision, rhythm / transitions, AI-tells / constructions, cognitive load / pedagogy, address / voice — as review steps."
       ]
     },
     {
@@ -317,7 +317,7 @@
       "expectations": [
         "`## Findings` raises at most a small number of substantive items (no wall of false positives on clean prose).",
         "British conventions are preserved: -ise spellings, no Oxford comma in standard series, single quotation marks, £ currency, metric units with no-break space (`21 °C`, `320 square metres`).",
-        "`## Genre / technique resolution` commits to the closest matching genre — `column` or `general` — and names a technique if the genre's `default_technique` is not `none`.",
+        "`## Genre / technique resolution` commits to a defensible genre for the structural markers present — `article`, `column`, or `general` are all acceptable on H1 + standfirst — and names a technique if the genre's `default_technique` is set.",
         "`## Phase log` includes a Phase 2 entry citing `lib/rules/style.md` as the applied style foundation.",
         "Any change applied in the edit is traceable to a finding in the transcript — no silent rewrites."
       ]

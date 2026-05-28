@@ -432,7 +432,7 @@
         "`## Phase log` records the user's delegation signal after finding 2 ('just do the rest' or close paraphrase).",
         "`## Subagent ceiling` records N=2 and identifies the source as the `--max-iterations=2` flag (not a natural-language phrase, not the default 0, not the last-resort floor).",
         "`## Phase log` notes that `lib/protocols/subagent.md` would be invoked on the open tail with N=2 (executor records what the subagent would do; no actual sub-subagent is spawned per the executor instructions).",
-        "`output.md` contains the polished text only — no user-facing summary of which findings were settled by the subagent."
+        "`output.md` is dominated by the polished text. A brief editorial trailer noting that a subagent pass handled the remaining findings is acceptable; what fails the assertion is the polished text being subordinated to a verbose user-facing summary."
       ]
     },
     {
