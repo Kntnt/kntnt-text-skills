@@ -6,6 +6,23 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.5.6] — 2026-05-28
+
+### Added
+
+- `commands/kntnt-text-skills.md` — slash-command implementation of the plugin's help. At invocation it lists `skills/` via `ls`, reads `plugin.json` for version / author / repository, and reads each skill's `SKILL.md` frontmatter `description` and body intro paragraph live. There is no parallel, hand-maintained help text anywhere in the plugin.
+- `.claude-plugin/plugin.json` now declares the two recommended manifest fields `homepage` and `repository` (both `https://github.com/Kntnt/kntnt-text-skills`). Audit against the `plugin-structure` skill flagged them as missing.
+
+### Changed
+
+- `/kntnt-text-skills` migrated from a slash-only skill to a slash command. The slash interface is unchanged — bare invocation renders an overview; passing a skill name renders that skill's detail view; an unknown name returns `Unknown skill: X. Known: …`. The overview is simpler than the v0.5.0 manpage: it lists `/<skill>` plus the intro paragraph for every skill, and drops the previously hand-maintained `LANGUAGES`, `INPUT MODES`, and `FLAGS` blocks. Languages, input modes, and flags are documented in README.md and per-`SKILL.md`; the help command no longer duplicates that surface. The detail view shows the skill's frontmatter `description` plus its body intro paragraph.
+- `CONTRIBUTING.md` point 6 simplified — adding a new skill no longer requires a separate help-text edit; the command auto-discovers from `skills/` and reads the new `SKILL.md` live. Contributors are reminded to give the new `SKILL.md` a clear frontmatter `description` and a short intro paragraph, since those are what the help command shows.
+- README *What the plugin does* and *Usage* `/kntnt-text-skills` subsection rewritten to describe the command implementation and the live-read behaviour. *File structure* tree now lists `commands/kntnt-text-skills.md` instead of `skills/kntnt-text-skills/SKILL.md`. The post-list note about `disable-model-invocation: true` clarified to cover task and context-loader skills; the new help command shares the explicit-invocation property by construction.
+
+### Removed
+
+- `skills/kntnt-text-skills/SKILL.md` — replaced by the command above. The handcrafted manpage blocks it carried (one Overview + seven Detail blocks) are not ported; the command derives equivalent overview lines from each skill's intro paragraph instead, eliminating the drift risk where the parallel help text could fall behind real skill behaviour.
+
 ## [0.5.5] — 2026-05-28
 
 ### Added

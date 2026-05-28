@@ -23,7 +23,7 @@ By submitting a contribution, you agree it is licensed under Apache 2.0 by virtu
 3. **Read the authoring rules** in the README (the *Authoring rules* section and the audit checklist beneath it) before editing files under `skills/` or `lib/`. The rules exist to prevent recurring architectural drift.
 4. **Keep prose in British English** outside `lib/languages/`. Language-specific examples and conventions live in the matching language file.
 5. **One concern per PR.** Smaller PRs land faster.
-6. **When adding a new skill or a new language file**, update `skills/kntnt-text-skills/SKILL.md` so `/kntnt-text-skills` keeps showing accurate help. The version is read live from `.claude-plugin/plugin.json`, but the skill list, language list, and detail blocks are static.
+6. **When adding a new skill**, give the new `SKILL.md` a clear frontmatter `description` and a short intro paragraph beneath the `# /name` heading. The `/kntnt-text-skills` help command auto-discovers skills from `skills/` and reads those two fields live — no separate help text needs updating.
 
 ## Style and language conventions
 

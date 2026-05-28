@@ -24,9 +24,9 @@ The plugin exposes eight skills, organised in four groups.
 
 **Slash-only help:**
 
-- `/kntnt-text-skills` — manpage-style help for the plugin itself. Bare invocation renders an overview of every skill (commands, arguments, flags, input modes, languages). Passing a skill name (e.g. `/kntnt-text-skills write`) renders a detail view for that skill. The version is read live from `plugin.json`; the rest of the help text is static.
+- `/kntnt-text-skills` — short overview of the plugin and its skills. Bare invocation lists every skill with its intro line; passing a skill name (e.g. `/kntnt-text-skills write`) shows that skill's frontmatter description and intro paragraph. Implemented as a slash command, not a skill — all values are read live from `plugin.json` and the individual `SKILL.md` files, so there is no parallel help text to maintain.
 
-All slash-only skills carry `disable-model-invocation: true` in their frontmatter and therefore activate only on the exact slash command — never through the model deciding on its own that they would be useful.
+All task and context-loader skills above carry `disable-model-invocation: true` in their frontmatter and therefore activate only on the exact slash command — never through the model deciding on its own that they would be useful. `/kntnt-text-skills` is a slash command, so it shares the same explicit-invocation property by construction.
 
 ## Languages
 
@@ -194,7 +194,7 @@ The plugin briefly confirms that the module is loaded. The rules then apply for 
 
 ### `/kntnt-text-skills`
 
-Manpage-style help for the plugin itself. Bare invocation renders an overview of every skill; passing a skill name renders a detail view for that one.
+Short overview of the plugin and its skills. Bare invocation lists every skill in `skills/` with its intro line; passing a skill name renders that skill's frontmatter description and the intro paragraph from its `SKILL.md` body.
 
 ```
 /kntnt-text-skills
@@ -202,7 +202,7 @@ Manpage-style help for the plugin itself. Bare invocation renders an overview of
 /kntnt-text-skills proofread
 ```
 
-The version is read live from `plugin.json`; the rest of the help text is static and maintained by hand when skills or languages change.
+Implemented as a slash command (`commands/kntnt-text-skills.md`), not a skill. All values — version, author, repository, skill list, per-skill text — are read live from `plugin.json` and the individual `SKILL.md` files at invocation, so adding, removing, or renaming a skill needs no separate help-text edit.
 
 ## File structure
 
@@ -216,6 +216,8 @@ kntnt-text-skills/
 │   │   └── bug.md
 │   └── workflows/
 │       └── audit.yml
+├── commands/
+│   └── kntnt-text-skills.md
 ├── skills/
 │   ├── write/SKILL.md
 │   ├── edit/SKILL.md
@@ -223,8 +225,7 @@ kntnt-text-skills/
 │   ├── proofread/SKILL.md
 │   ├── writing-rules/SKILL.md
 │   ├── abt/SKILL.md
-│   ├── pac/SKILL.md
-│   └── kntnt-text-skills/SKILL.md
+│   └── pac/SKILL.md
 ├── lib/
 │   ├── languages/
 │   │   ├── default-mechanics.md
