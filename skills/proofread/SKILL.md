@@ -1,6 +1,6 @@
 ---
 name: proofread
-description: Conservative proofreading of an existing text — mechanical errors only (spelling, grammar, punctuation, typography per the loaded language), no style touch-ups. Activate on the slash command `/proofread`, the qualified form `/kntnt-text-skills:proofread`, or on natural-language proofreading requests — *proofread this*, *fix the typos*, *spell-check*, *copyedit*, and equivalent phrasings in other languages (e.g. *korrekturläs*, *rätta stavfelen*). Broad triggering is safe because the skill never changes style, word order, or argumentation.
+description: Conservative proofreading of an existing text — mechanical errors only (spelling, grammar, punctuation, typography per the loaded language), no style touch-ups. Activate when the user clearly asks for a proofread pass on a specific text — *proofread this*, *fix the typos in this paragraph*, *spell-check this draft*, *copyedit this section*, *korrekturläs det här*, *rätta stavfelen i texten*, or equivalent unambiguous requests in any language. Also activates on the slash command `/proofread` and the qualified form `/kntnt-text-skills:proofread`. Do NOT activate on bare mentions of the word *proofread* or *spell-check*, on questions about what proofreading is, or on passing references — only on requests that obviously intend the skill to run now on a specific text.
 ---
 
 # /proofread
