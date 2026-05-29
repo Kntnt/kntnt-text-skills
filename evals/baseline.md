@@ -123,7 +123,7 @@ Per-case timing and token use were not stored at run time. Variance was not meas
 
 ## How to refresh this baseline
 
-1. Re-run the pipeline per the *Running the suite* section in `evals/README.md` for each of the four skills, from a terminal where `claude` is authenticated (not from inside a Claude Code session). `python3 evals/workspace/_runner.py --iteration <N> --runs <R>` drives the full suite; `--skill <name>` and `--case-ids <list>` scope down for partial sweeps.
+1. Re-run the pipeline per the *Running the suite* section in `evals/README.md` for each of the four skills, from a terminal where `claude` is authenticated (not from inside a Claude Code session). `uv run evals/workspace/_runner.py --iteration <N> --runs <R>` drives the full suite; `--skill <name>` and `--case-ids <list>` scope down for partial sweeps.
 2. Aggregate the per-skill grading outputs and refresh the tables above.
 3. Update the front-matter note with the new ISO date and the plugin version being baselined.
 4. Commit the refreshed `baseline.md`. From that point on, regressions are measured against the new baseline; any drop in the with-skill pass rate is a release blocker until investigated.

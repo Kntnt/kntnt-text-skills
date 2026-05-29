@@ -3,7 +3,7 @@ repos:
     hooks:
       - id: audit
         name: kntnt-text-skills audit
-        entry: python scripts/audit.py
+        entry: uv run scripts/audit.py
         language: system
         pass_filenames: false
         always_run: true

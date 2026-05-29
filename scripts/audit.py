@@ -1,4 +1,9 @@
-#!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "pyyaml==6.0.3",
+# ]
+# ///
 """Audit script for kntnt-text-skills.
 
 Runs every scriptable check from the README "Audit checklist". Cognitive
@@ -8,7 +13,7 @@ sections) stay manual.
 Exit code 0 when no findings are produced; exit code 1 otherwise. A
 tabulated report is written to stdout in both cases.
 
-Required by the project root: `python scripts/audit.py` works from anywhere
+Required by the project root: `uv run scripts/audit.py` works from anywhere
 in the worktree because the script resolves the repository root from its
 own location, not from the current working directory.
 """
@@ -70,6 +75,7 @@ class CheckResult:
 
     @property
     def ok(self) -> bool:
+        """True when the check produced no findings."""
         return not self.findings
 
 
@@ -294,7 +300,15 @@ def check_genre_frontmatter_sync() -> CheckResult:
             # Missing from index — already reported by (b); skip here.
             continue
         # Compare the documented fields when present in either source.
-        for field_name in ("name", "swedish_term", "default_technique", "triggers", "default", "not_triggers", "disambiguation"):
+        for field_name in (
+            "name",
+            "swedish_term",
+            "default_technique",
+            "triggers",
+            "default",
+            "not_triggers",
+            "disambiguation",
+        ):
             in_fm = field_name in frontmatter
             in_idx = field_name in index_block
             if not in_fm and not in_idx:
@@ -463,7 +477,9 @@ def check_slash_names_in_lib() -> CheckResult:
     # on the right. The left boundary is the literal slash, which already
     # acts as a non-identifier separator from the preceding text.
     pattern = re.compile(
-        r"(?<![A-Za-z0-9_/])(" + "|".join(re.escape(n) for n in SKILL_SLASH_NAMES) + r")(?![A-Za-z0-9_-])"
+        r"(?<![A-Za-z0-9_/])("
+        + "|".join(re.escape(n) for n in SKILL_SLASH_NAMES)
+        + r")(?![A-Za-z0-9_-])"
     )
     scan_dirs = (PROTOCOLS_DIR, RULES_DIR, GENRES_DIR, TECHNIQUES_DIR)
     for directory in scan_dirs:
@@ -714,10 +730,14 @@ def format_report(results: list[CheckResult]) -> str:
     lines = [header, separator]
     for r in results:
         status = "OK" if r.ok else "FAIL"
-        lines.append(f"{r.name.ljust(name_width)}  {status.ljust(status_width)}  {len(r.findings)}")
+        lines.append(
+            f"{r.name.ljust(name_width)}  {status.ljust(status_width)}  {len(r.findings)}"
+        )
     lines.append(separator)
     total = sum(len(r.findings) for r in results)
-    lines.append(f"{'TOTAL FINDINGS'.ljust(name_width)}  {''.ljust(status_width)}  {total}")
+    lines.append(
+        f"{'TOTAL FINDINGS'.ljust(name_width)}  {''.ljust(status_width)}  {total}"
+    )
     # Detail block — every failing check prints its findings.
     failing = [r for r in results if not r.ok]
     if failing:

@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.12"
+# ///
 """Generate executor and grader prompts for the kntnt-text-skills eval run.
 
 Emits the prompt body to stdout so the orchestrator can pipe it into a
@@ -12,13 +14,13 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
-import sys
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 SUITE = json.loads((REPO / "evals" / "evals.json").read_text())
 
 
 def case_by_id(eid: int) -> dict:
+    """Return the case dict with the given id; raise KeyError when none matches."""
     for c in SUITE["evals"]:
         if c["id"] == eid:
             return c
@@ -26,29 +28,37 @@ def case_by_id(eid: int) -> dict:
 
 
 def case_dir(case: dict, iteration: int) -> pathlib.Path:
-    return (REPO / "evals" / "workspace" / case["skill_name"]
-            / f"iteration-{iteration}"
-            / f"eval-{case['id']:03d}-{case['name']}")
+    """Workspace directory for one case under the given iteration."""
+    return (
+        REPO
+        / "evals"
+        / "workspace"
+        / case["skill_name"]
+        / f"iteration-{iteration}"
+        / f"eval-{case['id']:03d}-{case['name']}"
+    )
 
 
 def with_skill_prompt(case: dict, iteration: int, run_n: int) -> str:
+    """Build the with-skill executor prompt: run the case through its SKILL.md protocol."""
     skill_dir = REPO / "skills" / case["skill_name"]
     outputs_dir = case_dir(case, iteration) / "with_skill" / f"run-{run_n}" / "outputs"
-    files_block = "\n".join(
-        f"- `{f}` (absolute: `{REPO/f}`)" for f in case.get("files", [])
-    ) or "_(no input fixture files)_"
+    files_block = (
+        "\n".join(f"- `{f}` (absolute: `{REPO / f}`)" for f in case.get("files", []))
+        or "_(no input fixture files)_"
+    )
     return f"""You are an executor running a single test case for the kntnt-text-skills plugin. \
 The plugin lives at `{REPO}` and is READ-ONLY — do not modify anything under \
 `skills/`, `lib/`, `evals/fixtures/`, or `evals/evals.json`. You may only write under the outputs directory below.
 
 # Skill under test
-- Skill name: `/{case['skill_name']}`
-- Skill spec: `{skill_dir / 'SKILL.md'}`
+- Skill name: `/{case["skill_name"]}`
+- Skill spec: `{skill_dir / "SKILL.md"}`
 - The spec is authoritative. Read it (and the `../../lib/...` files it references) and follow it literally. \
 Treat the SKILL.md and its referenced lib files as the only source of truth for protocol behaviour.
 
 # Case
-- User prompt: `{case['prompt']}`
+- User prompt: `{case["prompt"]}`
 - Input fixture file(s):
 {files_block}
 - For the redline case-402 overlay fixture (`evals/fixtures/lib/languages/sv_FI.md`), treat it as if it sat in `lib/languages/sv_FI.md` — that is the variant under test.
@@ -84,16 +94,20 @@ Write under: `{outputs_dir}`
 
 
 def without_skill_prompt(case: dict, iteration: int, run_n: int) -> str:
-    outputs_dir = case_dir(case, iteration) / "without_skill" / f"run-{run_n}" / "outputs"
-    files_block = "\n".join(
-        f"- `{REPO/f}`" for f in case.get("files", [])
-    ) or "_(no input fixture files; prompt is the only input)_"
+    """Build the baseline executor prompt: handle the case by best judgment, with no skill."""
+    outputs_dir = (
+        case_dir(case, iteration) / "without_skill" / f"run-{run_n}" / "outputs"
+    )
+    files_block = (
+        "\n".join(f"- `{REPO / f}`" for f in case.get("files", []))
+        or "_(no input fixture files; prompt is the only input)_"
+    )
     return f"""You are running a baseline for a single text-editing test case. \
 There is no skill — apply your own best judgment to the prompt. \
 You may read the fixture file(s) below to see the input; do NOT read anything else under `{REPO}`.
 
 # Case
-- User prompt: `{case['prompt']}`
+- User prompt: `{case["prompt"]}`
 - Input fixture file(s):
 {files_block}
 
@@ -121,21 +135,22 @@ Write under: `{outputs_dir}`
 
 
 def grader_prompt(case: dict, config: str, iteration: int, run_n: int) -> str:
+    """Build the grader prompt that scores one configuration's outputs against the case's expectations."""
     run_dir = case_dir(case, iteration) / config / f"run-{run_n}"
     outputs_dir = run_dir / "outputs"
     grading_path = run_dir / "grading.json"
     expectations = case.get("expectations", [])
-    exp_block = "\n".join(f"  {i+1}. {e}" for i, e in enumerate(expectations))
+    exp_block = "\n".join(f"  {i + 1}. {e}" for i, e in enumerate(expectations))
     return f"""You are grading one configuration of one test case for the kntnt-text-skills plugin.
 
 # Case
-- id: {case['id']}
-- name: `{case['name']}`
-- skill: `/{case['skill_name']}`
+- id: {case["id"]}
+- name: `{case["name"]}`
+- skill: `/{case["skill_name"]}`
 - configuration: `{config}`
 - run: {run_n} of N
-- prompt: `{case['prompt']}`
-- expected outcome: {case.get('expected_output','')}
+- prompt: `{case["prompt"]}`
+- expected outcome: {case.get("expected_output", "")}
 
 # Expectations to grade
 {exp_block}
@@ -170,8 +185,11 @@ The `expectations[].text` must match the original expectation text verbatim. Inc
 
 
 def main() -> None:
+    """Parse CLI args and print the requested executor or grader prompt to stdout."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("cmd", choices=("with", "without", "grade-with", "grade-without"))
+    parser.add_argument(
+        "cmd", choices=("with", "without", "grade-with", "grade-without")
+    )
     parser.add_argument("eval_id", type=int)
     parser.add_argument("--iteration", type=int, default=2)
     parser.add_argument("--run", type=int, default=1)

@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.12"
+# ///
 """Scaffold evals/workspace/<skill>/iteration-<N>/eval-<id>-<name>/ tree.
 
 Creates per-case directories with eval_metadata.json under the iteration
@@ -22,18 +24,31 @@ WS = REPO / "evals" / "workspace"
 
 
 def main() -> None:
+    """Parse CLI args and scaffold the per-case iteration tree for the requested runs."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--iteration", type=int, default=2,
-                        help="Iteration number; iteration-<N> subdir is created")
-    parser.add_argument("--runs", type=int, default=3,
-                        help="Number of runs per configuration to scaffold")
+    parser.add_argument(
+        "--iteration",
+        type=int,
+        default=2,
+        help="Iteration number; iteration-<N> subdir is created",
+    )
+    parser.add_argument(
+        "--runs",
+        type=int,
+        default=3,
+        help="Number of runs per configuration to scaffold",
+    )
     args = parser.parse_args()
 
     created = 0
     for case in SUITE["evals"]:
         skill = case["skill_name"]
-        case_dir = (WS / skill / f"iteration-{args.iteration}"
-                    / f"eval-{case['id']:03d}-{case['name']}")
+        case_dir = (
+            WS
+            / skill
+            / f"iteration-{args.iteration}"
+            / f"eval-{case['id']:03d}-{case['name']}"
+        )
         case_dir.mkdir(parents=True, exist_ok=True)
         meta = {
             "eval_id": case["id"],
@@ -55,8 +70,10 @@ def main() -> None:
                 )
         created += 1
 
-    print(f"Scaffolded {created} case directories under "
-          f"{WS} (iteration-{args.iteration}, runs=1..{args.runs}).")
+    print(
+        f"Scaffolded {created} case directories under "
+        f"{WS} (iteration-{args.iteration}, runs=1..{args.runs})."
+    )
 
 
 if __name__ == "__main__":

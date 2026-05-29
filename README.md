@@ -199,7 +199,7 @@ Short overview of the plugin and its skills. Bare invocation lists every skill i
 /kntnt-text-skills:help proofread
 ```
 
-Implemented as a slash command (`commands/help.md`), not a skill. All values — version, author, repository, skill list, per-skill text — are read live from `plugin.json` and the individual `SKILL.md` files at invocation, so adding, removing, or renaming a skill needs no separate help-text edit.
+Implemented as a slash command (`commands/help.md`) backed by a small rendering script (`scripts/help.py`), not a skill. All values — version, author, repository, skill list, per-skill text — are read live from `plugin.json` and the individual `SKILL.md` files at invocation, so adding, removing, or renaming a skill needs no separate help-text edit.
 
 ## File structure
 
@@ -214,7 +214,7 @@ kntnt-text-skills/
 │   └── workflows/
 │       └── audit.yml
 ├── commands/
-│   └── kntnt-text-skills.md
+│   └── help.md
 ├── skills/
 │   ├── write/SKILL.md
 │   ├── edit/SKILL.md
@@ -256,7 +256,8 @@ kntnt-text-skills/
 │       ├── abt.md
 │       └── pac.md
 ├── scripts/
-│   └── audit.py
+│   ├── audit.py
+│   └── help.py
 ├── evals/
 │   ├── README.md
 │   ├── baseline.md
@@ -381,7 +382,7 @@ Finally, add a matching block for the new genre to `lib/genres/_index.md` so the
 
 Before editing any files under `skills/` or `lib/`, read the **Authoring rules** section below — it captures the architectural constraints that earlier rounds of cleanup have established and that future changes must preserve.
 
-**Eval suite.** Test coverage lives in [`evals/`](evals/) and is wired to the [skill-creator](https://github.com/anthropics/skills/tree/main/skill-creator) pipeline. The aggregated [`evals/evals.json`](evals/evals.json) covers all four task skills (`/proofread`, `/redline`, `/edit`, `/write`) in Swedish, British English, and American English, plus a fallback case in German, an overlay-loader case in Finland-Swedish, the two fast-path parity cases, the per-skill natural-language `--max-iterations` cases, and the last-resort floor case. When a new rule lands — a new language file, a new genre, a new mechanic — add at least one test case in `evals/` in the same commit; for a new language file, add at least three cases per affected skill. See [`evals/README.md`](evals/README.md) for the file layout, the scaling rule, and how to run the suite.
+**Eval suite.** Test coverage lives in [`evals/`](evals/) and is wired to the [skill-creator](https://github.com/anthropics/skills/tree/main/skill-creator) pipeline. The aggregated [`evals/evals.json`](evals/evals.json) covers all four task skills (`/proofread`, `/redline`, `/edit`, `/write`) in Swedish, British English, and American English, plus a fallback case in German, an overlay-loader case in Finland-Swedish, the two fast-path parity cases, the per-skill natural-language `--max-iterations` cases, the last-resort floor case, the three `/redline` Phase 3 dialogue cases (mixed accept/reject/counter, delegate-with-`--max-iterations`, contested counter), and the negative-control cases that check clean text is preserved without over-correction. When a new rule lands — a new language file, a new genre, a new mechanic — add at least one test case in `evals/` in the same commit; for a new language file, add at least three cases per affected skill. See [`evals/README.md`](evals/README.md) for the file layout, the scaling rule, and how to run the suite.
 
 ## Design principles
 
@@ -439,7 +440,7 @@ These rules govern how to edit the files in this plugin. They exist to prevent a
 
 ### Audit checklist before committing changes
 
-Items marked **(auto)** are enforced by `scripts/audit.py`, which runs as a pre-commit hook and as the `audit` GitHub Actions job on every push and PR. Items marked **(manual)** require human judgement and are not scripted. Install the pre-commit hook locally with `pip install pre-commit && pre-commit install`; from then on the audit fires before every commit and CI re-runs it on the remote.
+Items marked **(auto)** are enforced by `scripts/audit.py`, which runs as a pre-commit hook and as the `audit` GitHub Actions job on every push and PR. Items marked **(manual)** require human judgement and are not scripted. `scripts/audit.py` is a self-contained PEP 723 script; the hook and the CI job both invoke it with `uv run scripts/audit.py`, which provisions its only dependency (PyYAML, pinned inline) automatically — so [`uv`](https://docs.astral.sh/uv/) must be installed. Install the pre-commit hook locally with `pip install pre-commit && pre-commit install`; from then on the audit fires before every commit and CI re-runs it on the remote.
 
 - **(auto)** Search for skill names (`/proofread`, `/redline`, `/edit`, `/write`, `/writing-rules`, `/abt`, `/pac`) in `lib/protocols/*.md`, `lib/rules/*.md`, `lib/genres/*.md`, and `lib/techniques/*.md`. The only legitimate match is in `lib/protocols/subagent.md`, which describes the subagent role within a parent skill. The `lib/languages/*.md` files are exempt from the scripted scan because their description paragraphs name the consuming skills as scope metadata (which section applies to which review pass) rather than as cross-references in execution-context prose.
 - **(manual)** Search for skill names in another skill's *body* (not just file references like `protocols/proofread.md`, but `/proofread` itself).

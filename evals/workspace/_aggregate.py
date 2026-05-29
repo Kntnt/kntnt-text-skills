@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.12"
+# ///
 """Aggregate grading.json files into baseline tables with variance.
 
 Reads all `run-N/grading.json` files under `iteration-<N>/` for each case
@@ -13,7 +15,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
 import pathlib
 import sys
 from collections import defaultdict
@@ -28,8 +29,12 @@ def collect_records(iteration: int, runs: int) -> list[dict]:
     """Read every run's grading.json into a list of records."""
     records = []
     for case in SUITE["evals"]:
-        base = (WS / case["skill_name"] / f"iteration-{iteration}"
-                / f"eval-{case['id']:03d}-{case['name']}")
+        base = (
+            WS
+            / case["skill_name"]
+            / f"iteration-{iteration}"
+            / f"eval-{case['id']:03d}-{case['name']}"
+        )
         for cfg in ("with_skill", "without_skill"):
             run_rates = []
             run_passed = []
@@ -45,22 +50,25 @@ def collect_records(iteration: int, runs: int) -> list[dict]:
                 run_rates.append(summ["pass_rate"])
             if not run_rates:
                 continue
-            records.append({
-                "id": case["id"],
-                "name": case["name"],
-                "skill": case["skill_name"],
-                "language": case["language"],
-                "config": cfg,
-                "n_runs": len(run_rates),
-                "passed_total": sum(run_passed),
-                "total_total": sum(run_total),
-                "mean_rate": mean(run_rates),
-                "stddev_rate": stdev(run_rates) if len(run_rates) > 1 else 0.0,
-            })
+            records.append(
+                {
+                    "id": case["id"],
+                    "name": case["name"],
+                    "skill": case["skill_name"],
+                    "language": case["language"],
+                    "config": cfg,
+                    "n_runs": len(run_rates),
+                    "passed_total": sum(run_passed),
+                    "total_total": sum(run_total),
+                    "mean_rate": mean(run_rates),
+                    "stddev_rate": stdev(run_rates) if len(run_rates) > 1 else 0.0,
+                }
+            )
     return records
 
 
 def fmt_rate(passed: int, total: int) -> str:
+    """Format a pass count as `passed / total (pct%)`."""
     pct = round(100 * passed / total) if total else 0
     return f"{passed} / {total} ({pct}%)"
 
@@ -75,10 +83,11 @@ def fmt_mean_stddev(records: list[dict]) -> str:
     # Pooled stddev across cases — simple average of per-case stddevs (a
     # rough but informative proxy; not a formal pooled variance).
     pooled = mean(sds) if any(s > 0 for s in sds) else 0.0
-    return f"{m*100:.1f}% ± {pooled*100:.1f}pp"
+    return f"{m * 100:.1f}% ± {pooled * 100:.1f}pp"
 
 
 def write_per_skill(records: list[dict], out: list[str]) -> None:
+    """Append the per-skill pass-rate table (with-skill vs. without-skill, plus delta) to `out`."""
     out.append("\n## Per-skill")
     out.append("| Skill | With-skill | Without-skill | Delta |")
     out.append("|---|---|---|---|")
@@ -95,14 +104,21 @@ def write_per_skill(records: list[dict], out: list[str]) -> None:
         w_total = sum(r["total_total"] for r in w_recs)
         wo_passed = sum(r["passed_total"] for r in wo_recs)
         wo_total = sum(r["total_total"] for r in wo_recs)
-        delta = 100 * w_passed / w_total - 100 * wo_passed / wo_total if (w_total and wo_total) else 0
-        out.append(f"| {skill} | {fmt_rate(w_passed, w_total)} "
-                   f"({fmt_mean_stddev(w_recs)}) | "
-                   f"{fmt_rate(wo_passed, wo_total)} "
-                   f"({fmt_mean_stddev(wo_recs)}) | {delta:+.0f} pp |")
+        delta = (
+            100 * w_passed / w_total - 100 * wo_passed / wo_total
+            if (w_total and wo_total)
+            else 0
+        )
+        out.append(
+            f"| {skill} | {fmt_rate(w_passed, w_total)} "
+            f"({fmt_mean_stddev(w_recs)}) | "
+            f"{fmt_rate(wo_passed, wo_total)} "
+            f"({fmt_mean_stddev(wo_recs)}) | {delta:+.0f} pp |"
+        )
 
 
 def write_per_language(records: list[dict], out: list[str]) -> None:
+    """Append the per-language pass-rate table to `out`."""
     out.append("\n## Per-language")
     out.append("| Language | With-skill | Without-skill | Delta |")
     out.append("|---|---|---|---|")
@@ -119,15 +135,26 @@ def write_per_language(records: list[dict], out: list[str]) -> None:
         w_total = sum(r["total_total"] for r in w_recs)
         wo_passed = sum(r["passed_total"] for r in wo_recs)
         wo_total = sum(r["total_total"] for r in wo_recs)
-        delta = 100 * w_passed / w_total - 100 * wo_passed / wo_total if (w_total and wo_total) else 0
-        label = lang if lang not in ("sv_FI", "de") else f"{lang} ({'overlay' if lang == 'sv_FI' else 'fallback'})"
-        out.append(f"| {label} | {fmt_rate(w_passed, w_total)} "
-                   f"({fmt_mean_stddev(w_recs)}) | "
-                   f"{fmt_rate(wo_passed, wo_total)} "
-                   f"({fmt_mean_stddev(wo_recs)}) | {delta:+.0f} pp |")
+        delta = (
+            100 * w_passed / w_total - 100 * wo_passed / wo_total
+            if (w_total and wo_total)
+            else 0
+        )
+        label = (
+            lang
+            if lang not in ("sv_FI", "de")
+            else f"{lang} ({'overlay' if lang == 'sv_FI' else 'fallback'})"
+        )
+        out.append(
+            f"| {label} | {fmt_rate(w_passed, w_total)} "
+            f"({fmt_mean_stddev(w_recs)}) | "
+            f"{fmt_rate(wo_passed, wo_total)} "
+            f"({fmt_mean_stddev(wo_recs)}) | {delta:+.0f} pp |"
+        )
 
 
 def write_required_cases(records: list[dict], out: list[str]) -> None:
+    """Append the status table for the contract-required cases to `out`."""
     required = {
         401: "fallback-default-mechanics-on-german-text",
         402: "overlay-loader-sv_FI-territorial-variant",
@@ -145,18 +172,26 @@ def write_required_cases(records: list[dict], out: list[str]) -> None:
     out.append("| Case | id | With-skill (mean ± stddev) | Without-skill | n_runs |")
     out.append("|---|---|---|---|---|")
     for rid in sorted(required):
-        w = next((r for r in records if r["id"] == rid and r["config"] == "with_skill"), None)
-        wo = next((r for r in records if r["id"] == rid and r["config"] == "without_skill"), None)
+        w = next(
+            (r for r in records if r["id"] == rid and r["config"] == "with_skill"), None
+        )
+        wo = next(
+            (r for r in records if r["id"] == rid and r["config"] == "without_skill"),
+            None,
+        )
         if not w or not wo:
             out.append(f"| {required[rid]} | {rid} | n/a | n/a | 0 |")
             continue
-        out.append(f"| {required[rid]} | {rid} | "
-                   f"{w['mean_rate']*100:.0f}% ± {w['stddev_rate']*100:.1f}pp | "
-                   f"{wo['mean_rate']*100:.0f}% ± {wo['stddev_rate']*100:.1f}pp | "
-                   f"{w['n_runs']} |")
+        out.append(
+            f"| {required[rid]} | {rid} | "
+            f"{w['mean_rate'] * 100:.0f}% ± {w['stddev_rate'] * 100:.1f}pp | "
+            f"{wo['mean_rate'] * 100:.0f}% ± {wo['stddev_rate'] * 100:.1f}pp | "
+            f"{w['n_runs']} |"
+        )
 
 
 def write_overall(records: list[dict], out: list[str]) -> None:
+    """Append the overall pooled and per-case-averaged summary to `out`."""
     w_recs = [r for r in records if r["config"] == "with_skill"]
     wo_recs = [r for r in records if r["config"] == "without_skill"]
     w_passed = sum(r["passed_total"] for r in w_recs)
@@ -164,28 +199,44 @@ def write_overall(records: list[dict], out: list[str]) -> None:
     wo_passed = sum(r["passed_total"] for r in wo_recs)
     wo_total = sum(r["total_total"] for r in wo_recs)
     out.append("\n## Overall")
-    out.append(f"- With-skill aggregate (all runs pooled): {fmt_rate(w_passed, w_total)}")
+    out.append(
+        f"- With-skill aggregate (all runs pooled): {fmt_rate(w_passed, w_total)}"
+    )
     out.append(f"- With-skill mean ± stddev across cases: {fmt_mean_stddev(w_recs)}")
-    out.append(f"- Without-skill aggregate (all runs pooled): {fmt_rate(wo_passed, wo_total)}")
-    out.append(f"- Without-skill mean ± stddev across cases: {fmt_mean_stddev(wo_recs)}")
-    delta = 100 * w_passed / w_total - 100 * wo_passed / wo_total if (w_total and wo_total) else 0
+    out.append(
+        f"- Without-skill aggregate (all runs pooled): {fmt_rate(wo_passed, wo_total)}"
+    )
+    out.append(
+        f"- Without-skill mean ± stddev across cases: {fmt_mean_stddev(wo_recs)}"
+    )
+    delta = (
+        100 * w_passed / w_total - 100 * wo_passed / wo_total
+        if (w_total and wo_total)
+        else 0
+    )
     out.append(f"- Delta: {delta:+.1f} pp")
 
 
 def main() -> int:
+    """Parse CLI args, collect grading records, and print the aggregated markdown report."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--iteration", type=int, default=2)
     parser.add_argument("--runs", type=int, default=3)
     args = parser.parse_args()
     records = collect_records(args.iteration, args.runs)
     if not records:
-        print(f"No grading.json data found for iteration {args.iteration}", file=sys.stderr)
+        print(
+            f"No grading.json data found for iteration {args.iteration}",
+            file=sys.stderr,
+        )
         return 1
     n_with = sum(1 for r in records if r["config"] == "with_skill")
     n_without = sum(1 for r in records if r["config"] == "without_skill")
-    out: list[str] = [f"# Aggregated baseline — iteration-{args.iteration}",
-                      f"\nCases graded: with_skill={n_with}, without_skill={n_without}; "
-                      f"target runs per config: {args.runs}."]
+    out: list[str] = [
+        f"# Aggregated baseline — iteration-{args.iteration}",
+        f"\nCases graded: with_skill={n_with}, without_skill={n_without}; "
+        f"target runs per config: {args.runs}.",
+    ]
     write_per_skill(records, out)
     write_per_language(records, out)
     write_required_cases(records, out)

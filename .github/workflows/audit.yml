@@ -13,13 +13,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: pip install pyyaml
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
 
       - name: Run audit script
-        run: python scripts/audit.py
+        run: uv run scripts/audit.py

@@ -6,6 +6,18 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.6.1] — 2026-05-29
+
+### Changed
+
+- **Help command rendering extracted into a standalone script.** `commands/help.md` no longer renders the help block in the model at invocation; it runs `scripts/help.py` (a PEP 723 script invoked via `uv run`) and prints the result verbatim inside a single fenced block. The script is the single source of truth — it reads `.claude-plugin/plugin.json` and every `skills/<name>/SKILL.md` and resolves the intro paragraphs, 80-character wrapping, column alignment, and single-space separator lines in code. Output is unchanged: bare invocation → overview, known skill name → detail, unknown argument → the one-line error. The command frontmatter gains `model: sonnet` and narrows `allowed-tools` to `Bash(uv:*)`. The change makes the layout deterministic (no model-rendering drift) at the cost of a `uv` dependency for the help command.
+- **All project scripts brought onto the uv + PEP 723 runtime** per the coding standard. `scripts/audit.py` declares its only dependency (PyYAML) in PEP 723 inline metadata and runs via `uv run`; the `audit` CI job drops `actions/setup-python` + `pip install pyyaml` for `astral-sh/setup-uv` + `uv run scripts/audit.py`, and `.pre-commit-config.yaml` invokes it the same way. The four eval-harness scripts (`_setup.py`, `_runner.py`, `_prompts.py`, `_aggregate.py`) gain `requires-python` PEP 723 headers, lose their `#!/usr/bin/env python3` shebangs (they are internal scripts, not `bin/` commands), and their run instructions in `evals/README.md` / `evals/baseline.md` move to `uv run`. Every script gains full per-function docstrings; a one-off ruff pass (not wired into the project) removed two unused imports and one unused variable and formatted the files. Behaviour-neutral — the audit and eval pipelines produce identical results.
+- **README refreshed** to match: the file-structure tree corrects `commands/kntnt-text-skills.md` → `commands/help.md` and lists `scripts/help.py`; the help-command and audit-checklist sections describe the `uv run` / PEP 723 mechanism; the eval-suite summary now names the Phase 3 dialogue and negative-control cases.
+
+### Removed
+
+- `evals/workspace/_author_055.py` — the one-shot authoring script that applied the v0.5.5 eval refinements (negative-control cases, Phase 3 dialogue cases, the case-404 rewrite, the paired assertions). Its mutations have been part of `evals/evals.json` since 0.5.5 and nothing references it; it remains recoverable from git history.
+
 ## [0.6.0] — 2026-05-29
 
 ### Changed

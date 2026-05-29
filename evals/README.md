@@ -22,15 +22,15 @@ The pipeline lives entirely in `evals/workspace/`. From version 0.5.5 on, the ru
 
 ```bash
 # 1. Scaffold the iteration tree (per-case eval_metadata.json + run-N directories)
-python3 evals/workspace/_setup.py --iteration 2 --runs 3
+uv run evals/workspace/_setup.py --iteration 2 --runs 3
 
 # 2. Run executors and graders. MUST be invoked from your normal terminal —
 #    nested claude -p (inside another claude session) returns 401 because
 #    auth is stripped on nesting. Resumable; safe to Ctrl-C and rerun.
-python3 evals/workspace/_runner.py --iteration 2 --runs 3 --parallel 4
+uv run evals/workspace/_runner.py --iteration 2 --runs 3 --parallel 4
 
 # 3. Aggregate the grading.json files into a markdown report with mean ± stddev
-python3 evals/workspace/_aggregate.py --iteration 2 --runs 3 > /tmp/baseline-draft.md
+uv run evals/workspace/_aggregate.py --iteration 2 --runs 3 > /tmp/baseline-draft.md
 ```
 
 Subset flags exist for smoke-testing (`--skill proofread`, `--limit 4`, `--skip-graders`). Cost cap per invocation defaults to $1 executor / $3 grader batch — adjust with `--executor-budget` / `--grader-budget`.
