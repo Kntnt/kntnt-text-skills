@@ -1,23 +1,25 @@
 # macOS
 .DS_Store
 
-# Editor backups
-*.swp
-*~
-
 # Local environment overrides
 .env
 .env.local
 
-# Eval runner output — per-skill iteration data. The orchestrator helpers
-# at evals/workspace/ top level (_runner.py, _prompts.py, _setup.py,
-# _aggregate.py, EXECUTOR_*.md, GRADER*.md, _author_*.py) are source code
-# and stay tracked.
-evals/workspace/proofread/
-evals/workspace/redline/
-evals/workspace/edit/
-evals/workspace/write/
+# Editor/IDE settings
+.idea/
+.vscode/
 
-# Python bytecode
+# Editor backups
+*.swp
+*~
+
+# Python
 __pycache__/
 *.pyc
+
+
+# Claude Code
+.claude
+
+# Eval runner output
+evals/workspace/
