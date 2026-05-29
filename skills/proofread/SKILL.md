@@ -1,11 +1,11 @@
 ---
 name: proofread
-description: Conservative proofreading of an existing text — mechanical errors only (spelling, grammar, punctuation, typography per the loaded language), no style touch-ups. Activate when the user explicitly invokes this plugin's proofread skill — `/proofread`, `/kntnt-text-skills:proofread`, `kntnt text skills proofread`, `text-proofread-skill`, "proofread X with Kntnt's skill", "Kntnt's text proofread skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "proofread", "fix typos", or "spell-check".
+description: Conservative proofreading of an existing text — mechanical errors only (spelling, grammar, punctuation, typography per the loaded language), no style touch-ups. Activate on the slash command `/proofread`, the qualified form `/kntnt-text-skills:proofread`, or on natural-language proofreading requests — *proofread this*, *fix the typos*, *spell-check*, *copyedit*, and equivalent phrasings in other languages (e.g. *korrekturläs*, *rätta stavfelen*). Broad triggering is safe because the skill never changes style, word order, or argumentation.
 ---
 
 # /proofread
 
-Conservative proofreading: corrects mechanical errors only (spelling, grammar, punctuation, typography per the loaded language). Doesn't touch style, word order, or argumentation. Pass an optional language argument (`/proofread sv`, `/proofread en_GB`) to force a language; without it, the language is detected from the input.
+Conservative proofreading: corrects mechanical errors only (spelling, grammar, punctuation, typography per the loaded language). Doesn't touch style, word order, or argumentation. Triggers on `/proofread`, the qualified form, or natural-language requests like *proofread this* or *fix the typos*. Pass an optional language argument (`/proofread sv`, `/proofread en_GB`) to force a language; without it, the language is detected from the input.
 
 When activated, apply the procedure in `../../lib/protocols/proofread.md` to the user's input.
 
