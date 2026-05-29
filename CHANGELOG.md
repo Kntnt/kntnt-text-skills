@@ -6,6 +6,22 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.6.0] — 2026-05-29
+
+### Changed
+
+- **Skills now auto-invoke on natural language.** `disable-model-invocation: true` removed from every `SKILL.md`. The flag was previously blocking inter-skill invocation; with it gone, one skill can activate another from inside its body, and the model can route a user's natural-language request to the right skill without the slash command. Each skill's frontmatter `description` is rewritten as a precise trigger spec — slash command, qualified form `/kntnt-text-skills:<skill>`, or plugin-anchored natural-language phrasings (e.g. *kntnt text skills edit*, *text-edit-skill*, *edit X with Kntnt's skill*) — and explicitly rejects bare action words. The slash-command interface is unchanged; this only adds a second, gated triggering path.
+- **`/proofread` is the documented exception to the plugin-anchored trigger rule.** Its description accepts clear natural-language proofreading requests aimed at a specific text — *proofread this*, *fix the typos in this paragraph*, *spell-check this draft*, *korrekturläs det här* — because the skill's scope is conservative (mechanical errors only, never style or word order) and broad triggering is safe. Bare mentions of the word, questions about proofreading, or passing references must not activate the skill.
+- **Each `SKILL.md`'s body opens with a declarative, human-readable description** of what the skill does, how to invoke it, and what arguments it takes. The opener replaces the prior terse imperative ("Apply the procedure in …", "Three-phase critical editorial review settled by an internal subagent") with prose that serves Claude on activation and a human reader via `/kntnt-text-skills:help`. Operational imperatives that need to survive live in a follow-up paragraph below the opener for the three loaders and `/proofread`.
+- **Help command renders the plugin's `description` from `plugin.json`** in the overview header above the skill list, making use of a field that was already being read but not surfaced. Detail view skips `plugin.json` entirely and renders just `/<skill>` plus the skill's body intro paragraph — no version, no repo, no plugin name in the detail header.
+- **Help command emits single-space separator lines** instead of fully empty lines. Claude.app's code-fence renderer was collapsing fully empty lines; lines containing exactly one space are treated as non-empty and stay visible. In a terminal the single space is indistinguishable from a fully empty line, so the trick is free.
+- **README restructured.** Skill groups collapsed from four ("Automatically-triggered task skill", "Slash-only task skills", "Slash-only context loaders", "Slash-only help") to three (Task skills, Context loaders, Help) — the auto-trigger / slash-only distinction is no longer the discriminator. Added a trigger-doctrine paragraph after the group list. Authoring rule #7 (*Progressive disclosure in SKILL.md*) rewritten to allow a human-readable opening paragraph in the body and to document the conservative-skill exception. Help command's description in both the intro section and the Usage section updated to describe the new render behaviour.
+- **CI workflow** bumped `actions/checkout@v4` → `@v6` and `actions/setup-python@v5` → `@v6`. The previous pins ran on Node 20, which GitHub deprecates after 2026-06-02 and removes after 2026-09-16. The new pins are on Node 24-compatible majors.
+
+### Fixed
+
+- YAML parse error in the frontmatter `description` of every task skill: the `: ` (colon-space) inside *…this plugin's edit skill: `/edit`, …* was being parsed as a nested mapping, breaking the file. Replaced with ` — ` (em dash) in every affected description — same visual cadence, no YAML ambiguity.
+
 ## [0.5.7] — 2026-05-29
 
 ### Changed
