@@ -1,6 +1,6 @@
 ---
 name: redline
-description: Three-phase critical editorial review of an existing text with human-in-the-loop settling of each finding via accept / reject / counter / delegate. Activate when the user explicitly invokes this plugin's redline skill: `/redline`, `/kntnt-text-skills:redline`, `kntnt text skills redline`, `text-redline-skill`, "redline X with Kntnt's skill", "Kntnt's text redline skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "redline" or "review" something.
+description: Three-phase critical editorial review of an existing text with human-in-the-loop settling of each finding via accept / reject / counter / delegate. Activate when the user explicitly invokes this plugin's redline skill — `/redline`, `/kntnt-text-skills:redline`, `kntnt text skills redline`, `text-redline-skill`, "redline X with Kntnt's skill", "Kntnt's text redline skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "redline" or "review" something.
 ---
 
 # /redline

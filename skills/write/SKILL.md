@@ -1,6 +1,6 @@
 ---
 name: write
-description: Four-phase content creation from a brief — brief acquisition, idea presentation, draft, automatic polish. Requires a language argument. Activate when the user explicitly invokes this plugin's write skill: `/write`, `/kntnt-text-skills:write`, `kntnt text skills write`, `text-write-skill`, "write X with Kntnt's skill", "Kntnt's text write skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "write" or "draft" something.
+description: Four-phase content creation from a brief — brief acquisition, idea presentation, draft, automatic polish. Requires a language argument. Activate when the user explicitly invokes this plugin's write skill — `/write`, `/kntnt-text-skills:write`, `kntnt text skills write`, `text-write-skill`, "write X with Kntnt's skill", "Kntnt's text write skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "write" or "draft" something.
 ---
 
 # /write

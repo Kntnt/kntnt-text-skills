@@ -1,6 +1,6 @@
 ---
 name: pac
-description: Loads the PAC analytical technique (Premise, Analysis, Conclusion — three-part analytical arc) into the session. Activate when the user explicitly invokes this plugin's PAC loader: `/pac`, `/kntnt-text-skills:pac`, `kntnt text skills pac`, "Kntnt's PAC loader", "load Kntnt's PAC technique", or similar plugin-anchored phrasing. Do not activate on casual mentions of PAC or analytical structure.
+description: Loads the PAC analytical technique (Premise, Analysis, Conclusion — three-part analytical arc) into the session. Activate when the user explicitly invokes this plugin's PAC loader — `/pac`, `/kntnt-text-skills:pac`, `kntnt text skills pac`, "Kntnt's PAC loader", "load Kntnt's PAC technique", or similar plugin-anchored phrasing. Do not activate on casual mentions of PAC or analytical structure.
 ---
 
 # /pac

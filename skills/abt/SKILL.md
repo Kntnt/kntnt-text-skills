@@ -1,6 +1,6 @@
 ---
 name: abt
-description: Loads the ABT narrative technique (And, But, Therefore — three-part narrative arc) into the session. Activate when the user explicitly invokes this plugin's ABT loader: `/abt`, `/kntnt-text-skills:abt`, `kntnt text skills abt`, "Kntnt's ABT loader", "load Kntnt's ABT technique", or similar plugin-anchored phrasing. Do not activate on casual mentions of ABT or narrative arcs.
+description: Loads the ABT narrative technique (And, But, Therefore — three-part narrative arc) into the session. Activate when the user explicitly invokes this plugin's ABT loader — `/abt`, `/kntnt-text-skills:abt`, `kntnt text skills abt`, "Kntnt's ABT loader", "load Kntnt's ABT technique", or similar plugin-anchored phrasing. Do not activate on casual mentions of ABT or narrative arcs.
 ---
 
 # /abt

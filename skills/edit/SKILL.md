@@ -1,6 +1,6 @@
 ---
 name: edit
-description: Three-phase AFK editorial review of an existing text — silent proofread, critical review against the full rule set, automatic application of the finding list. Activate when the user explicitly invokes this plugin's edit skill: `/edit`, `/kntnt-text-skills:edit`, `kntnt text skills edit`, `text-edit-skill`, "edit X with Kntnt's skill", "Kntnt's text edit skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "edit" or "fix" something.
+description: Three-phase AFK editorial review of an existing text — silent proofread, critical review against the full rule set, automatic application of the finding list. Activate when the user explicitly invokes this plugin's edit skill — `/edit`, `/kntnt-text-skills:edit`, `kntnt text skills edit`, `text-edit-skill`, "edit X with Kntnt's skill", "Kntnt's text edit skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "edit" or "fix" something.
 ---
 
 # /edit

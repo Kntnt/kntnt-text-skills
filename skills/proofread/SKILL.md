@@ -1,6 +1,6 @@
 ---
 name: proofread
-description: Conservative proofreading of an existing text — mechanical errors only (spelling, grammar, punctuation, typography per the loaded language), no style touch-ups. Activate when the user explicitly invokes this plugin's proofread skill: `/proofread`, `/kntnt-text-skills:proofread`, `kntnt text skills proofread`, `text-proofread-skill`, "proofread X with Kntnt's skill", "Kntnt's text proofread skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "proofread", "fix typos", or "spell-check".
+description: Conservative proofreading of an existing text — mechanical errors only (spelling, grammar, punctuation, typography per the loaded language), no style touch-ups. Activate when the user explicitly invokes this plugin's proofread skill — `/proofread`, `/kntnt-text-skills:proofread`, `kntnt text skills proofread`, `text-proofread-skill`, "proofread X with Kntnt's skill", "Kntnt's text proofread skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "proofread", "fix typos", or "spell-check".
 ---
 
 # /proofread
