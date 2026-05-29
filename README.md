@@ -24,9 +24,9 @@ The plugin exposes eight skills, organised in four groups.
 
 **Slash-only help:**
 
-- `/kntnt-text-skills` — short overview of the plugin and its skills. Bare invocation lists every skill with its intro line; passing a skill name (e.g. `/kntnt-text-skills write`) shows that skill's frontmatter description and intro paragraph. Implemented as a slash command, not a skill — all values are read live from `plugin.json` and the individual `SKILL.md` files, so there is no parallel help text to maintain.
+- `/kntnt-text-skills:help` — short overview of the plugin and its skills. Bare invocation lists every skill with its intro line; passing a skill name (e.g. `/kntnt-text-skills:help write`) shows that skill's frontmatter description and intro paragraph. Implemented as a slash command, not a skill — all values are read live from `plugin.json` and the individual `SKILL.md` files, so there is no parallel help text to maintain.
 
-All task and context-loader skills above carry `disable-model-invocation: true` in their frontmatter and therefore activate only on the exact slash command — never through the model deciding on its own that they would be useful. `/kntnt-text-skills` is a slash command, so it shares the same explicit-invocation property by construction.
+All task and context-loader skills above carry `disable-model-invocation: true` in their frontmatter and therefore activate only on the exact slash command — never through the model deciding on its own that they would be useful. `/kntnt-text-skills:help` is a slash command, so it shares the same explicit-invocation property by construction.
 
 ## Languages
 
@@ -192,17 +192,17 @@ Context loaders. They do no work of their own — they only load the relevant ru
 
 The plugin briefly confirms that the module is loaded. The rules then apply for the rest of the session's output.
 
-### `/kntnt-text-skills`
+### `/kntnt-text-skills:help`
 
 Short overview of the plugin and its skills. Bare invocation lists every skill in `skills/` with its intro line; passing a skill name renders that skill's frontmatter description and the intro paragraph from its `SKILL.md` body.
 
 ```
-/kntnt-text-skills
-/kntnt-text-skills write
-/kntnt-text-skills proofread
+/kntnt-text-skills:help
+/kntnt-text-skills:help write
+/kntnt-text-skills:help proofread
 ```
 
-Implemented as a slash command (`commands/kntnt-text-skills.md`), not a skill. All values — version, author, repository, skill list, per-skill text — are read live from `plugin.json` and the individual `SKILL.md` files at invocation, so adding, removing, or renaming a skill needs no separate help-text edit.
+Implemented as a slash command (`commands/help.md`), not a skill. All values — version, author, repository, skill list, per-skill text — are read live from `plugin.json` and the individual `SKILL.md` files at invocation, so adding, removing, or renaming a skill needs no separate help-text edit.
 
 ## File structure
 

@@ -5,7 +5,7 @@ allowed-tools: Read, Bash(ls:*)
 disable-model-invocation: true
 ---
 
-The user invoked `/kntnt-text-skills`. Argument: `$1`
+The user invoked `/kntnt-text-skills:help`. Argument: `$1`
 
 Skill directories present in the plugin (one per line, alphabetic):
 !`ls -1 "${CLAUDE_PLUGIN_ROOT}/skills/" 2>/dev/null | sort`
@@ -36,7 +36,7 @@ Skills:
   /<name>          <intro paragraph>
   …
 
-For details on one skill:  /kntnt-text-skills <skill-name>
+For details on one skill:  /kntnt-text-skills:help <skill-name>
 ```
 
 Left-align the slash-name column, padded to two spaces past the longest name. List skills in the same order as the directory listing. Use the intro paragraphs verbatim — do not re-flow, summarise, or rewrite.
