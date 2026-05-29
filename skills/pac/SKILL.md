@@ -1,12 +1,13 @@
 ---
 name: pac
-description: Manual context loader that loads the PAC technique (Premise, Analysis, Conclusion — analytical arc) into the current session. Activates only via the explicit `/pac` slash command.
-disable-model-invocation: true
+description: Loads the PAC analytical technique (Premise, Analysis, Conclusion — three-part analytical arc) into the session. Activate when the user explicitly invokes this plugin's PAC loader: `/pac`, `/kntnt-text-skills:pac`, `kntnt text skills pac`, "Kntnt's PAC loader", "load Kntnt's PAC technique", or similar plugin-anchored phrasing. Do not activate on casual mentions of PAC or analytical structure.
 ---
 
 # /pac
 
-Load the technique into context, then confirm briefly that PAC is ready. Do not summarise its content unless the user asks.
+Loads the PAC analytical technique — *Premise, Analysis, Conclusion* — into the session so the next writing or review task can apply it. PAC structures a piece as a claim (Premise), the reasoning that supports it (Analysis), and the takeaway (Conclusion). Useful before drafting or reviewing argumentative or explanatory writing.
+
+When activated, load the technique file, then confirm briefly that PAC is ready. Do not summarise its content unless the user asks.
 
 ## Files to read
 

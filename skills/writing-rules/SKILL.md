@@ -1,12 +1,13 @@
 ---
 name: writing-rules
-description: Manual context loader that loads the plugin's writing rules and style guidance into the current session, optionally scoped to a given language. Activates only via the explicit `/writing-rules` slash command.
-disable-model-invocation: true
+description: Loads the plugin's writing rules, construction-scoped rules, substantive style, and language-specific mechanics into the session. Activate when the user explicitly invokes this plugin's writing-rules loader: `/writing-rules`, `/kntnt-text-skills:writing-rules`, `kntnt text skills writing rules`, "load Kntnt's writing rules", "Kntnt's writing-rules loader", or similar plugin-anchored phrasing. Do not activate on casual mentions of writing rules or style guidance.
 ---
 
 # /writing-rules
 
-Load the rule files into context, then confirm briefly that the rules are ready. Do not summarise their content unless the user asks.
+Loads the plugin's writing rules and style guidance — universal punctuation, construction-scoped rules, substantive style, and language-specific mechanics — into the current session. Optionally takes a language argument (`/writing-rules sv`, `/writing-rules en_GB`) to load only one language's rules; without it, all installed language files are loaded.
+
+When activated, load the rule files into context, then confirm briefly that the rules are ready. Do not summarise their content unless the user asks.
 
 ## Language determination
 

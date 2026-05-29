@@ -1,12 +1,13 @@
 ---
 name: abt
-description: Manual context loader that loads the ABT technique (And, But, Therefore — narrative arc) into the current session. Activates only via the explicit `/abt` slash command.
-disable-model-invocation: true
+description: Loads the ABT narrative technique (And, But, Therefore — three-part narrative arc) into the session. Activate when the user explicitly invokes this plugin's ABT loader: `/abt`, `/kntnt-text-skills:abt`, `kntnt text skills abt`, "Kntnt's ABT loader", "load Kntnt's ABT technique", or similar plugin-anchored phrasing. Do not activate on casual mentions of ABT or narrative arcs.
 ---
 
 # /abt
 
-Load the technique into context, then confirm briefly that ABT is ready. Do not summarise its content unless the user asks.
+Loads the ABT narrative technique — *And, But, Therefore* — into the session so the next writing or review task can apply it. ABT structures a piece as a stable setup (And), a disruption (But), and a resolution (Therefore). Useful before drafting or reviewing something that should read as a story rather than a list of facts.
+
+When activated, load the technique file, then confirm briefly that ABT is ready. Do not summarise its content unless the user asks.
 
 ## Files to read
 

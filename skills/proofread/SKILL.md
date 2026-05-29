@@ -1,11 +1,13 @@
 ---
 name: proofread
-description: Conservative proofreading — proofread ⊂ redline ⊂ edit, the lightest of three review skills. Corrects only objectively wrong things (spelling, grammar, punctuation, duplicated or missing words, wrong-word errors, and the loaded language file's typographic and mechanic conventions). Never changes style, word order, structure, voice, or argumentation — those are the redline / edit passes. Use whenever the user writes `/proofread` (alone — operates on the most recent text in the conversation — or followed by text, a file reference, or a URL). English trigger phrases — `proofread`, `proofreading`, `copyedit`, `copyediting`, `fix the typos`, `check the spelling`, `spell-check`. Swedish equivalents (`korrekturläs`, `korra`, `rätta stavfel`) and similar phrasings in other languages are understood semantically. Optional language argument (`/proofread sv`, `/proofread en_GB`); without it, auto-detects from the input. Preserves original formatting.
+description: Conservative proofreading of an existing text — mechanical errors only (spelling, grammar, punctuation, typography per the loaded language), no style touch-ups. Activate when the user explicitly invokes this plugin's proofread skill: `/proofread`, `/kntnt-text-skills:proofread`, `kntnt text skills proofread`, `text-proofread-skill`, "proofread X with Kntnt's skill", "Kntnt's text proofread skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "proofread", "fix typos", or "spell-check".
 ---
 
 # /proofread
 
-Apply the procedure in `../../lib/protocols/proofread.md` to the user's input.
+Conservative proofreading: corrects mechanical errors only (spelling, grammar, punctuation, typography per the loaded language). Doesn't touch style, word order, or argumentation. Pass an optional language argument (`/proofread sv`, `/proofread en_GB`) to force a language; without it, the language is detected from the input.
+
+When activated, apply the procedure in `../../lib/protocols/proofread.md` to the user's input.
 
 ## Language determination
 

@@ -1,12 +1,11 @@
 ---
 name: edit
-description: Three-phase critical editorial review that settles the finding list directly without user dialogue, delivering the polished text. AFK (away-from-keyboard) variant of `/redline`, which settles each finding with the user one at a time. Optional flags: see SKILL.md body for `--max-iterations`. Activates only via the explicit `/edit` slash command.
-disable-model-invocation: true
+description: Three-phase AFK editorial review of an existing text — silent proofread, critical review against the full rule set, automatic application of the finding list. Activate when the user explicitly invokes this plugin's edit skill: `/edit`, `/kntnt-text-skills:edit`, `kntnt text skills edit`, `text-edit-skill`, "edit X with Kntnt's skill", "Kntnt's text edit skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "edit" or "fix" something.
 ---
 
 # /edit
 
-Three-phase critical editorial review settled by an internal subagent.
+Reviews your text for mechanical errors (spelling, grammar, punctuation) and editorial concerns (clarity, style, structure), applies the fixes automatically, and returns the polished result. Optionally takes `--max-iterations=N` (0–3) to run additional review rounds that re-examine the fixes before delivery; default 0 is a single pass.
 
 ## Language determination
 

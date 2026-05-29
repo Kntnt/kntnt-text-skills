@@ -1,12 +1,11 @@
 ---
 name: redline
-description: Three-phase critical editorial review — silent proofread, then a finding list, then settle each finding with the user one at a time via accept / reject / counter / delegate. Human-in-the-loop counterpart of `/edit`, which runs the same passes without the dialogue. Optional flags: see SKILL.md body for `--max-iterations`. Activates only via the explicit `/redline` slash command.
-disable-model-invocation: true
+description: Three-phase critical editorial review of an existing text with human-in-the-loop settling of each finding via accept / reject / counter / delegate. Activate when the user explicitly invokes this plugin's redline skill: `/redline`, `/kntnt-text-skills:redline`, `kntnt text skills redline`, `text-redline-skill`, "redline X with Kntnt's skill", "Kntnt's text redline skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "redline" or "review" something.
 ---
 
 # /redline
 
-Three-phase critical editorial review with human-in-the-loop settling.
+Reviews your text for mechanical errors (spelling, grammar, punctuation) and editorial concerns (clarity, style, structure), then stops at each editorial finding to ask whether to accept, reject, counter, or delegate it. Optionally takes `--max-iterations=N` (0–3) to run additional review rounds on findings you delegate; default 0 is a single pass.
 
 ## Language determination
 

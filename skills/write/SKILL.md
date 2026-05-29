@@ -1,12 +1,11 @@
 ---
 name: write
-description: Content creation from scratch or from source material. Four phases — brief acquisition across nine fields, idea presentation, draft, and an automatic redline polish — gate the run so the user shapes the brief and idea before drafting begins. Optional flags: see SKILL.md body for `--max-iterations`. Activates only via the explicit `/write` slash command.
-disable-model-invocation: true
+description: Four-phase content creation from a brief — brief acquisition, idea presentation, draft, automatic polish. Requires a language argument. Activate when the user explicitly invokes this plugin's write skill: `/write`, `/kntnt-text-skills:write`, `kntnt text skills write`, `text-write-skill`, "write X with Kntnt's skill", "Kntnt's text write skill", or similar plugin-anchored phrasing. Do not activate on bare requests to "write" or "draft" something.
 ---
 
 # /write
 
-Four-phase content creation.
+Walks you through writing a piece from a brief: first you agree on the brief itself (audience, purpose, angle, hook, channel, length, content type), then it proposes an idea, then drafts, then polishes the draft. Requires a language argument first (`sv`, `en_GB`, `en_US`); the brief follows. Optionally takes `--max-iterations=N` (0–3) to run additional review rounds during the polish step; default 0 is a single pass.
 
 ## Language determination
 

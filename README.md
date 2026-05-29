@@ -4,29 +4,26 @@ A plugin for Claude Code and Cowork that provides eight interconnected skills fo
 
 ## What the plugin does
 
-The plugin exposes eight skills, organised in four groups.
+The plugin exposes eight skills, organised in three groups.
 
-**Automatically-triggered task skill:**
+**Task skills:**
 
-- `/proofread` — conservative proofreading. Corrects only what is objectively wrong (spelling, grammar, punctuation, the conventions in the loaded mechanics file). Never changes word choice, word order, structure, tone, or argumentation. The lightest of three review skills: `proofread ⊂ redline ⊂ edit`. Triggers on the `/proofread` slash command and on natural-language proofreading requests.
-
-**Slash-only task skills:**
-
+- `/proofread` — conservative proofreading. Corrects only what is objectively wrong (spelling, grammar, punctuation, the conventions in the loaded mechanics file). Never changes word choice, word order, structure, tone, or argumentation. The lightest of three review skills: `proofread ⊂ redline ⊂ edit`.
 - `/redline` — critical editorial review with human-in-the-loop. Runs the same silent proofread pass as `/proofread`, then performs a critical-review pass against the full rule set (style, content type, technique, language) and presents each finding one at a time as a four-part proposal (marking, problem, solution, prompt). You accept, reject, counter, or delegate. Scope is from proofreading up to and including line editing.
 - `/edit` — AFK (away-from-keyboard) variant of `/redline`. Same proofread and critical-review passes, but no question-by-question dialogue with you. The main agent applies the finding list directly and delivers the polished text. Pass `--max-iterations=N` (or an equivalent natural-language phrase — *deep review*, *one round*, *kör djupt*) to add an opt-in subagent loop with that ceiling.
 - `/write` — four-phase content creation. Phase 1 acquires a brief over nine fields. Phase 2 presents the idea for structure, tone, technique, and address. Phase 3 writes the draft. Phase 4 applies the redline protocol to the draft — by default the main agent applies the findings directly and delivers the polished result; `--max-iterations=N` opts into a subagent loop just as in `/edit`.
 
-**Slash-only context loaders:**
+**Context loaders:**
 
 - `/writing-rules` — loads the writing rules, the general style guide, and the language file(s) into the session, so later ad-hoc writing follows the rule set without going through `/write` or `/edit`.
 - `/abt` — loads the ABT technique (And, But, Therefore — narrative arc).
 - `/pac` — loads the PAC technique (Premise, Analysis, Conclusion — analytical arc).
 
-**Slash-only help:**
+**Help:**
 
-- `/kntnt-text-skills:help` — short overview of the plugin and its skills. Bare invocation lists every skill with its intro line; passing a skill name (e.g. `/kntnt-text-skills:help write`) shows that skill's frontmatter description and intro paragraph. Implemented as a slash command, not a skill — all values are read live from `plugin.json` and the individual `SKILL.md` files, so there is no parallel help text to maintain.
+- `/kntnt-text-skills:help` — short overview of the plugin and its skills. Bare invocation lists every skill with its intro paragraph (the first paragraph after the `# /<skill>` heading in its `SKILL.md`); passing a skill name (e.g. `/kntnt-text-skills:help write`) shows that skill's intro paragraph on its own. Implemented as a slash command, not a skill — all values are read live from `plugin.json` and the individual `SKILL.md` files, so there is no parallel help text to maintain.
 
-All task and context-loader skills above carry `disable-model-invocation: true` in their frontmatter and therefore activate only on the exact slash command — never through the model deciding on its own that they would be useful. `/kntnt-text-skills:help` is a slash command, so it shares the same explicit-invocation property by construction.
+Each skill's frontmatter `description` defines the trigger boundary. A skill activates on its slash command, on the qualified form `/kntnt-text-skills:<skill>`, or on natural-language phrasing that names this plugin together with the skill (e.g. *kntnt text skills edit*, *text-edit-skill*, *edit X with Kntnt's skill*). Bare action words like *edit*, *proofread*, or *write* do not activate any skill. `/kntnt-text-skills:help` is a slash command, so it carries the same explicit-invocation property by construction.
 
 ## Languages
 
@@ -194,7 +191,7 @@ The plugin briefly confirms that the module is loaded. The rules then apply for 
 
 ### `/kntnt-text-skills:help`
 
-Short overview of the plugin and its skills. Bare invocation lists every skill in `skills/` with its intro line; passing a skill name renders that skill's frontmatter description and the intro paragraph from its `SKILL.md` body.
+Short overview of the plugin and its skills. Bare invocation lists every skill in `skills/` with its intro paragraph (the first paragraph after the `# /<skill>` heading in its `SKILL.md`); passing a skill name renders that skill's intro paragraph on its own.
 
 ```
 /kntnt-text-skills:help
@@ -390,7 +387,7 @@ Before editing any files under `skills/` or `lib/`, read the **Authoring rules**
 
 - **DRY.** Shared rules live in one place. The proofread pass is described once across three layers. Language-specific conventions live only in the language layer files. No trigger keywords are duplicated between `SKILL.md` and content-type frontmatter.
 - **Modular.** New content type = one new file (plus a row in `lib/genres/_index.md`). New technique = one new file. New language = one new file (`<lang>.md` with `<!-- layer: mechanics -->` and optionally `<!-- layer: style -->` sections). No `SKILL.md` needs to change.
-- **Manual context loaders.** `/writing-rules`, `/abt`, `/pac` fire only on explicit slash commands. Their descriptions document what they do — not when to invoke them.
+- **Plugin-anchored triggers.** Every skill activates only on plugin-anchored invocation: slash command, qualified form `/kntnt-text-skills:<skill>`, or natural-language phrasing that names this plugin together with the skill. Bare action words don't fire any skill. The `description` field in each `SKILL.md`'s frontmatter defines that trigger boundary.
 - **Tools, not algorithms.** The skill files describe outcomes and rules. They do not specify matching algorithms or file-search heuristics — the plugin solves the mechanics with standard tools (Glob, Grep, Read, Edit, Write, Bash).
 - **The user, not the author.** All skill-internal text addresses *the user*. The plugin is generic; the house voice it embodies is documented in metadata, not embedded in the skill text.
 - **English baseline, language layer for the rest.** Everything outside `lib/languages/` is written in British English. Per-language conventions, examples, and overrides live in `lib/languages/<lang>.md` (with mechanics and style as named sections).
@@ -432,7 +429,7 @@ These rules govern how to edit the files in this plugin. They exist to prevent a
 
 **6. No false equivalence claims.** If two skills differ in scope, behaviour, or settling mechanism, they are not *the same thing with one difference*. Describe each honestly. *Phase 1 identical to /proofread* is false if /proofread loads one rule file and Phase 1 loads two — even if both follow the same protocol.
 
-**7. Progressive disclosure in SKILL.md.** Frontmatter is always in context — put the full description and trigger logic there. The body is loaded when the skill triggers — keep it lean: one or two imperative sentences plus the file list. Body prose should not duplicate the frontmatter or the file list.
+**7. Progressive disclosure in SKILL.md.** Frontmatter carries the trigger logic — kept tight enough that the skill activates only when the user clearly invokes this plugin's specific skill: slash command, qualified form `/kntnt-text-skills:<skill>`, or plugin-anchored natural-language phrasing. A bare action word ("edit", "proofread", "write") must not be enough to trigger. The body's first paragraph carries the human-readable description of what the skill does, how to invoke it, and what arguments it takes — used both by Claude when the skill activates and by `/kntnt-text-skills:help` when listing or detailing the skill. The rest of the body is operational: imperative instructions, protocol references, and the file list. Body prose beyond the opening paragraph must not duplicate what the opening paragraph or the file list already says.
 
 **8. DRY where the abstraction is real, duplicate where it isn't.** A shared file is justified when multiple callers genuinely follow the same procedure or apply the same rules. The current shared protocols (`protocols/proofread.md`, `protocols/redline.md`, `protocols/language-resolution.md`, `protocols/genre-resolution.md`) capture real abstractions — each is followed identically by its callers, varying only in which rule files are loaded or which caller-side bits the protocol cannot know. Do not introduce shared files for accidental similarity; do not duplicate when the shared abstraction is real.
 

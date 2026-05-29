@@ -16,21 +16,21 @@ The single source of truth is the plugin's own files. Read what is needed and re
 
 **Visual blank lines.** Lines used purely as visual separators must be emitted with a single space character on them, never as truly empty lines. Claude.app's code-fence renderer collapses fully empty lines; a line containing one space is treated as non-empty and stays visible. In a terminal the single space is indistinguishable from a fully empty line, so the trick is free.
 
-**Step 1.** Read `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`. Capture:
-
-- `<version>` — the `version` field.
-- `<repo>` — the `repository` field.
-
-**Step 2.** Branch on `$1`:
+Branch on `$1`:
 
 ### Overview — when `$1` is empty
 
-Read every `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` from the listing above, in a single parallel batch. From each file, extract the **intro paragraph** — the first non-empty paragraph in the body that follows the `# /<name>` heading and precedes the first `## ` heading.
+Read in parallel:
+
+- `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json` — capture `<version>` (the `version` field), `<repo>` (`repository`), and `<plugin-description>` (`description`).
+- Every `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` from the listing above — from each, extract the **intro paragraph**: the first non-empty paragraph in the body that follows the `# /<name>` heading and precedes the first `## ` heading.
 
 Render this block:
 
 ```
 kntnt-text-skills <version>  ·  <repo>
+
+<plugin-description, wrapped to 80 chars>
 
 Skills:
 
@@ -45,26 +45,23 @@ For details on one skill:  /kntnt-text-skills:help <skill-name>
 Layout rules:
 
 - Two-space left margin. Pad each slash-name with spaces to two columns past the longest one; the description column is the same for every entry.
-- No rendered line exceeds 80 characters. Wrap intro paragraphs at word boundaries; continuation lines start at the description column.
-- One blank line after `Skills:`, one between entries, one before the closing line.
-- Skills in the directory order. Intro text verbatim — wrapping only, no summary or paraphrase.
+- No rendered line exceeds 80 characters. Wrap intro paragraphs and the plugin description at word boundaries. For skill entries, continuation lines start at the description column; for the plugin description, continuation lines start at column 0.
+- One blank line between the header line, the plugin description, `Skills:`, each entry, and the closing line.
+- Skills in the directory order. All text verbatim from source — wrapping only, no summary or paraphrase.
 
 ### Detail — when `$1` matches one of the listed skill directories
 
-Read `${CLAUDE_PLUGIN_ROOT}/skills/$1/SKILL.md`. From its YAML frontmatter, capture the `description` field. From its body, capture the intro paragraph as defined above.
+Read only `${CLAUDE_PLUGIN_ROOT}/skills/$1/SKILL.md` (do not read `plugin.json`). Extract the intro paragraph as defined above.
 
 Render this block:
 
 ```
-/$1 — kntnt-text-skills <version>
-<repo>
-
-<frontmatter description>
+/$1
 
 <intro paragraph>
 ```
 
-Both fields verbatim from the file; wrap at word boundaries so no line exceeds 80 characters.
+The intro paragraph verbatim from the file; wrap at word boundaries so no line exceeds 80 characters.
 
 ### Unknown — when `$1` is non-empty and not in the listing
 
