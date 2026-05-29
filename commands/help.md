@@ -14,6 +14,8 @@ Skill directories present in the plugin (one per line, alphabetic):
 
 The single source of truth is the plugin's own files. Read what is needed and render the matching block inside a triple-backtick fenced code block so blank lines and column alignment survive in both terminal and web renderers. No introduction, commentary, or summary outside the fence.
 
+**Visual blank lines.** Lines used purely as visual separators must be emitted with a single space character on them, never as truly empty lines. Claude.app's code-fence renderer collapses fully empty lines; a line containing one space is treated as non-empty and stays visible. In a terminal the single space is indistinguishable from a fully empty line, so the trick is free.
+
 **Step 1.** Read `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`. Capture:
 
 - `<version>` — the `version` field.
