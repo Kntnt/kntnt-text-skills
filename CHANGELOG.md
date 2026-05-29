@@ -6,6 +6,13 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.5.7] — 2026-05-29
+
+### Changed
+
+- `/kntnt-text-skills` command renamed to `/kntnt-text-skills:help`. `commands/kntnt-text-skills.md` moves to `commands/help.md`; invocation becomes the qualified `/kntnt-text-skills:help [skill-name]`. The bare `/kntnt-text-skills` short form no longer resolves to this command — it would only do so if no other plugin had taken that namespace, and the qualified form is what the harness surfaces in practice anyway. README and the internal references inside the command body updated to match.
+- Help command render layout reworked. Overview block collapses the header to one line (`kntnt-text-skills <version>  ·  <repo>`, dropping the separate author line), wraps each skill's intro paragraph at word boundaries with continuation lines aligned to the description column, separates entries with blank lines, and enforces a hard 80-character ceiling on every rendered line. Detail block applies the same 80-char wrap to the frontmatter description and the intro paragraph, and drops the author line from its header. The render still happens entirely in the model at invocation — no script, no separate man-page source, no token-heavy template additions.
+
 ## [0.5.6] — 2026-05-28
 
 ### Added
