@@ -1,10 +1,21 @@
 # Changelog
 
-All notable changes to this project are documented here. The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) and the versioning policy described in the project README.
+All notable changes to this project are documented here. The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) and the versioning policy described in [`docs/versioning.md`](docs/versioning.md).
 
 History starts at **0.3.0** — the first version with a documented baseline. Earlier versions (0.1.0, 0.2.0) are not reconstructed here; the git log is the source for that prehistory.
 
 ## [Unreleased]
+
+## [0.7.1] — 2026-06-04
+
+### Added
+
+- **`docs/` directory.** Six topical documents extracted from the README so the front page stays oriented to readers deciding whether to use the plugin: `docs/architecture.md` (review hierarchy, the three layers, file structure, design principles), `docs/languages.md` (the mechanics/style language model, fallback, resolution, overlay), `docs/content-types.md` (the ten content types, ABT/PAC, the global bans), `docs/extending.md` (adding a genre, technique, or language, plus the eval suite), `docs/authoring.md` (the ten authoring rules and the audit checklist), and `docs/versioning.md` (the Semantic Versioning policy).
+
+### Changed
+
+- **README rewritten from scratch under the `readme-github` genre.** The overgrown single-file README is replaced by a lean, audience-layered front page following the genre's canonical section order (badges → Description → Requirements → Installation → Usage → FAQ → Questions, bugs, and feature requests → Extending → Development → How you can contribute → License → Changelog). The deep internal material moves to `docs/` and is linked from *Technical documentation*; the two boilerplate blocks are emitted verbatim. *Acknowledgements* is omitted by choice.
+- **Cross-references updated for the docs move.** `CONTRIBUTING.md` and the `scripts/audit.py` docstrings now point at `docs/authoring.md` for the authoring rules and the audit checklist; the changelog header points at `docs/versioning.md` for the versioning policy. No scripted check reads the README, so the audit is unaffected.
 
 ### Fixed
 
@@ -172,5 +183,6 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 - Marketplace metadata (`.claude-plugin/marketplace.json`) and `/plugin marketplace add` / `/plugin install` instructions for installation via the modern Claude Code plugin flow.
 - Keep a Changelog 1.1.0 changelog (this file) and a versioning-policy section in the README that adapts SemVer to a rules-driven plugin.
 
-[Unreleased]: https://github.com/Kntnt/kntnt-text-skills/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/Kntnt/kntnt-text-skills/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.7.1
 [0.7.0]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.7.0

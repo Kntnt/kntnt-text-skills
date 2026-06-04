@@ -6,9 +6,9 @@
 # ///
 """Audit script for kntnt-text-skills.
 
-Runs every scriptable check from the README "Audit checklist". Cognitive
-checks (vague descriptions, prose duplication summaries, intent of unmarked
-sections) stay manual.
+Runs every scriptable check from the "Audit checklist" in docs/authoring.md.
+Cognitive checks (vague descriptions, prose duplication summaries, intent of
+unmarked sections) stay manual.
 
 Exit code 0 when no findings are produced; exit code 1 otherwise. A
 tabulated report is written to stdout in both cases.
@@ -468,8 +468,8 @@ def check_slash_names_in_lib() -> CheckResult:
     Language files are deliberately exempt: they are data tables of
     conventions, and their file-level description paragraph names the
     skills that load each section as scope metadata, similar to a SKILL.md
-    frontmatter description. The README authoring rule 1 is about skill
-    bodies and execution-context procedure / rule files; language files
+    frontmatter description. Authoring rule 1 (docs/authoring.md) is about
+    skill bodies and execution-context procedure / rule files; language files
     carry data that consuming skills classify by scope."""
 
     result = CheckResult(name="(g) skill slash names in lib/ execution context")
