@@ -274,6 +274,22 @@
       ]
     },
     {
+      "id": 319,
+      "skill_name": "write",
+      "name": "en_GB-write-readme-github",
+      "language": "en_GB",
+      "prompt": "/write write a GitHub README.md in British English for `kntnt-redirect`, a WordPress plugin (owner Kntnt) that manages 301/302 redirects from the admin, exposes a developer hooks API, ships PHPUnit and Playwright tests, and is licensed GPL-3.0 — accept all, just produce the draft",
+      "files": [],
+      "expected_output": "British English GitHub README in the genre's canonical structure, with the two boilerplate sections emitted verbatim.",
+      "expectations": [
+        "Genre commits to `readme-github` (default_technique `none`).",
+        "Audience layering holds: the user-facing sections (Description, Requirements, Installation, Usage) precede the extender section (Extending) and the contributor sections (Development, How you can contribute).",
+        "Exactly one H1 (the repository name); any FAQ uses H4 questions; each Extending construct gets its own H3.",
+        "The *Questions, bugs, and feature requests* section is emitted verbatim, owner/repo substituted to Kntnt/kntnt-redirect: `Have a usage question or something to discuss? Please use [Discussions](https://github.com/Kntnt/kntnt-redirect/discussions).` and `Found a bug or want to request a feature? Please [open an issue](https://github.com/Kntnt/kntnt-redirect/issues). Search the existing issues first to avoid duplicates.`",
+        "The *Changelog* section ends with the verbatim line `The project follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).`; the badge row carries one badge per concern (licence, runtime/platform, latest release, optional CI), not one per dependency; no marketing-tone or AI-tell openings."
+      ]
+    },
+    {
       "id": 407,
       "skill_name": "write",
       "name": "max-iterations-natural-language-write",

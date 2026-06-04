@@ -6,6 +6,13 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-06-04
+
+### Added
+
+- **New content type: `readme-github`.** A GitHub `README.md` genre in `lib/genres/readme-github.md`, with a matching block in `lib/genres/_index.md`. Default technique `none`. The genre is organised around three audiences in ascending order of commitment — Users, then Extenders, then Contributors — and a fixed section order (badges → Description with Key Features / The problem / How this helps → Requirements → Installation → Usage → FAQ → Questions, bugs, and feature requests → Extending → Development → How you can contribute → Acknowledgements → License → Changelog). Write-scope sections carry the audience-layering principle, the full section anatomy, register, heading scheme, and placeholder conventions; an unmarked *Fixed wording* section pins the two verbatim boilerplate blocks (the *Questions, bugs, and feature requests* body and the *Changelog* Keep-a-Changelog / Semantic-Versioning line, owner/repo the only substitution) so they survive both drafting and review; the review-scope pitfalls restate the checkable structural rules. Triggers on `readme.md`, `readme for github`, and `github readme`; bare `readme` does not fire. The README content-type table (now ten types) and file tree are updated to match.
+- **Eval coverage for `readme-github`.** Two cases in `evals/evals.json` (mirrored to the per-skill files): `en_GB-write-readme-github` (id 319) asserts the write path commits to the genre, holds audience layering and heading levels, and emits both boilerplate blocks verbatim; `en_GB-edit-readme-github-boilerplate-restored` (id 220) feeds the new fixture `evals/fixtures/en_GB-readme-drift.md` — a README whose two boilerplate sections have drifted — and asserts the edit path restores them to the fixed wording exactly while preserving structure and British conventions.
+
 ## [0.6.1] — 2026-05-29
 
 ### Changed
@@ -161,3 +168,5 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 - Marketplace metadata (`.claude-plugin/marketplace.json`) and `/plugin marketplace add` / `/plugin install` instructions for installation via the modern Claude Code plugin flow.
 - Keep a Changelog 1.1.0 changelog (this file) and a versioning-policy section in the README that adapts SemVer to a rules-driven plugin.
 
+[Unreleased]: https://github.com/Kntnt/kntnt-text-skills/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.7.0

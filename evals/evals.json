@@ -1013,6 +1013,24 @@
       ]
     },
     {
+      "id": 220,
+      "skill_name": "edit",
+      "name": "en_GB-edit-readme-github-boilerplate-restored",
+      "language": "en_GB",
+      "prompt": "/edit en_GB readme for github",
+      "files": [
+        "evals/fixtures/en_GB-readme-drift.md"
+      ],
+      "expected_output": "Polished GitHub README whose two drifted boilerplate sections are restored to the genre's fixed wording verbatim, with canonical structure and British conventions preserved.",
+      "expectations": [
+        "`## Genre / technique resolution` commits to `readme-github` (default_technique `none`).",
+        "The *Questions, bugs, and feature requests* body is restored to the genre's fixed wording verbatim, owner/repo substituted to acme/tinycache: a paragraph `Have a usage question or something to discuss? Please use [Discussions](https://github.com/acme/tinycache/discussions).` followed by a paragraph `Found a bug or want to request a feature? Please [open an issue](https://github.com/acme/tinycache/issues). Search the existing issues first to avoid duplicates.` — the fixture's single reworded list paragraph is replaced.",
+        "The *Changelog* section's drifted line is restored to exactly `The project follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).` — both Markdown links present (the fixture had dropped them and used *adheres to*).",
+        "The canonical section order and heading levels are preserved; the user-facing sections still precede *How you can contribute*.",
+        "British conventions are preserved (-ise spellings, single quotation marks, *Licence*); every applied change is traceable to a finding in the transcript — no silent rewrites."
+      ]
+    },
+    {
       "id": 301,
       "skill_name": "write",
       "name": "sv-write-article-brief-flow",
@@ -1282,6 +1300,22 @@
         "The piece takes a clear stance — no false balance.",
         "American conventions for spelling, punctuation, and date order.",
         "Direct *you* where the form invites it; no AI-tell crutches."
+      ]
+    },
+    {
+      "id": 319,
+      "skill_name": "write",
+      "name": "en_GB-write-readme-github",
+      "language": "en_GB",
+      "prompt": "/write write a GitHub README.md in British English for `kntnt-redirect`, a WordPress plugin (owner Kntnt) that manages 301/302 redirects from the admin, exposes a developer hooks API, ships PHPUnit and Playwright tests, and is licensed GPL-3.0 — accept all, just produce the draft",
+      "files": [],
+      "expected_output": "British English GitHub README in the genre's canonical structure, with the two boilerplate sections emitted verbatim.",
+      "expectations": [
+        "Genre commits to `readme-github` (default_technique `none`).",
+        "Audience layering holds: the user-facing sections (Description, Requirements, Installation, Usage) precede the extender section (Extending) and the contributor sections (Development, How you can contribute).",
+        "Exactly one H1 (the repository name); any FAQ uses H4 questions; each Extending construct gets its own H3.",
+        "The *Questions, bugs, and feature requests* section is emitted verbatim, owner/repo substituted to Kntnt/kntnt-redirect: `Have a usage question or something to discuss? Please use [Discussions](https://github.com/Kntnt/kntnt-redirect/discussions).` and `Found a bug or want to request a feature? Please [open an issue](https://github.com/Kntnt/kntnt-redirect/issues). Search the existing issues first to avoid duplicates.`",
+        "The *Changelog* section ends with the verbatim line `The project follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).`; the badge row carries one badge per concern (licence, runtime/platform, latest release, optional CI), not one per dependency; no marketing-tone or AI-tell openings."
       ]
     },
     {
