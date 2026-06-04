@@ -6,6 +6,10 @@ History starts at **0.3.0** — the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+### Fixed
+
+- **`/kntnt-text-skills:help <skill-name>` now shows the requested skill's detail** instead of always falling back to the overview. The command body referenced the positional placeholder `$1`, which is not substituted in this context and expanded to an empty string, so `scripts/help.py` was always invoked with no argument and correctly returned the overview. Both occurrences in `commands/help.md` now use `$ARGUMENTS` (the full argument string); a skill name is passed through as one quoted token, and an empty argument still yields the overview. `scripts/help.py` was already correct and is unchanged.
+
 ## [0.7.0] — 2026-06-04
 
 ### Added
