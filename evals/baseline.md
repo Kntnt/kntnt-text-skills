@@ -1,4 +1,4 @@
-# Baseline — version 0.5.5
+# Baseline – version 0.5.5
 
 > Generated on 2026-05-28 from `evals/workspace/<skill>/iteration-{1,2}/`
 > for each of the four task skills against plugin version 0.5.5. Executor
@@ -21,13 +21,13 @@
 | Total assertions | 363 (with-skill and without-skill graded against the same set) |
 | Skills covered | `/proofread`, `/redline`, `/edit`, `/write` |
 | Languages covered | sv, en_GB, en_US, plus sv_FI (overlay fixture) and de (fallback fixture) |
-| Required cases | 8 — fallback, overlay, fast-path-hit, fast-path-standard, max-iterations × 3, last-resort-floor |
-| Negative-control cases | 5 — ids 19, 20, 21 (proofread), 119 (redline), 219 (edit) |
-| Phase 3 dialogue cases | 3 — ids 409, 410, 411 (redline) |
+| Required cases | 8 – fallback, overlay, fast-path-hit, fast-path-standard, max-iterations × 3, last-resort-floor |
+| Negative-control cases | 5 – ids 19, 20, 21 (proofread), 119 (redline), 219 (edit) |
+| Phase 3 dialogue cases | 3 – ids 409, 410, 411 (redline) |
 | Cases per skill | proofread = 22, redline = 26, edit = 21, write = 19 |
-| Cases per language per skill (sv / en_GB / en_US) | proofread: 7 / 7 / 7 — redline: 12 / 7 / 6 — edit: 8 / 7 / 6 — write: 7 / 6 / 6 |
+| Cases per language per skill (sv / en_GB / en_US) | proofread: 7 / 7 / 7 – redline: 12 / 7 / 6 – edit: 8 / 7 / 6 – write: 7 / 6 / 6 |
 
-The cases-per-language totals satisfy both contractual minima — ≥6 per skill in total, and ≥6 per language per skill for each language with a shipped `<lang>.md`.
+The cases-per-language totals satisfy both contractual minima – ≥6 per skill in total, and ≥6 per language per skill for each language with a shipped `<lang>.md`.
 
 ## Per-skill pass rate
 
@@ -69,7 +69,7 @@ All eight required cases pass every with-skill expectation.
 
 ### Negative-control cases (false-positive discipline)
 
-Five cases supply clean text in each language and require that `/proofread`, `/redline`, or `/edit` produce no wall of false-positive findings on text that already follows the conventions.
+Five cases supply clean text in each language and require that `/proofread`, `/redline` or `/edit` produce no wall of false-positive findings on text that already follows the conventions.
 
 | Case | id | Skill | Language | With-skill | Without-skill | Notes |
 |---|---|---|---|---|---|---|
@@ -81,7 +81,7 @@ Five cases supply clean text in each language and require that `/proofread`, `/r
 
 Aggregate: **28 / 28 with-skill (100 %) vs 16 / 28 without-skill (57 %)**, +43 pp.
 
-The without-skill baseline does relatively well on output text here because the LLM tends not to invent corrections on clean text either — but it lacks the protocol fidelity (genre commit, scope record, layer name) the with-skill side records.
+The without-skill baseline does relatively well on output text here because the LLM tends not to invent corrections on clean text either – but it lacks the protocol fidelity (genre commit, scope record, layer name) the with-skill side records.
 
 ### Phase 3 dialogue cases (redline)
 
@@ -95,7 +95,7 @@ Three cases exercise the redline Phase 3 protocol (accept / reject / counter / d
 
 Aggregate: **17 / 17 with-skill (100 %) vs 11 / 17 without-skill (65 %)**, +35 pp.
 
-Phase 3 fidelity is *simulated* in the same way `--max-iterations` is — the executor records the branches the protocol would take, the grader reads the transcript for evidence. End-to-end Phase 3 with an interactive user is not driven by the skill-creator runner (which uses one-shot `claude -p`); that limitation is documented in `evals/README.md` and treated as a known gap rather than a defect.
+Phase 3 fidelity is *simulated* in the same way `--max-iterations` is – the executor records the branches the protocol would take, the grader reads the transcript for evidence. End-to-end Phase 3 with an interactive user is not driven by the skill-creator runner (which uses one-shot `claude -p`); that limitation is documented in `evals/README.md` and treated as a known gap rather than a defect.
 
 ## With-skill vs. without-skill comparison
 
@@ -111,13 +111,13 @@ Per-case timing and token use were not stored at run time. Variance was not meas
 ## Methodology notes
 
 - **Hybrid iteration.** Sixty cases (the unchanged set from v0.5.4) carry their iteration-1 grades. Twenty-eight cases (paired protocol checks, negative controls, Phase 3 dialogue, case 404 rewrite) carry iteration-2 grades. Both passes used `claude-sonnet-4-6` and the same executor and grader prompts (`EXECUTOR_*.md`, `GRADER_BATCH.md`). The carry-over is sound because: (a) the executor prompt did not change between iterations, so the unchanged cases' output and grading would not differ on a re-run except by Sonnet's own non-determinism; (b) the new v0.5.5 assertions land on cases that *did* run in iteration-2, so the new dimensions reflect fresh measurement rather than imputation.
-- **Orchestrator.** Iteration-2 was driven by `evals/workspace/_runner.py`, a headless orchestrator that fans out `claude -p` subprocesses with a per-job budget cap, parallelism, the resumable-skipping pattern (existing `output.md` / `grading.json` are not regenerated unless deleted), a `--case-ids` filter for partial sweeps, and a `--model` flag (default `claude-sonnet-4-6`). It cannot be run from inside a Claude Code session — nested `claude -p` strips auth and returns 401. Documented in the runner's own docstring.
-- **Sonnet-tur dependency, addressed.** Several assertions written in v0.5.5 scaffolding were initially worded such that whether the grader marked PASS depended on whether Sonnet, on the run in question, used a specific phrase or path citation in its transcript. The cases involved (205, 211, 218; style-layer-pass evidence and body-text-stability evidence) were rewritten to enumerate the semantically valid evidence forms explicitly — file-path citation, layer-naming phrase, or category enumeration for style-layer; findings-traceability rather than literal "body text unchanged" for body stability. This addresses an observed flake where the same transcript graded PASS on one round and FAIL on another.
+- **Orchestrator.** Iteration-2 was driven by `evals/workspace/_runner.py`, a headless orchestrator that fans out `claude -p` subprocesses with a per-job budget cap, parallelism, the resumable-skipping pattern (existing `output.md` / `grading.json` are not regenerated unless deleted), a `--case-ids` filter for partial sweeps and a `--model` flag (default `claude-sonnet-4-6`). It cannot be run from inside a Claude Code session – nested `claude -p` strips auth and returns 401. Documented in the runner's own docstring.
+- **Sonnet-tur dependency, addressed.** Several assertions written in v0.5.5 scaffolding were initially worded such that whether the grader marked PASS depended on whether Sonnet, on the run in question, used a specific phrase or path citation in its transcript. The cases involved (205, 211, 218; style-layer-pass evidence and body-text-stability evidence) were rewritten to enumerate the semantically valid evidence forms explicitly – file-path citation, layer-naming phrase or category enumeration for style-layer; findings-traceability rather than literal "body text unchanged" for body stability. This addresses an observed flake where the same transcript graded PASS on one round and FAIL on another.
 
 ## Observations and follow-ups
 
-- **Every with-skill cell is 100 %.** All four skills, all five languages, every required case, every negative-control case, and every Phase 3 dialogue case pass every expectation. The without-skill baseline scores 42–57 % per skill and 38–56 % per major language. The +53.2 pp aggregate delta on 363 assertions is a substantially stronger signal than v0.5.4's +49 pp on 66 assertions: a wider suite with more discriminating dimensions, and the plugin still passes everything.
-- **Without-skill rate dropped (51 % → 47 %).** Not a regression — the new v0.5.5 dimensions (paired protocol checks, fallback notice form, negative-control discipline records, Phase 3 dialogue branches) are inherently harder for a baseline LLM to satisfy. The delta widened (+49 → +53 pp) because the with-skill side held at 100 % while the without-skill side dipped on the new harder assertions.
+- **Every with-skill cell is 100 %.** All four skills, all five languages, every required case, every negative-control case and every Phase 3 dialogue case pass every expectation. The without-skill baseline scores 42–57 % per skill and 38–56 % per major language. The +53.2 pp aggregate delta on 363 assertions is a substantially stronger signal than v0.5.4's +49 pp on 66 assertions: a wider suite with more discriminating dimensions, and the plugin still passes everything.
+- **Without-skill rate dropped (51 % → 47 %).** Not a regression – the new v0.5.5 dimensions (paired protocol checks, fallback notice form, negative-control discipline records, Phase 3 dialogue branches) are inherently harder for a baseline LLM to satisfy. The delta widened (+49 → +53 pp) because the with-skill side held at 100 % while the without-skill side dipped on the new harder assertions.
 - **Sweden-Swedish remains the largest delta.** `sv` carries +62 pp because most of the protocol-semantic cases (genre resolution, fast-path, subagent ceiling, last-resort floor, Phase 3 dialogue) ride on Swedish fixtures. The English locales (`en_GB` +49 pp, `en_US` +44 pp) have smaller deltas because the baseline LLM already does most of the English typography corrections on its own. The fallback and overlay deltas are largest in absolute terms (de +100 pp, sv_FI +80 pp).
 - **Iteration-2 single-run carries a discipline footnote, not a flaw.** Sonnet's executor output varies between runs (verbosity, choice of vocabulary in the transcript). The v0.5.5 assertions that survived two rounds of reformulation now name their evidence forms broadly enough that the grader does not depend on Sonnet writing a specific phrase. A future iteration with `--runs 3` would quantify residual variance; one isn't required for release certification because the assertion language was hardened in iteration-2 specifically to remove the brittleness.
 

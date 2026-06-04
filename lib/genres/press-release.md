@@ -12,7 +12,7 @@ triggers:
 
 ## Purpose
 
-A press release announces news to journalists, who may pick it up and use it in editorial coverage. The text must be publishable straight into a newspaper or trade outlet without the journalist needing to rewrite the substance. Neutral, journalistic tone — the press release is not a marketing piece.
+A press release announces news to journalists, who may pick it up and use it in editorial coverage. The text must be publishable straight into a newspaper or trade outlet without the journalist needing to rewrite the substance. Neutral, journalistic tone – the press release is not a marketing piece.
 
 The reader is a journalist scanning many releases per day to find what is newsworthy. The structure must let her grasp the news within the first paragraph and decide whether to keep reading.
 
@@ -54,7 +54,7 @@ Press releases use strict grammar. No sentence fragments, no one-word sentences,
 <!-- scope: write -->
 ## Default technique
 
-None. The press release follows journalistic structure — the news first, then context. ABT is not applied as a structural backbone. If the brief explicitly requests ABT, follow the brief.
+None. The press release follows journalistic structure – the news first, then context. ABT is not applied as a structural backbone. If the brief explicitly requests ABT, follow the brief.
 
 <!-- scope: review -->
 ## Common pitfalls
@@ -63,11 +63,11 @@ Marketing tone. Adjectives like *fantastic*, *revolutionary*, *market-leading* w
 
 Buried news. The news must be in the headline and the summary. A press release that takes three paragraphs to get to the news has lost the journalist.
 
-Attributed quotes that contain facts. Quoted utterances are for subjective interpretations, comments, and judgements. Facts go in the body. A quote that says *We have launched X* is a wasted quote.
+Attributed quotes that contain facts. Quoted utterances are for subjective interpretations, comments and judgements. Facts go in the body. A quote that says *We have launched X* is a wasted quote.
 
 Boilerplate at the top. Company information goes at the end. The journalist already knows what company sent the release; she wants the news first.
 
-Missing contact information. A press release without name, phone, and email cannot be followed up on. The journalist moves to the next release in her queue.
+Missing contact information. A press release without name, phone and email cannot be followed up on. The journalist moves to the next release in her queue.
 
 Invented sources or fabricated statistics. The global rules apply. See `rules/style.md`.
 

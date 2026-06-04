@@ -1,12 +1,12 @@
 # Genre index
 
-Static index of every genre file in `lib/genres/`. One block per genre, carrying the fields needed for trigger matching: `name`, `swedish_term`, `default_technique`, `default` (where set), `triggers`, and — where present — `not_triggers` and `disambiguation`.
+Static index of every genre file in `lib/genres/`. One block per genre, carrying the fields needed for trigger matching: `name`, `swedish_term`, `default_technique`, `default` (where set), `triggers` and – where present – `not_triggers` and `disambiguation`.
 
 Match a user's prompt against this file directly. Do not read each genre file in full to compare. Once the matching genre is decided, read only the corresponding `lib/genres/<name>.md` file for the full rules.
 
 When no trigger matches and no semantic likeness lands clearly, fall back to the genre whose block carries `default: true`.
 
-When adding, renaming, or removing a genre file, update this index to match. The plugin does not regenerate it automatically.
+When adding, renaming or removing a genre file, update this index to match. The plugin does not regenerate it automatically.
 
 ---
 
@@ -121,7 +121,7 @@ When adding, renaming, or removing a genre file, update this index to match. The
   - `readme for github`
   - `github readme`
 - not_triggers:
-  - `bare 'readme' / 'readme file' / 'readme-fil' without 'github' or a '.md' filename — too broad; ask instead`
+  - `bare 'readme' / 'readme file' / 'readme-fil' without 'github' or a '.md' filename – too broad; ask instead`
 
 ---
 
@@ -138,7 +138,7 @@ When adding, renaming, or removing a genre file, update this index to match. The
   - `vitbok`
 - not_triggers:
   - `'rapport' inside a quoted working title for an article (reportage)`
-  - `'skriv en analys' / 'write an analysis' without 'rapport'/'report' — too broad`
+  - `'skriv en analys' / 'write an analysis' without 'rapport'/'report' – too broad`
   - `styrelseprotokoll`
   - `mötesprotokoll`
   - `board minutes`

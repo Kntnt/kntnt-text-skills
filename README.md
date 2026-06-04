@@ -4,20 +4,20 @@
 [![Latest release](https://img.shields.io/github/v/release/Kntnt/kntnt-text-skills)](https://github.com/Kntnt/kntnt-text-skills/releases/latest)
 [![Audit](https://github.com/Kntnt/kntnt-text-skills/actions/workflows/audit.yml/badge.svg)](https://github.com/Kntnt/kntnt-text-skills/actions/workflows/audit.yml)
 
-A plugin for Claude Code and Cowork that turns a house writing style into installable rules and protocols, then exposes eight skills for writing, reviewing, editing and proofreading text in Swedish, British English or American English — and can be taught any further language by adding one file.
+A plugin for Claude Code and Cowork that turns a house writing style into installable rules and protocols, then exposes eight skills for writing, reviewing, editing and proofreading text in Swedish, British English or American English – and can be taught any further language by adding one file.
 
 ## Description
 
-The plugin embodies the house style of [Kntnt](https://kntnt.com), but every skill-internal text addresses *the user* rather than the author, so it works for anyone who wants to write in the same vein. Universal rules — punctuation, structure, the global bans — are kept separate from language-specific realisations: typography, address, AI-tell manifestations and interference patterns live in per-language files under `lib/languages/`, so the same rule set produces idiomatic output across languages.
+The plugin embodies the house style of [Kntnt](https://kntnt.com), but every skill-internal text addresses *the user* rather than the author, so it works for anyone who wants to write in the same vein. Universal rules – punctuation, structure, the global bans – are kept separate from language-specific realisations: typography, address, AI-tell manifestations and interference patterns live in per-language files under `lib/languages/`, so the same rule set produces idiomatic output across languages.
 
-The skills come in three groups: four task skills that do the work (`/proofread`, `/redline`, `/edit`, `/write`), three context loaders that bring the rule set into a session for ad-hoc writing (`/writing-rules`, `/abt`, `/pac`), and a help command (`/kntnt-text-skills:help`).
+The skills come in three groups: four task skills that do the work (`/proofread`, `/redline`, `/edit`, `/write`), three context loaders that bring the rule set into a session for ad-hoc writing (`/writing-rules`, `/abt`, `/pac`) and a help command (`/kntnt-text-skills:help`).
 
 ### Key features
 
 - Eight skills in three groups: four task skills, three context loaders and a help command.
-- A strict review hierarchy — `proofread ⊂ redline ⊂ edit` — where each deeper skill is the previous one plus a phase, with no duplicated logic.
+- A strict review hierarchy – `proofread ⊂ redline ⊂ edit` – where each deeper skill is the previous one plus a phase, with no duplicated logic.
 - Per-language conventions split into a mechanics layer (proofread scope) and a style layer (redline / edit scope), shipping with Swedish, British English and American English plus an international fallback.
-- Ten content types — article, case study, press release, web copy, teaser, report, column, opinion piece, GitHub README and a general fallback — each with its own genre file.
+- Ten content types – article, case study, press release, web copy, teaser, report, column, opinion piece, GitHub README and a general fallback – each with its own genre file.
 - Two structural techniques, ABT and PAC, applied only from installed files.
 - An opt-in subagent loop for deeper polish, off by default and bounded to three iterations.
 - Plugin-anchored triggers: skills activate only on explicit invocation, never on a bare action word.
@@ -25,7 +25,7 @@ The skills come in three groups: four task skills that do the work (`/proofread`
 
 ### The problem
 
-Text written with a general-purpose assistant tends to drift. AI-tell phrases creep in, typography and punctuation wander between conventions, sources get invented, and the structure flattens into something recognisably machine-made. Ad-hoc prompting does not enforce a consistent house style, and the conventions that matter — how British English differs from American, when an attribution takes a speech dash, which abbreviations need spelling out — are easy to state once and hard to apply every time.
+Text written with a general-purpose assistant tends to drift. AI-tell phrases creep in, typography and punctuation wander between conventions, sources get invented, and the structure flattens into something recognisably machine-made. Ad-hoc prompting does not enforce a consistent house style, and the conventions that matter – how British English differs from American, when an attribution takes a speech dash, which abbreviations need spelling out – are easy to state once and hard to apply every time.
 
 ### How this plugin helps
 
@@ -33,13 +33,13 @@ The plugin encodes a house style as installable rules and protocols, then applie
 
 ### Limitations
 
-Ad copy, Google Ads copy and bare social-media posts without a teaser purpose are out of scope. A narrative technique is applied only when an installed file defines it — a technique named in a prompt but not installed is refused rather than improvised. The plugin needs a host that supports the features listed under [Requirements](#requirements).
+Ad copy, Google Ads copy and bare social-media posts without a teaser purpose are out of scope. A narrative technique is applied only when an installed file defines it – a technique named in a prompt but not installed is refused rather than improvised. The plugin needs a host that supports the features listed under [Requirements](#requirements).
 
 ## Requirements
 
 The plugin runs in Claude Code or Cowork and needs support for slash commands, YAML frontmatter (including `disable-model-invocation`) and subagents. No external libraries or MCP servers are required; the plugin is self-contained.
 
-Subagents drive the opt-in `--max-iterations=N` loop in `/edit`, `/write` and `/redline`, and the automatic one-round floor when the redline pass surfaces a last-resort finding. Contributors who run the audit hook also need [`uv`](https://docs.astral.sh/uv/) — see [Development](#development).
+Subagents drive the opt-in `--max-iterations=N` loop in `/edit`, `/write` and `/redline`, and the automatic one-round floor when the redline pass surfaces a last-resort finding. Contributors who run the audit hook also need [`uv`](https://docs.astral.sh/uv/) – see [Development](#development).
 
 ## Installation
 
@@ -68,7 +68,7 @@ Each skill is invoked by its slash command. A language argument, where the skill
 
 ### `/proofread`
 
-Conservative proofreading: corrects only what is objectively wrong — spelling, grammar, punctuation, the conventions in the loaded mechanics file — and never touches word choice, word order, structure, tone or argumentation. Type the command with the text, or `/proofread` alone to operate on the most recent text in the conversation. An optional language argument fixes the language; without one the skill detects it.
+Conservative proofreading: corrects only what is objectively wrong – spelling, grammar, punctuation, the conventions in the loaded mechanics file – and never touches word choice, word order, structure, tone or argumentation. Type the command with the text, or `/proofread` alone to operate on the most recent text in the conversation. An optional language argument fixes the language; without one the skill detects it.
 
 ```
 /proofread Det här ä en testtext med några konstigheter
@@ -80,7 +80,7 @@ Formatting (line breaks, headings, lists, code blocks) is preserved exactly. Whe
 
 ### `/redline`
 
-Critical editorial review with you in the loop. A silent proofread pass runs first, then a critical-review pass against the full rule set, then each finding is presented one at a time as a four-part proposal — marking, problem, solution and prompt — to which you respond *accept*, *reject*, *counter* or *delegate*.
+Critical editorial review with you in the loop. A silent proofread pass runs first, then a critical-review pass against the full rule set, then each finding is presented one at a time as a four-part proposal – marking, problem, solution and prompt – to which you respond *accept*, *reject*, *counter* or *delegate*.
 
 ```
 /redline @draft.md
@@ -99,18 +99,18 @@ The away-from-keyboard variant of `/redline`: the same proofread and critical-re
 /edit --max-iterations=2 @draft.md
 ```
 
-The default is a single direct pass. `--max-iterations=1`, `=2` or `=3` — or a natural-language equivalent such as *deep review*, *two rounds max* or *one round* — opts into a subagent loop with that ceiling (clamped to three).
+The default is a single direct pass. `--max-iterations=1`, `=2` or `=3` – or a natural-language equivalent such as *deep review*, *two rounds max* or *one round* – opts into a subagent loop with that ceiling (clamped to three).
 
 ### `/write`
 
-Content creation from a brief or from source material, in four phases: brief acquisition over nine fields, an idea for structure, tone, technique and address, the draft, and an automatic polish through the redline machinery. A language argument is required; without one, `/write` proposes a language from the prompt and asks you to confirm.
+Content creation from a brief or from source material, in four phases: brief acquisition over nine fields, an idea for structure, tone, technique and address, the draft and an automatic polish through the redline machinery. A language argument is required; without one, `/write` proposes a language from the prompt and asks you to confirm.
 
 ```
 /write Skriv ett kundcase om hur Ystadbostäder gick över till digitala lås. Källmaterial: @intervju.md
 /write en_GB Draft a column on the agency market consolidation
 ```
 
-Pass `--max-iterations=N` on the invocation to opt the polish into a subagent loop. You can override the content type's default technique in the prompt — *use ABT*, *force PAC*, *no technique* — and a technique with no installed file is refused with the alternatives named.
+Pass `--max-iterations=N` on the invocation to opt the polish into a subagent loop. You can override the content type's default technique in the prompt – *use ABT*, *force PAC*, *no technique* – and a technique with no installed file is refused with the alternatives named.
 
 ### Context loaders: `/writing-rules`, `/abt`, `/pac`
 
@@ -125,7 +125,7 @@ These do no work of their own; they load rule modules into the session so later 
 
 ### `/kntnt-text-skills:help`
 
-A short overview of the plugin and its skills. Bare invocation lists every skill with its intro paragraph; passing a skill name shows that skill's intro on its own. It is a slash command backed by a small rendering script, so the version, author and per-skill text are read live from `plugin.json` and the individual `SKILL.md` files — there is no parallel help text to maintain.
+A short overview of the plugin and its skills. Bare invocation lists every skill with its intro paragraph; passing a skill name shows that skill's intro on its own. It is a slash command backed by a small rendering script, so the version, author and per-skill text are read live from `plugin.json` and the individual `SKILL.md` files – there is no parallel help text to maintain.
 
 ```
 /kntnt-text-skills:help
@@ -140,15 +140,15 @@ They form a strict hierarchy: `proofread ⊂ redline ⊂ edit`. `/proofread` cor
 
 #### Why doesn't saying ‘edit this’ trigger `/edit`?
 
-By design. Every skill uses plugin-anchored triggers: it activates only on its slash command, the qualified form `/kntnt-text-skills:<skill>`, or natural-language phrasing that names this plugin together with the skill. Bare action words such as *edit*, *write* or *redline* fire nothing. `/proofread` is the one documented exception — it also responds to clear proofreading requests aimed at a specific text — because its scope is conservative and broad triggering is safe.
+By design. Every skill uses plugin-anchored triggers: it activates only on its slash command, the qualified form `/kntnt-text-skills:<skill>` or natural-language phrasing that names this plugin together with the skill. Bare action words such as *edit*, *write* or *redline* fire nothing. `/proofread` is the one documented exception – it also responds to clear proofreading requests aimed at a specific text – because its scope is conservative and broad triggering is safe.
 
 #### Which languages are supported?
 
-Swedish, British English and American English ship as full language files. Any other language falls back to an international baseline (`default-mechanics.md`), and the plugin tells you it has done so. Adding a language is a single file — see [`docs/languages.md`](docs/languages.md) and [`docs/extending.md`](docs/extending.md).
+Swedish, British English and American English ship as full language files. Any other language falls back to an international baseline (`default-mechanics.md`), and the plugin tells you it has done so. Adding a language is a single file – see [`docs/languages.md`](docs/languages.md) and [`docs/extending.md`](docs/extending.md).
 
 #### Does the plugin need any external services?
 
-No. It is self-contained — no external libraries, no MCP servers, no network access.
+No. It is self-contained – no external libraries, no MCP servers, no network access.
 
 ## Questions, bugs, and feature requests
 
@@ -160,9 +160,9 @@ Found a bug or want to request a feature? Please [open an issue](https://github.
 
 Three things can be added without touching any `SKILL.md`, each a single file (plus, for a genre, a row in the index):
 
-- **A new content type** — a genre file under `lib/genres/` plus a matching block in `lib/genres/_index.md`.
-- **A new technique** — a file under `lib/techniques/`, described in parallel with ABT and PAC.
-- **A new language** — one file under `lib/languages/`, carrying a mechanics layer and an optional style layer.
+- **A new content type** – a genre file under `lib/genres/` plus a matching block in `lib/genres/_index.md`.
+- **A new technique** – a file under `lib/techniques/`, described in parallel with ABT and PAC.
+- **A new language** – one file under `lib/languages/`, carrying a mechanics layer and an optional style layer.
 
 The full procedure, including the frontmatter patterns and the territorial-variant overlay, is in [`docs/extending.md`](docs/extending.md). For the content types and techniques already installed, see [`docs/content-types.md`](docs/content-types.md); for the language model, [`docs/languages.md`](docs/languages.md).
 
@@ -170,7 +170,7 @@ The full procedure, including the frontmatter patterns and the territorial-varia
 
 ### Build from source
 
-There is nothing to compile — the plugin is a set of Markdown rule files and two small Python helper scripts. To work on it, clone the repository:
+There is nothing to compile – the plugin is a set of Markdown rule files and two small Python helper scripts. To work on it, clone the repository:
 
 ```bash
 git clone git@github.com:Kntnt/kntnt-text-skills.git
@@ -193,16 +193,16 @@ The eval suite under [`evals/`](evals/) exercises the four task skills against t
 
 The deeper record lives under [`docs/`](docs/):
 
-- [`docs/architecture.md`](docs/architecture.md) — the review hierarchy, the three layers, the file structure and the design principles.
-- [`docs/languages.md`](docs/languages.md) — the language model: mechanics and style layers, the default fallback, resolution and the territorial-variant overlay.
-- [`docs/content-types.md`](docs/content-types.md) — the ten content types, the ABT and PAC techniques and the global bans.
-- [`docs/extending.md`](docs/extending.md) — adding a content type, technique or language, and the eval suite.
-- [`docs/authoring.md`](docs/authoring.md) — the authoring rules and the pre-commit audit checklist for anyone editing `skills/` or `lib/`.
-- [`docs/versioning.md`](docs/versioning.md) — the Semantic Versioning policy adapted to a rules-driven plugin.
+- [`docs/architecture.md`](docs/architecture.md) – the review hierarchy, the three layers, the file structure and the design principles.
+- [`docs/languages.md`](docs/languages.md) – the language model: mechanics and style layers, the default fallback, resolution and the territorial-variant overlay.
+- [`docs/content-types.md`](docs/content-types.md) – the ten content types, the ABT and PAC techniques and the global bans.
+- [`docs/extending.md`](docs/extending.md) – adding a content type, technique or language, and the eval suite.
+- [`docs/authoring.md`](docs/authoring.md) – the authoring rules and the pre-commit audit checklist for anyone editing `skills/` or `lib/`.
+- [`docs/versioning.md`](docs/versioning.md) – the Semantic Versioning policy adapted to a rules-driven plugin.
 
 ## How you can contribute
 
-Contributions are welcome, small or large — reporting a bug, requesting a feature, fixing a rule, adding a language file or improving the documentation. New language files that follow the existing template are especially welcome. Before editing anything under `skills/` or `lib/`, read [`docs/authoring.md`](docs/authoring.md); for which kinds of change are likely to be merged and how inbound licensing works, see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+Contributions are welcome, small or large – reporting a bug, requesting a feature, fixing a rule, adding a language file or improving the documentation. New language files that follow the existing template are especially welcome. Before editing anything under `skills/` or `lib/`, read [`docs/authoring.md`](docs/authoring.md); for which kinds of change are likely to be merged and how inbound licensing works, see [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## License
 

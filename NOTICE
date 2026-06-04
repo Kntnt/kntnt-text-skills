@@ -4,7 +4,7 @@ Copyright 2024-2026 Thomas Barregren / Kntnt
 This product includes software developed by Kntnt (https://kntnt.com).
 
 kntnt-text-skills is a Claude Code plugin that provides seven interconnected
-skills for writing, reviewing, editing, and proofreading text, modelled on the
+skills for writing, reviewing, editing and proofreading text, modelled on the
 house style of Kntnt and extensible with one file per additional language.
 
 Made by Kntnt.

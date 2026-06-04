@@ -1,6 +1,6 @@
 # Contributing to kntnt-text-skills
 
-Thanks for considering a contribution. The plugin is open source under the Apache License 2.0, which means anyone is free to fork it and modify it for their own purposes. This document describes the *project norm* — what kinds of contributions are likely to be welcomed into the upstream repository at [Kntnt/kntnt-text-skills](https://github.com/Kntnt/kntnt-text-skills). It is not a legal restriction on what you may do with the code; it is editorial guidance on what is likely to be merged.
+Thanks for considering a contribution. The plugin is open source under the Apache License 2.0, which means anyone is free to fork it and modify it for their own purposes. This document describes the *project norm* – what kinds of contributions are likely to be welcomed into the upstream repository at [Kntnt/kntnt-text-skills](https://github.com/Kntnt/kntnt-text-skills). It is not a legal restriction on what you may do with the code; it is editorial guidance on what is likely to be merged.
 
 ## Contribution scope
 
@@ -19,11 +19,11 @@ By submitting a contribution, you agree it is licensed under Apache 2.0 by virtu
 ## How to contribute
 
 1. **Open an issue first** for anything in the *discussed* row of the table above. For *welcomed* items, you can open a PR directly. Use the issue tracker at <https://github.com/Kntnt/kntnt-text-skills/issues>.
-2. **Bug reports** should follow the template under `.github/ISSUE_TEMPLATE/bug.md` — which rule, which language file, which input, observed versus expected outcome.
+2. **Bug reports** should follow the template under `.github/ISSUE_TEMPLATE/bug.md` – which rule, which language file, which input, observed versus expected outcome.
 3. **Read the authoring rules** in [`docs/authoring.md`](docs/authoring.md) (the authoring rules and the audit checklist beneath them) before editing files under `skills/` or `lib/`. The rules exist to prevent recurring architectural drift.
 4. **Keep prose in British English** outside `lib/languages/`. Language-specific examples and conventions live in the matching language file.
 5. **One concern per PR.** Smaller PRs land faster.
-6. **When adding a new skill**, give the new `SKILL.md` a clear frontmatter `description` and a short intro paragraph beneath the `# /name` heading. The `/kntnt-text-skills` help command auto-discovers skills from `skills/` and reads those two fields live — no separate help text needs updating.
+6. **When adding a new skill**, give the new `SKILL.md` a clear frontmatter `description` and a short intro paragraph beneath the `# /name` heading. The `/kntnt-text-skills` help command auto-discovers skills from `skills/` and reads those two fields live – no separate help text needs updating.
 
 ## Style and language conventions
 

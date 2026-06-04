@@ -58,7 +58,7 @@ SKILL_SLASH_NAMES: tuple[str, ...] = (
 
 @dataclass
 class Finding:
-    """One audit finding — path plus optional line plus message."""
+    """One audit finding – path plus optional line plus message."""
 
     check: str
     path: str
@@ -129,7 +129,7 @@ def iter_dir_md(directory: Path) -> list[Path]:
 
 
 def check_skill_lib_paths() -> CheckResult:
-    """Check (a) — every `../../lib/...` path in skill files resolves to an
+    """Check (a) – every `../../lib/...` path in skill files resolves to an
     actual file. Placeholders like `<lang>.md` and `<type>.md` are ignored
     because they expand at runtime."""
 
@@ -198,7 +198,7 @@ def parse_index_block(body: str) -> dict[str, Any]:
             if raw_value == "":
                 # Disambiguation is a mapping; other list-shaped fields
                 # are plain lists. The first nested line determines the
-                # shape — start empty and let the nested-line handler
+                # shape – start empty and let the nested-line handler
                 # promote to dict on first key: value match.
                 fields[key] = []
                 continue
@@ -245,7 +245,7 @@ def strip_index_value(raw: str) -> Any:
 
 
 def check_genre_symmetry() -> CheckResult:
-    """Check (b) — every genre file has a section in `_index.md` and vice
+    """Check (b) – every genre file has a section in `_index.md` and vice
     versa. No orphans either direction."""
 
     result = CheckResult(name="(b) genre <-> _index.md symmetry")
@@ -275,7 +275,7 @@ def check_genre_symmetry() -> CheckResult:
 
 
 def check_genre_frontmatter_sync() -> CheckResult:
-    """Check (c) — each genre file's frontmatter matches the corresponding
+    """Check (c) – each genre file's frontmatter matches the corresponding
     `_index.md` block field-by-field for the documented fields."""
 
     result = CheckResult(name="(c) genre frontmatter <-> _index.md fields")
@@ -297,7 +297,7 @@ def check_genre_frontmatter_sync() -> CheckResult:
         name = genre_file.stem
         index_block = index_sections.get(name)
         if index_block is None:
-            # Missing from index — already reported by (b); skip here.
+            # Missing from index – already reported by (b); skip here.
             continue
         # Compare the documented fields when present in either source.
         for field_name in (
@@ -354,7 +354,7 @@ def values_equal(a: Any, b: Any) -> bool:
 
 
 def check_default_genre_unique() -> CheckResult:
-    """Check (d) — exactly one genre file (and exactly one `_index.md`
+    """Check (d) – exactly one genre file (and exactly one `_index.md`
     block) carries `default: true`."""
 
     result = CheckResult(name="(d) exactly one genre with default: true")
@@ -398,7 +398,7 @@ def check_default_genre_unique() -> CheckResult:
 
 
 def check_language_layer_markers() -> CheckResult:
-    """Check (e) — every `lib/languages/<lang>.md` except `default-mechanics.md`
+    """Check (e) – every `lib/languages/<lang>.md` except `default-mechanics.md`
     carries the mechanics layer marker. The style layer marker is also
     required (the issue calls absence a warning but the project policy is
     hard-fail without warning levels)."""
@@ -430,7 +430,7 @@ def check_language_layer_markers() -> CheckResult:
 
 
 def check_genre_scope_markers() -> CheckResult:
-    """Check (f) — each genre file has at least one `<!-- scope: write -->`
+    """Check (f) – each genre file has at least one `<!-- scope: write -->`
     and one `<!-- scope: review -->` marker. Whether each section is marked
     correctly is a cognitive check."""
 
@@ -461,7 +461,7 @@ def check_genre_scope_markers() -> CheckResult:
 
 
 def check_slash_names_in_lib() -> CheckResult:
-    """Check (g) — skill slash names do not appear in execution-context lib
+    """Check (g) – skill slash names do not appear in execution-context lib
     files (protocols, rules, genres, techniques). The only documented
     legitimate location is `lib/protocols/subagent.md`.
 
@@ -505,7 +505,7 @@ def check_slash_names_in_lib() -> CheckResult:
 
 
 def check_plugin_json_and_version() -> CheckResult:
-    """Check (h) — `plugin.json` is well-formed and carries the required
+    """Check (h) – `plugin.json` is well-formed and carries the required
     fields; the version field matches the latest non-Unreleased heading in
     `CHANGELOG.md`."""
 
@@ -578,10 +578,10 @@ def check_plugin_json_and_version() -> CheckResult:
 
 
 def check_language_inherits() -> CheckResult:
-    """Check (i) — every `inherits` field points to an existing base file in
+    """Check (i) – every `inherits` field points to an existing base file in
     `lib/languages/`, the base does not itself declare `inherits` (one step
     only), and cycles are structurally impossible. No live `inherits` ships
-    today, so the check is a no-op on current data — kept in place so the
+    today, so the check is a no-op on current data – kept in place so the
     overlay loader's documented constraint cannot drift."""
 
     result = CheckResult(name="(i) inherits validation")
@@ -634,11 +634,11 @@ def collect_trigger_lists() -> dict[str, list[str]]:
 
 
 def check_trigger_duplication() -> CheckResult:
-    """Check (j) — trigger words from `_index.md` should not be enumerated
+    """Check (j) – trigger words from `_index.md` should not be enumerated
     as inline lists in `skills/*/SKILL.md` or `lib/protocols/*.md`. Forward-
     compat gate so the fast-path-dedup refactor cannot be silently undone.
 
-    A paragraph block is exempt when it explicitly cites `_index.md` —
+    A paragraph block is exempt when it explicitly cites `_index.md` –
     that pattern is a meta-reference acknowledging the index as the source,
     and the fast-path-dedup slice removes those paragraphs wholesale rather
     than leaving them in place. A naked enumeration without the citation is
@@ -722,7 +722,7 @@ def format_report(results: list[CheckResult]) -> str:
     """Render the report as a tabulated summary followed by a finding
     detail block per failing check."""
 
-    # Summary table — fixed column widths derived from the data.
+    # Summary table – fixed column widths derived from the data.
     name_width = max(len(r.name) for r in results)
     status_width = len("STATUS")
     header = f"{'CHECK'.ljust(name_width)}  {'STATUS'.ljust(status_width)}  COUNT"
@@ -738,7 +738,7 @@ def format_report(results: list[CheckResult]) -> str:
     lines.append(
         f"{'TOTAL FINDINGS'.ljust(name_width)}  {''.ljust(status_width)}  {total}"
     )
-    # Detail block — every failing check prints its findings.
+    # Detail block – every failing check prints its findings.
     failing = [r for r in results if not r.ok]
     if failing:
         lines.append("")
@@ -748,7 +748,7 @@ def format_report(results: list[CheckResult]) -> str:
             lines.append(f"## {r.name}")
             for f in r.findings:
                 location = f.path if f.line is None else f"{f.path}:{f.line}"
-                lines.append(f"  - {location} — {f.message}")
+                lines.append(f"  - {location} – {f.message}")
     return "\n".join(lines)
 
 

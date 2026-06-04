@@ -14,7 +14,7 @@ The user can provide input in any of these forms:
 - **Inline text in the prompt.** The text to operate on is included directly in the user's message, often after the slash command. Use it as-is.
 - **File referenced via `@`-notation.** The user explicitly attaches a file path with `@`-notation. Read the file and operate on its contents.
 - **File described by name.** The user mentions a filename or describes a file in natural language ("rätta artikeln om vitvaror", "the report I just saved"). The agent finds the file in the workspace.
-- **URL.** The user supplies a URL. Fetch the content and operate on it. The output protocol applies — URLs are read-only, so the output goes elsewhere than back to the source.
+- **URL.** The user supplies a URL. Fetch the content and operate on it. The output protocol applies – URLs are read-only, so the output goes elsewhere than back to the source.
 - **Upload.** A file appears in the uploads area of the session. Read it from there.
 
 ### Search domain when a file is described by name
@@ -29,14 +29,14 @@ The agent searches the user's workspace folder recursively and the uploads folde
 
 ### Bare slash command
 
-When the calling skill is invoked with no following text and no file reference, operate on the most recent text in the conversation — typically the previous assistant message or the text that the conversation was just working on. A skill that creates new content rather than revising an existing text treats a bare invocation as a new request, starting from the most recent prompt or material in the conversation as context.
+When the calling skill is invoked with no following text and no file reference, operate on the most recent text in the conversation – typically the previous assistant message or the text that the conversation was just working on. A skill that creates new content rather than revising an existing text treats a bare invocation as a new request, starting from the most recent prompt or material in the conversation as context.
 
 ### Multiple files in one prompt
 
 When the user references several files in one prompt, run the skill per file in a loop. The output protocol applies to each file separately.
 
 <!-- form: output-inline -->
-## Output — inline input
+## Output – inline input
 
 Where the result of a task skill goes when the input was inline text in the prompt.
 
@@ -46,12 +46,12 @@ Inline input maps to inline output. Deliver the result directly in the conversat
 
 ### No-op behaviour
 
-When the skill's procedure produces no changes — typically because the input contains no errors the procedure was looking for — the output protocol does not apply. The calling skill returns a short status message defined in its own procedure and writes nothing.
+When the skill's procedure produces no changes – typically because the input contains no errors the procedure was looking for – the output protocol does not apply. The calling skill returns a short status message defined in its own procedure and writes nothing.
 
 <!-- form: output-files -->
-## Output — file and URL input
+## Output – file and URL input
 
-Where the result of a task skill goes when the input was a file or a URL — depending on input source and runtime environment. The agent detects the case using its tools (a write-probe on the workspace folder, an Edit-availability check on the target file) and selects the matching outcome.
+Where the result of a task skill goes when the input was a file or a URL – depending on input source and runtime environment. The agent detects the case using its tools (a write-probe on the workspace folder, an Edit-availability check on the target file) and selects the matching outcome.
 
 ### Cases
 
@@ -71,11 +71,11 @@ When the user references multiple files in one prompt, the skill loops per file.
 
 ### No-op behaviour
 
-When the skill's procedure produces no changes — typically because the input contains no errors the procedure was looking for — the output protocol does not apply. The calling skill returns a short status message defined in its own procedure and writes nothing.
+When the skill's procedure produces no changes – typically because the input contains no errors the procedure was looking for – the output protocol does not apply. The calling skill returns a short status message defined in its own procedure and writes nothing.
 
 ### Multi-phase output
 
-When the calling skill runs several phases (e.g., a silent corrective pass followed by a critical-review pass followed by a settling step), only the final polished text is routed through this protocol. Intermediate phase outputs are not separately delivered — the user sees the result of all phases combined.
+When the calling skill runs several phases (e.g., a silent corrective pass followed by a critical-review pass followed by a settling step), only the final polished text is routed through this protocol. Intermediate phase outputs are not separately delivered – the user sees the result of all phases combined.
 
 ### Content-creation defaults
 

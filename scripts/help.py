@@ -5,8 +5,8 @@
 
 The plugin's own files are the single source of truth: ``.claude-plugin/plugin.json``
 supplies the header fields and ``skills/<name>/SKILL.md`` supplies each skill's intro
-paragraph. The script extracts that material and emits the fully formatted block — word
-wrapping, column alignment, and single-space separator lines all resolved here — so the
+paragraph. The script extracts that material and emits the fully formatted block – word
+wrapping, column alignment and single-space separator lines all resolved here – so the
 slash command only has to print the result verbatim. Pass an optional skill name to get
 the detail view; pass nothing for the overview.
 """
@@ -19,8 +19,8 @@ import sys
 import textwrap
 from pathlib import Path
 
-# Hard line budget for wrapped prose. The header and closing lines are exempt — a repository
-# URL cannot be wrapped at a word boundary — so only intro paragraphs and the plugin
+# Hard line budget for wrapped prose. The header and closing lines are exempt – a repository
+# URL cannot be wrapped at a word boundary – so only intro paragraphs and the plugin
 # description are held to it.
 LINE_WIDTH = 80
 
@@ -97,7 +97,7 @@ def skill_dirs(root: Path) -> list[str]:
 
 
 def render_overview(root: Path, names: list[str]) -> str:
-    """Render the full overview block: header, wrapped plugin description, and one aligned entry per skill."""
+    """Render the full overview block: header, wrapped plugin description and one aligned entry per skill."""
     manifest = json.loads(
         (root / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")
     )
