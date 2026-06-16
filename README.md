@@ -39,7 +39,7 @@ Ad copy, Google Ads copy and bare social-media posts without a teaser purpose ar
 
 The plugin runs in Claude Code or Cowork and needs support for slash commands, YAML frontmatter (including `disable-model-invocation`) and subagents. No external libraries or MCP servers are required; the plugin is self-contained.
 
-Subagents drive the opt-in `--max-iterations=N` loop in `/edit`, `/write` and `/redline`, and the automatic one-round floor when the redline pass surfaces a last-resort finding. Contributors who run the audit hook also need [`uv`](https://docs.astral.sh/uv/) – see [Development](#development).
+Subagents drive the opt-in `--max-iterations=N` loop in `/edit`, `/write` and `/redline`, and the automatic one-round floor when the redline pass surfaces a last-resort finding. The `/help` command renders through a bundled [`uv`](https://docs.astral.sh/uv/)-run script, so `uv` must be on `PATH` to use `/help`; the writing skills themselves are pure-prompt and need nothing beyond the host. Contributors who run the audit hook need `uv` too – see [Development](#development).
 
 ## Installation
 
