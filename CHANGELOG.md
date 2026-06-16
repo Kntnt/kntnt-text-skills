@@ -6,6 +6,10 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+### Added
+
+- `.claude/settings.json` – a tracked, curated settings file with the recommended `Bash(uv:*)` permission; `.gitignore` is narrowed (`.claude/*` plus `!.claude/settings.json`) so the shared file is versioned while per-user `.claude/` state (`settings.local.json`, the local `worktrees/`, and the like) stays ignored.
+
 ### Changed
 
 - **`README.md` now documents `uv` as a runtime requirement for `/help`.** The *Requirements* section previously described `uv` as a contributor-only need (the audit hook); it now states that `/help` renders through a bundled `uv`-run script, so `uv` must be on `PATH` to use `/help`, while the writing skills themselves remain pure-prompt.
