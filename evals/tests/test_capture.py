@@ -138,6 +138,52 @@ def test_anonymiser_scrubs_names_but_keeps_anglicism_terms() -> None:
     assert "adressera" in scrubbed and "leverera" in scrubbed
 
 
+def test_names_in_assertion_text_and_source_are_anonymised() -> None:
+    """A name the maintainer names inside a fault remark is scrubbed from the assertion text and its source trace, not just from the fixture body."""
+    case = capture.propose(EDIT_TRANSCRIPT)
+    # The *Marx's teorier* remark carries a real surname inside the emphasised
+    # fault span; it must not survive into the committed assertion or its trace.
+    for exp in case["expectations"]:
+        assert "Marx" not in exp["text"], (
+            f"name 'Marx' leaked into assertion text: {exp['text']!r}"
+        )
+        assert "Marx" not in exp["source"], (
+            f"name 'Marx' leaked into assertion source trace: {exp['source']!r}"
+        )
+
+
+def test_change_to_and_should_be_connectives_pair_fault_with_target() -> None:
+    """Natural-English correction connectives ('change to', 'should be') pair the fault with its target rather than emitting the target as its own fault."""
+    for remark in (
+        "*utilise* is jargon, change to *use*",
+        "*utilise* should be *use*",
+    ):
+        seeds = capture._faults_from_remark(remark)
+        shaped = [capture._shape_assertion("edit", seed, remark) for seed in seeds]
+        shaped = [text for text in shaped if text]
+        # The correction target *use* must never be proposed as its own fault.
+        assert not any("*use*" in text and "flagged" in text for text in shaped), (
+            f"correction target leaked as a fault for {remark!r}: {shaped}"
+        )
+        # The fault *utilise* carries its named target rather than losing it.
+        assert any("*utilise* is corrected to *use*." == text for text in shaped), (
+            f"fault was not paired with its target for {remark!r}: {shaped}"
+        )
+
+
+def test_inner_smart_quoted_span_does_not_truncate_a_fault_remark() -> None:
+    """A feedback bullet whose remark contains an inner smart-quoted span is captured whole, not truncated at the first quote character."""
+    bullet = '- "The phrase ”as such” is filler — *as such* must be cut."'
+    parsed = capture.parse_transcript(f"## Maintainer feedback\n{bullet}\n")
+    assert parsed["feedback"], "expected the feedback bullet to be captured"
+    remark = parsed["feedback"][0]
+    # The fault *as such* sits after the inner smart-quoted span; truncating at
+    # the first inner quote would drop it, so it must survive in the remark.
+    assert "*as such*" in remark, (
+        f"remark was truncated before its fault span: {remark!r}"
+    )
+
+
 def test_propose_writes_nothing_to_disk() -> None:
     """propose() is pure: it returns a candidate without touching evals.json or any per-skill file."""
     before = (EVALS / "evals.json").read_text()
@@ -229,6 +275,9 @@ def _run() -> int:
         test_write_assertions_are_negative_or_structural_shape,
         test_names_are_anonymised_in_the_proposed_fixture,
         test_anonymiser_scrubs_names_but_keeps_anglicism_terms,
+        test_names_in_assertion_text_and_source_are_anonymised,
+        test_change_to_and_should_be_connectives_pair_fault_with_target,
+        test_inner_smart_quoted_span_does_not_truncate_a_fault_remark,
         test_propose_writes_nothing_to_disk,
         test_commit_appends_object_form_case_and_regenerates_flattened_per_skill,
         test_commit_strips_the_propose_only_source_trace,
