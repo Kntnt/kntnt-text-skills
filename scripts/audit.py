@@ -768,6 +768,78 @@ def locate_block(text: str, block: str) -> int | None:
     return text.count("\n", 0, idx) + 1
 
 
+def check_default_iteration_consistency() -> CheckResult:
+    """Check (k) – the polish default is one subagent iteration, stated
+    consistently across the two skills that own it and the protocol that
+    serves them.
+
+    Per the issue that introduced the default, `/write` (Phase 4) and `/edit`
+    (Phase 3) default to `--max-iterations=1`; explicit `0` is the documented
+    opt-out, `2` / `3` still raise the ceiling. The guard exists so a later
+    edit cannot silently re-pin the default to `0` in one file while the
+    others read `1` – the exact drift the issue was filed to remove. It is a
+    text-shape check, not a semantic one: it pins the `(default)` marker to
+    `=1`, forbids it on `=0`, and forbids the stale single-pass and
+    no-subagent-by-default phrasings that contradict the new default."""
+
+    result = CheckResult(name="(k) default iteration consistency")
+
+    # Both skill files must mark =1 as the default and =0 as the opt-out, and
+    # must not carry the stale "default 0 is a single pass" intro line.
+    iteration_skills = ("write", "edit")
+    for skill_name in iteration_skills:
+        skill_md = SKILLS_DIR / skill_name / "SKILL.md"
+        text = read_text(skill_md)
+        rel = relpath(skill_md)
+        if not re.search(r"--max-iterations=1`?\s*\(default\)", text):
+            result.findings.append(
+                Finding(
+                    check=result.name,
+                    path=rel,
+                    line=None,
+                    message="--max-iterations=1 is not marked as the default",
+                )
+            )
+        if re.search(r"--max-iterations=0`?\s*\(default\)", text):
+            result.findings.append(
+                Finding(
+                    check=result.name,
+                    path=rel,
+                    line=None,
+                    message="--max-iterations=0 is still marked as the default",
+                )
+            )
+        if "default 0 is a single pass" in text:
+            result.findings.append(
+                Finding(
+                    check=result.name,
+                    path=rel,
+                    line=None,
+                    message="stale 'default 0 is a single pass' phrasing remains",
+                )
+            )
+
+    # The subagent protocol must not reassert that the default is no
+    # subagent round – that line contradicts the new skill default.
+    subagent_md = PROTOCOLS_DIR / "subagent.md"
+    subagent_text = read_text(subagent_md)
+    stale_phrases = (
+        "The default behaviour of the calling skill is therefore no subagent round",
+        "`N=0` means do not invoke this protocol",
+    )
+    for phrase in stale_phrases:
+        if phrase in subagent_text:
+            result.findings.append(
+                Finding(
+                    check=result.name,
+                    path=relpath(subagent_md),
+                    line=None,
+                    message=f"stale default wording contradicts the new default: {phrase!r}",
+                )
+            )
+    return result
+
+
 CHECKS: tuple[Callable[[], CheckResult], ...] = (
     check_skill_lib_paths,
     check_genre_symmetry,
@@ -779,6 +851,7 @@ CHECKS: tuple[Callable[[], CheckResult], ...] = (
     check_plugin_json_and_version,
     check_language_inherits,
     check_trigger_duplication,
+    check_default_iteration_consistency,
 )
 
 
