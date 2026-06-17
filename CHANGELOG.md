@@ -8,6 +8,7 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 
 ### Added
 
+- **`author.email` in `.claude-plugin/plugin.json`** (`thomas@kntnt.com`), the one recommended manifest field that was absent, bringing the plugin into line with the rest of the Kntnt family. The audit's `plugin.json` shape check (h) now also requires an `author` object with a syntactically valid `author.email`, so the field cannot silently drop out or regress.
 - `.claude/settings.json` – a tracked, curated settings file with the recommended `Bash(uv:*)` permission; `.gitignore` is narrowed (`.claude/*` plus `!.claude/settings.json`) so the shared file is versioned while per-user `.claude/` state (`settings.local.json`, the local `worktrees/`, and the like) stays ignored.
 
 ### Changed
