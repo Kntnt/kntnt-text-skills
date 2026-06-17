@@ -9,7 +9,7 @@ Walks you through writing a piece from a brief: first you agree on the brief its
 
 ## Language determination
 
-Resolve the language via `../../lib/protocols/language-resolution.md` in *propose mode* – propose a target language based on the prompt's language (Swedish prompt → Swedish text) and any source material, and confirm with the user. Honour the chosen language for the rest of the run.
+Resolve the language via `${CLAUDE_PLUGIN_ROOT}/lib/protocols/language-resolution.md` in *propose mode* – propose a target language based on the prompt's language (Swedish prompt → Swedish text) and any source material, and confirm with the user. Honour the chosen language for the rest of the run.
 
 Phase 3 (draft) and Phase 4 (redline + subagent) use both the *Mechanics* and *Style* sections of the loaded language file. When the file has no *Style* section (or when only `default-mechanics.md` is loaded), drafting proceeds with the universal style foundation in `rules/style.md` carrying the style layer.
 
@@ -25,7 +25,7 @@ Propose values for the nine briefing fields based on the prompt and any availabl
 6. **Hook** – the B in ABT.
 7. **Channel** – web, press release, e-book chapter, case study, newsletter, etc.
 8. **Length** – approximate word count.
-9. **Content type** – one of the installed types in `../../lib/genres/` plus the default technique from that type's frontmatter (or the user's named override).
+9. **Content type** – one of the installed types in `${CLAUDE_PLUGIN_ROOT}/lib/genres/` plus the default technique from that type's frontmatter (or the user's named override).
 
 For each field, present the proposed value and let the user accept, modify or discuss. No field is silently filled. Acceptance can be expressed as a blanket *accept all* – that is itself a position-taking and is honoured.
 
@@ -51,21 +51,21 @@ Apply the same review machinery as `/edit` to the draft.
 
 ### Rule application for Phase 4
 
-Apply the universal punctuation rules in `../../lib/rules/writing.md` always. Apply the matching sections of `../../lib/rules/constructions.md` (quotation, abbreviation, headed-text, lists) only when the draft contains those constructions. Section-level filtering is cognitive – the file is loaded in full as part of Batch 2 below and the relevant sections are read against the draft once it exists.
+Apply the universal punctuation rules in `${CLAUDE_PLUGIN_ROOT}/lib/rules/writing.md` always. Apply the matching sections of `${CLAUDE_PLUGIN_ROOT}/lib/rules/constructions.md` (quotation, abbreviation, headed-text, lists) only when the draft contains those constructions. Section-level filtering is cognitive – the file is loaded in full as part of Batch 2 below and the relevant sections are read against the draft once it exists.
 
-Then apply `../../lib/protocols/proofread.md` (silent Phase 4a) against those rule files and the *Mechanics* section of the loaded language file, followed by `../../lib/protocols/redline.md` (Phase 4b) against `../../lib/rules/style.md`, the *Style* section of the language file, the chosen genre file and the chosen technique file – producing a finding list.
+Then apply `${CLAUDE_PLUGIN_ROOT}/lib/protocols/proofread.md` (silent Phase 4a) against those rule files and the *Mechanics* section of the loaded language file, followed by `${CLAUDE_PLUGIN_ROOT}/lib/protocols/redline.md` (Phase 4b) against `${CLAUDE_PLUGIN_ROOT}/lib/rules/style.md`, the *Style* section of the language file, the chosen genre file and the chosen technique file – producing a finding list.
 
 ### Settling
 
 **Default behaviour.** The main agent applies the finding list directly to the drafted text and delivers the polished result via the output protocol matching the input form (see *Files to read*). No subagent is invoked.
 
-**Subagent opt-in.** The subagent loop in `../../lib/protocols/subagent.md` runs only when explicitly requested. The ceiling on iterations comes from the `--max-iterations=N` flag in the invocation:
+**Subagent opt-in.** The subagent loop in `${CLAUDE_PLUGIN_ROOT}/lib/protocols/subagent.md` runs only when explicitly requested. The ceiling on iterations comes from the `--max-iterations=N` flag in the invocation:
 
 - `--max-iterations=0` (default): no subagent – main agent applies directly as above.
 - `--max-iterations=1` / `=2` / `=3`: invoke the subagent with that ceiling. The subagent's convergence rules in `subagent.md` still apply – if main agent and subagent agree after an earlier round, the loop stops there.
 - `N > 3` is clamped to 3 (the protocol maximum).
 
-**Natural-language parity.** For the phrases that map to `N`, see *Natural-language parity* in `../../lib/protocols/subagent.md` (loaded as part of Batch 2). The flag wins on conflict; ask if the prompt is ambiguous.
+**Natural-language parity.** For the phrases that map to `N`, see *Natural-language parity* in `${CLAUDE_PLUGIN_ROOT}/lib/protocols/subagent.md` (loaded as part of Batch 2). The flag wins on conflict; ask if the prompt is ambiguous.
 
 **Last-resort floor.** When the redline pass produces the last-resort finding from `protocols/redline.md`, the subagent floor is raised to 1 even if the flag is 0 – one round to sanity-check the observation before it reaches the user as a closing note.
 
@@ -75,7 +75,7 @@ The main agent has final decision authority. No user-facing summary of any inter
 
 The user can override the default technique in the `/write` prompt – *use ABT*, *force PAC*, *without ABT*, *no technique*. The override applies via Phase 1's *Content type* field – propose the override rather than the content type's default.
 
-If the user names a technique that has no corresponding file in `../../lib/techniques/` (e.g., *PAS* when only `abt.md` and `pac.md` are present), refuse and report:
+If the user names a technique that has no corresponding file in `${CLAUDE_PLUGIN_ROOT}/lib/techniques/` (e.g., *PAS* when only `abt.md` and `pac.md` are present), refuse and report:
 
 > Technique 'X' is not installed in the plugin. Available techniques: ABT, PAC. Add `lib/techniques/x.md` first, or choose an installed technique or proceed without a technique.
 
@@ -83,7 +83,7 @@ Techniques are not applied from training data; they must be present as installed
 
 ## Content-type detection
 
-At the start of Phase 1, read `../../lib/genres/_index.md` to retrieve all type metadata in one read. Match the user's prompt against the triggers semantically – canonical forms plus idiosyncratic terms are sufficient; infer compounds and conjugations. The best match becomes the proposal for the *Content type* field in Phase 1.
+At the start of Phase 1, read `${CLAUDE_PLUGIN_ROOT}/lib/genres/_index.md` to retrieve all type metadata in one read. Match the user's prompt against the triggers semantically – canonical forms plus idiosyncratic terms are sufficient; infer compounds and conjugations. The best match becomes the proposal for the *Content type* field in Phase 1.
 
 When the prompt or metadata triggers a disambiguation rule (blogginlägg → article-or-column; e-book chapter → ask per chapter), present the disambiguation question. Negative triggers (`not_triggers`) prevent false positives. If no genre matches clearly via triggers or semantic likeness, propose the genre whose frontmatter has `default: true` – do not read multiple genre files in full to compare.
 
@@ -97,24 +97,24 @@ Once the type is confirmed, read the content-type file. Skip sections preceded b
 
 **Batch 0.** Before Phase 1 begins:
 
-- `../../lib/genres/_index.md` – for Phase 1 content-type detection.
+- `${CLAUDE_PLUGIN_ROOT}/lib/genres/_index.md` – for Phase 1 content-type detection.
 
 **Batch 1.** After Phase 1 confirms the content type and technique:
 
-- The matching `../../lib/genres/<type>.md`.
-- The matching `../../lib/techniques/<technique>.md`.
+- The matching `${CLAUDE_PLUGIN_ROOT}/lib/genres/<type>.md`.
+- The matching `${CLAUDE_PLUGIN_ROOT}/lib/techniques/<technique>.md`.
 
 **Batch 2.** After Phase 2 confirmation, issue all remaining reads in parallel:
 
-- `../../lib/protocols/io.md` – input detection and output routing.
-- `../../lib/protocols/language-resolution.md` – language candidate, file inventory, overlay loader, fallback reporting.
-- `../../lib/protocols/proofread.md` – for Phase 4a.
-- `../../lib/protocols/redline.md` – for Phase 4b.
-- `../../lib/protocols/subagent.md` – for Phase 4 settling.
-- `../../lib/rules/constructions.md` – construction-scoped rules; the relevant sections are applied cognitively in Phase 4 against the draft.
-- `../../lib/rules/style.md` – substantive style guidance for drafting and Phase 4 review.
-- `../../lib/rules/writing.md` – universal punctuation rules.
-- The language file determined above: `../../lib/languages/<lang>.md` (otherwise `../../lib/languages/default-mechanics.md`).
+- `${CLAUDE_PLUGIN_ROOT}/lib/protocols/io.md` – input detection and output routing.
+- `${CLAUDE_PLUGIN_ROOT}/lib/protocols/language-resolution.md` – language candidate, file inventory, overlay loader, fallback reporting.
+- `${CLAUDE_PLUGIN_ROOT}/lib/protocols/proofread.md` – for Phase 4a.
+- `${CLAUDE_PLUGIN_ROOT}/lib/protocols/redline.md` – for Phase 4b.
+- `${CLAUDE_PLUGIN_ROOT}/lib/protocols/subagent.md` – for Phase 4 settling.
+- `${CLAUDE_PLUGIN_ROOT}/lib/rules/constructions.md` – construction-scoped rules; the relevant sections are applied cognitively in Phase 4 against the draft.
+- `${CLAUDE_PLUGIN_ROOT}/lib/rules/style.md` – substantive style guidance for drafting and Phase 4 review.
+- `${CLAUDE_PLUGIN_ROOT}/lib/rules/writing.md` – universal punctuation rules.
+- The language file determined above: `${CLAUDE_PLUGIN_ROOT}/lib/languages/<lang>.md` (otherwise `${CLAUDE_PLUGIN_ROOT}/lib/languages/default-mechanics.md`).
 
 ## Special handling
 

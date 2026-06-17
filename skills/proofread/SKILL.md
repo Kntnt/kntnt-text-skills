@@ -7,11 +7,11 @@ description: Conservative proofreading of an existing text – mechanical errors
 
 Conservative proofreading: corrects mechanical errors only (spelling, grammar, punctuation, typography per the loaded language). Doesn't touch style, word order or argumentation. Triggers on `/proofread`, the qualified form or natural-language requests like *proofread this* or *fix the typos*. Pass an optional language argument (`/proofread sv`, `/proofread en_GB`) to force a language; without it, the language is detected from the input.
 
-When activated, apply the procedure in `../../lib/protocols/proofread.md` to the user's input.
+When activated, apply the procedure in `${CLAUDE_PLUGIN_ROOT}/lib/protocols/proofread.md` to the user's input.
 
 ## Language determination
 
-Resolve the language via `../../lib/protocols/language-resolution.md` in *detect mode* – the source language is inferred from the input text. Only the *Mechanics* section of the loaded language file applies to this skill; the *Style* section is out of scope.
+Resolve the language via `${CLAUDE_PLUGIN_ROOT}/lib/protocols/language-resolution.md` in *detect mode* – the source language is inferred from the input text. Only the *Mechanics* section of the loaded language file applies to this skill; the *Style* section is out of scope.
 
 ## Genre selection
 
@@ -19,7 +19,7 @@ This skill does not consult a genre file – only mechanics apply. The plugin-wi
 
 ## Rule application
 
-Apply the universal punctuation rules in `../../lib/rules/writing.md` always. Apply the matching sections of `../../lib/rules/constructions.md` (quotation, abbreviation, headed-text, lists) only when the input contains those constructions. Section-level filtering is cognitive – the file is loaded in full and the relevant sections are read against the input.
+Apply the universal punctuation rules in `${CLAUDE_PLUGIN_ROOT}/lib/rules/writing.md` always. Apply the matching sections of `${CLAUDE_PLUGIN_ROOT}/lib/rules/constructions.md` (quotation, abbreviation, headed-text, lists) only when the input contains those constructions. Section-level filtering is cognitive – the file is loaded in full and the relevant sections are read against the input.
 
 ## Files to read
 
@@ -29,9 +29,9 @@ Apply the universal punctuation rules in `../../lib/rules/writing.md` always. Ap
 
 **Batch 1.** Issue these reads in parallel:
 
-- `../../lib/protocols/io.md` – input detection and output routing.
-- `../../lib/protocols/language-resolution.md` – language candidate, file inventory, overlay loader, fallback reporting.
-- `../../lib/protocols/proofread.md` – the procedure and the full scope.
-- `../../lib/rules/writing.md` – universal punctuation rules.
-- `../../lib/rules/constructions.md` – construction-scoped rules; apply the sections that match constructions in the input.
-- `../../lib/languages/<lang>.md` – the specific language file determined above (apply only its mechanics section). If none exists for the determined language, use `../../lib/languages/default-mechanics.md` instead.
+- `${CLAUDE_PLUGIN_ROOT}/lib/protocols/io.md` – input detection and output routing.
+- `${CLAUDE_PLUGIN_ROOT}/lib/protocols/language-resolution.md` – language candidate, file inventory, overlay loader, fallback reporting.
+- `${CLAUDE_PLUGIN_ROOT}/lib/protocols/proofread.md` – the procedure and the full scope.
+- `${CLAUDE_PLUGIN_ROOT}/lib/rules/writing.md` – universal punctuation rules.
+- `${CLAUDE_PLUGIN_ROOT}/lib/rules/constructions.md` – construction-scoped rules; apply the sections that match constructions in the input.
+- `${CLAUDE_PLUGIN_ROOT}/lib/languages/<lang>.md` – the specific language file determined above (apply only its mechanics section). If none exists for the determined language, use `${CLAUDE_PLUGIN_ROOT}/lib/languages/default-mechanics.md` instead.

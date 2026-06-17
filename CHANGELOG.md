@@ -13,6 +13,7 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 ### Changed
 
 - **`README.md` now documents `uv` as a runtime requirement for `/help`.** The *Requirements* section previously described `uv` as a contributor-only need (the audit hook); it now states that `/help` renders through a bundled `uv`-run script, so `uv` must be on `PATH` to use `/help`, while the writing skills themselves remain pure-prompt.
+- **Unified every skill's `lib/` substrate read on `${CLAUDE_PLUGIN_ROOT}/lib/...`.** The seven `SKILL.md` files previously addressed shared substrate (protocols, rules, languages, genres, techniques) through the `../../lib/...` relative form while the bundled `scripts/` already used the plugin-root variable. All 97 references now use `${CLAUDE_PLUGIN_ROOT}/lib/...`, so a read resolves against the installed plugin rather than the runtime working directory — one addressing style for every intra-plugin reference. Audit check (a) resolves the new form and now fails if the retired `../../lib/...` form reappears, and `docs/architecture.md` and `docs/authoring.md` describe the unified convention.
 
 ## [0.7.2] – 2026-06-04
 

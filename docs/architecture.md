@@ -109,7 +109,7 @@ kntnt-text-skills/
 └── README.md
 ```
 
-Each `SKILL.md` is a short entry point that references the shared modules via relative paths. Rules, language files, content types and techniques live in `lib/` so every skill can share the same rule set without duplication. All files outside `lib/languages/` are written in British English; language-specific conventions and examples live in the matching language layer files.
+Each `SKILL.md` is a short entry point that references the shared modules via the `${CLAUDE_PLUGIN_ROOT}/lib/...` plugin-root path, the same form the bundled `scripts/` are addressed with, so a read resolves against the installed plugin rather than the runtime working directory. Rules, language files, content types and techniques live in `lib/` so every skill can share the same rule set without duplication. All files outside `lib/languages/` are written in British English; language-specific conventions and examples live in the matching language layer files.
 
 ## Design principles
 

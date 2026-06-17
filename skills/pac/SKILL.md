@@ -13,4 +13,4 @@ When activated, load the technique file, then confirm briefly that PAC is ready.
 
 > The list below is a coverage requirement, not a sequence of unconditional reads. Before each Read, check whether the file's content is already in your conversation context – from any prior turn, phase or skill invocation in this session. If it is, skip it. The user's input file or URL is always fetched fresh.
 
-1. `../../lib/techniques/pac.md` – the technique: the three parts, where PAC applies, visibility, variants and concrete examples.
+1. `${CLAUDE_PLUGIN_ROOT}/lib/techniques/pac.md` – the technique: the three parts, where PAC applies, visibility, variants and concrete examples.
