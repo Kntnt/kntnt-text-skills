@@ -68,13 +68,18 @@ Confirm the proposed brief or input text and the case name the same way. Show
 each assertion's traced feedback remark so the maintainer can judge whether the
 assertion faithfully captures the fault.
 
-Eyeball the proposed **brief / input text for residual names**. Anonymisation is
-a capitalisation heuristic with a small prose-word allowlist, not robust
-named-entity recognition: a real name the allowlist happens to cover can slip
-through, and an ordinary capitalised word it misses can over-scrub to a
-`[Company N]` placeholder. Read the scrubbed fixture line by line and fix any
-leak or mis-scrub before committing — this manual pass is the privacy guarantee
-for a real capture, not the heuristic alone.
+Eyeball the proposed **brief / input text and every assertion's text for
+residual names**. The brief, input text and each assertion's `text` are all
+anonymised – the assertion text matters most, because it is the part that lands
+in `evals.json` (the `source` trace is dropped on commit, so it deliberately
+stays verbatim for provenance and is the one place a name you cited is expected
+to remain). Anonymisation is a capitalisation heuristic with a small prose-word
+allowlist, not robust named-entity recognition: a real name the allowlist
+happens to cover can slip through, and an ordinary capitalised word it misses
+can over-scrub to a `[Company N]` placeholder. Read each scrubbed assertion and
+the fixture line by line and fix any leak or mis-scrub before committing – this
+manual pass is the privacy guarantee for a real capture, not the heuristic
+alone.
 
 Then take a **commit-or-skip** decision:
 

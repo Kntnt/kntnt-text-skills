@@ -67,6 +67,17 @@ def _load_classifier():
 classify = _load_classifier()
 
 
+# The maintainer wraps each feedback remark in an outer pair of quotes — a
+# straight `"` or a smart left/right double quote (U+201C / U+201D). The opening
+# and closing classes hold each character once, and the capture is greedy so the
+# match runs from the first opening quote to the LAST closing quote on the line:
+# a remark that itself contains an inner smart-quoted span ("the phrase ”as
+# such” is filler") is then kept whole rather than truncated at the first inner
+# quote. A non-greedy capture would stop at that inner quote and silently drop
+# any fault named after it.
+_OUTER_QUOTE = re.compile(r"[\"“”](.+)[\"“”]")
+
+
 def parse_transcript(text: str) -> dict:
     """Split a capture transcript into header fields, feedback remarks and diff.
 
@@ -92,7 +103,7 @@ def parse_transcript(text: str) -> dict:
     feedback = _extract_section_bullets(text, "Maintainer feedback")
     quoted: list[str] = []
     for bullet in feedback:
-        quote = re.search(r"[\"“””“](.+?)[\"“””“]", bullet)
+        quote = _OUTER_QUOTE.search(bullet)
         quoted.append(quote.group(1).strip() if quote else bullet)
 
     # Capture the diff body from the fenced block under the Diff heading.
@@ -207,8 +218,8 @@ def _emphasise(term: str) -> str:
 _TARGET_CONNECTIVE = (
     r"(?:ska\s+(?:bli|vara)|m[åa]ste\s+bli|byt(?:\s+\w+)?\s+till|"
     r"[äa]ndra(?:\s+\w+)?\s+till|ers[äa]tt(?:\s+\w+)?\s+med|"
-    r"blir|→|->|becomes?|should\s+become|corrected\s+to|changed\s+to|"
-    r"replace[ds]?\s+with)"
+    r"blir|→|->|becomes?|should\s+(?:become|be)|corrected\s+to|"
+    r"chang(?:e[ds]?|ing)(?:\s+\w+)?\s+to|replace[ds]?\s+with)"
 )
 
 # An emphasised correction target, optionally one of several alternatives the
@@ -218,8 +229,13 @@ _TARGET_CONNECTIVE = (
 # separates independent clauses (a second fault), so they are deliberately not
 # alternative separators, keeping "…*ge värde*; *leverera*…" as two faults.
 _ALT_SEP = r"\s*(?:eller|or|och|and)\s+"
+# A fault that names its correction may put ordinary words between the fault span
+# and the connective ("*utilise* is jargon, change to *use*"), so non-emphasised
+# filler is allowed there. The filler is `[^*]*?` — it stops at the next `*`, so
+# an intervening emphasised span (a second fault) is never swallowed into this
+# pairing; that span pairs on its own match or stands alone as its own fault.
 _FAULT_TO_TARGETS = re.compile(
-    rf"\*([^*]+)\*\s*{_TARGET_CONNECTIVE}\s*"
+    rf"\*([^*]+)\*[^*]*?{_TARGET_CONNECTIVE}\s*"
     rf"\*([^*]+)\*(?:{_ALT_SEP}\*([^*]+)\*)*",
     re.IGNORECASE,
 )
@@ -366,8 +382,17 @@ def propose(transcript_path: pathlib.Path) -> dict:
     language = header.get("language", "")
     prompt = header.get("prompt", "")
 
-    # Build the dimension-tagged assertions, each carrying the verbatim remark it
-    # traces to so the ratification step can show provenance.
+    # Build the dimension-tagged assertions. The assertion `text` is the part
+    # that lands in the committed suite (commit() keeps only {text, dimension}),
+    # so it is anonymised: a name the maintainer cites inside a fault remark —
+    # *Marx's teorier*, an *Acme delivers value* phrase — otherwise survives
+    # verbatim into evals.json, the one leak the fixture-body scrub never reached.
+    # The `source` trace stays verbatim: it is a proposal-only aid the maintainer
+    # reads during ratification to recognise their own remark and is dropped on
+    # commit, so scrubbing it would only blur provenance without protecting the
+    # committed object. Classification keys off the unscrubbed shaped text and
+    # remark, where the lowercase fault vocabulary anonymisation never touches
+    # still carries the register/mechanics signal.
     expectations: list[dict] = []
     for remark in parsed["feedback"]:
         for seed in _faults_from_remark(remark):
@@ -376,7 +401,7 @@ def propose(transcript_path: pathlib.Path) -> dict:
                 continue
             expectations.append(
                 {
-                    "text": shaped,
+                    "text": anonymise(shaped),
                     "dimension": _classify_assertion(skill, shaped, remark),
                     "source": remark,
                 }
