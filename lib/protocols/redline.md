@@ -35,7 +35,7 @@ The redline pass walks the text in this order. The order matters: lower layers f
 3. **Technique integrity.** Is the arc (ABT or PAC) present and invisible (ABT) or appropriately visible (PAC)? Where is the B, where is the T, where is the C? If a beat is missing or buried, that is a finding.
 4. **Address and voice.** Does the address match the content type? Is the writer's voice consistent? Is "du" used where appropriate and avoided where not? Is the reader treated as a colleague, never condescendingly?
 5. **Cognitive load.** Are terms explained before use? Is the order from known to unknown? Is evidence presented before conclusion? Are tripwires removed?
-6. **Anglicisms and AI-tells.** Apply the Smell Test. Substitute. Rewrite.
+6. **Anglicisms and AI-tells.** Read this layer adversarially: assume the text is AI-generated or translated and test every sentence for the tells that prove it – the loaded language file's Smell Test and the AI-tell constructions in the loaded rule and language files. The assumption is about the text, not the writer; a sentence is suspect until it reads as natively written. Substitute. Rewrite. This is the one layer where the reviewer assumes the worst and keeps probing; *Confidence and silence* still governs whether a clean layer produces a finding.
 7. **Rhythm and transitions.** Sentence-length variation, seamless transitions, no announced bridges.
 8. **Precision and word choice.** Every word signals – review for unintended signals. Substitute approximate words for exact ones.
 9. **Paragraph and sentence mechanics.** Paragraph length, sentence length, list punctuation, comma vs dash vs parenthesis.

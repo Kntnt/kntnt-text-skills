@@ -5,7 +5,7 @@ description: Three-phase AFK editorial review of an existing text – silent pro
 
 # /edit
 
-Reviews your text for mechanical errors (spelling, grammar, punctuation) and editorial concerns (clarity, style, structure), applies the fixes automatically and returns the polished result. Optionally takes `--max-iterations=N` (0–3) to run additional review rounds that re-examine the fixes before delivery; default 0 is a single pass.
+Reviews your text for mechanical errors (spelling, grammar, punctuation) and editorial concerns (clarity, style, structure), applies the fixes automatically and returns the polished result. Optionally takes `--max-iterations=N` (0–3) to set how many adversarial review rounds re-examine the fixes before delivery; default 1 runs one round, `0` opts out, `2`/`3` raise the ceiling.
 
 ## Language determination
 
@@ -35,12 +35,13 @@ Resolve the genre and technique via `${CLAUDE_PLUGIN_ROOT}/lib/protocols/genre-r
 
 ## Phase 3 – settling
 
-**Default behaviour.** The main agent applies the finding list directly to the corrected text and delivers the polished result via the output protocol matching the input form (see *Files to read*). No subagent is invoked.
+**Default behaviour.** Run one adversarial review round through the subagent loop in `${CLAUDE_PLUGIN_ROOT}/lib/protocols/subagent.md`. The default exists because the main agent applying its own redline findings to its own corrected text, in the same context, is too weak a check for register – it converges on cosmetic edits and calls translated-reading prose publication-ready. One round of an adversarial register reviewer is the floor that catches the AI-tell and translated-reading faults a same-context pass misses.
 
-**Subagent opt-in.** The subagent loop in `${CLAUDE_PLUGIN_ROOT}/lib/protocols/subagent.md` runs only when explicitly requested. The ceiling on iterations comes from the `--max-iterations=N` flag in the invocation:
+**Iteration ceiling.** The `--max-iterations=N` flag sets how many rounds the loop may run:
 
-- `--max-iterations=0` (default): no subagent – main agent applies directly as above.
-- `--max-iterations=1` / `=2` / `=3`: invoke the subagent with that ceiling. The subagent's convergence rules in `subagent.md` still apply – if main agent and subagent agree after an earlier round, the loop stops there.
+- `--max-iterations=1` (default): one adversarial round. The subagent's convergence rules in `subagent.md` apply – the round runs, then the main agent applies what the dialogue settled and delivers.
+- `--max-iterations=2` / `=3`: raise the ceiling. The loop stops early once main agent and subagent agree, but may not stop before the adversarial register pass has run at least once.
+- `--max-iterations=0`: opt out – the main agent applies the finding list directly to the corrected text without a subagent round. This is the explicit escape hatch, not the default.
 - `N > 3` is clamped to 3 (the protocol maximum).
 
 **Natural-language parity.** For the phrases that map to `N`, see *Natural-language parity* in `${CLAUDE_PLUGIN_ROOT}/lib/protocols/subagent.md` (loaded as part of Batch 1). The flag wins on conflict; ask if the prompt is ambiguous.

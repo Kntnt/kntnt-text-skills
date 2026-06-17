@@ -5,7 +5,7 @@ description: Four-phase content creation from a brief – brief acquisition, ide
 
 # /write
 
-Walks you through writing a piece from a brief: first you agree on the brief itself (audience, purpose, angle, hook, channel, length, content type), then it proposes an idea, then drafts, then polishes the draft. Requires a language argument first (`sv`, `en_GB`, `en_US`); the brief follows. Optionally takes `--max-iterations=N` (0–3) to run additional review rounds during the polish step; default 0 is a single pass.
+Walks you through writing a piece from a brief: first you agree on the brief itself (audience, purpose, angle, hook, channel, length, content type), then it proposes an idea, then drafts, then polishes the draft. Requires a language argument first (`sv`, `en_GB`, `en_US`); the brief follows. Optionally takes `--max-iterations=N` (0–3) to set how many adversarial review rounds run during the polish step; default 1 runs one round, `0` opts out, `2`/`3` raise the ceiling.
 
 ## Language determination
 
@@ -57,12 +57,13 @@ Then apply `${CLAUDE_PLUGIN_ROOT}/lib/protocols/proofread.md` (silent Phase 4a) 
 
 ### Settling
 
-**Default behaviour.** The main agent applies the finding list directly to the drafted text and delivers the polished result via the output protocol matching the input form (see *Files to read*). No subagent is invoked.
+**Default behaviour.** Run one adversarial review round through the subagent loop in `${CLAUDE_PLUGIN_ROOT}/lib/protocols/subagent.md`. The default exists because the main agent applying its own redline findings to its own draft, in the same context, is too weak a check for register – it converges on cosmetic edits and calls translated-reading prose publication-ready. One round of an adversarial register reviewer is the floor that catches the AI-tell and translated-reading faults a same-context pass misses.
 
-**Subagent opt-in.** The subagent loop in `${CLAUDE_PLUGIN_ROOT}/lib/protocols/subagent.md` runs only when explicitly requested. The ceiling on iterations comes from the `--max-iterations=N` flag in the invocation:
+**Iteration ceiling.** The `--max-iterations=N` flag sets how many rounds the loop may run:
 
-- `--max-iterations=0` (default): no subagent – main agent applies directly as above.
-- `--max-iterations=1` / `=2` / `=3`: invoke the subagent with that ceiling. The subagent's convergence rules in `subagent.md` still apply – if main agent and subagent agree after an earlier round, the loop stops there.
+- `--max-iterations=1` (default): one adversarial round. The subagent's convergence rules in `subagent.md` apply – the round runs, then the main agent applies what the dialogue settled and delivers.
+- `--max-iterations=2` / `=3`: raise the ceiling. The loop stops early once main agent and subagent agree, but may not stop before the adversarial register pass has run at least once.
+- `--max-iterations=0`: opt out – the main agent applies the finding list directly to the drafted text without a subagent round. This is the explicit escape hatch, not the default.
 - `N > 3` is clamped to 3 (the protocol maximum).
 
 **Natural-language parity.** For the phrases that map to `N`, see *Natural-language parity* in `${CLAUDE_PLUGIN_ROOT}/lib/protocols/subagent.md` (loaded as part of Batch 2). The flag wins on conflict; ask if the prompt is ambiguous.
