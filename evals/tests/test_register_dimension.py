@@ -192,6 +192,50 @@ def test_known_ai_tell_and_restraint_assertions_are_tagged_correctly() -> None:
         )
 
 
+def test_negative_control_restraint_assertions_are_protocol() -> None:
+    """Negative-control and no-silent-rewrite restraint assertions classify protocol, not the mechanics fallback.
+
+    Locks the second wave of corrections. The fast-path discriminator and the
+    flow-load consequence in redline #404 assert a behaviour the standard flow
+    ran (protocol), not an output-form property. The proofread-scope and
+    output-unchanged restraint checks (proofread #5/#8/#14/#17, #19/#20/#21)
+    and the bare no-silent-rewrite traceability line in edit #219 are the same
+    negative-control discipline as their protocol-tagged siblings (#119,
+    #205/#211/#218) and must classify alike. The boundary holds in the other
+    direction too: edit #220's twin clause stays mechanics because its
+    assertion is led by a British-conventions-preserved mechanics body, so the
+    restraint clause is a trailing addendum rather than the graded content.
+    """
+    suite = json.loads((EVALS / "evals.json").read_text())
+    by_id_text = {
+        (case["id"], exp["text"]): exp["dimension"]
+        for case in suite["evals"]
+        for exp in case["expectations"]
+    }
+    expected = {
+        # #404 fast-path discriminator and flow-load consequence -> protocol.
+        (404, "Either condition broken: structural markers present (H1, standfirst, byline, attributed quote)."): "protocol",
+        (404, "The findings list (`## Findings` in the transcript) includes at least one finding that cites a review-scoped section of `lib/genres/article.md` — specifically the repetition rule between H1, standfirst, lead and first H2, OR one of the documented common pitfalls (visible ABT formula, standfirst and lead repeating each other, teasing subheadings, explicit bridges). This is the observable consequence of the standard flow loading the genre file's review-scoped sections."): "protocol",
+        # Proofread-scope and output-unchanged restraint -> protocol.
+        (5, "No style or word-order changes are made — proofread scope only."): "protocol",
+        (8, "No other word-order or content changes are made — proofread scope only."): "protocol",
+        (14, "No other word-order or content changes are made — proofread scope only."): "protocol",
+        (17, "No other word-order or content changes are made — proofread scope only."): "protocol",
+        (19, "The output text is unchanged from the input, OR any change is limited to whitespace-equivalent normalisation (no semantic edits)."): "protocol",
+        (20, "The output text is unchanged from the input, OR any change is limited to whitespace-equivalent normalisation."): "protocol",
+        (21, "The output text is unchanged from the input, OR any change is limited to whitespace-equivalent normalisation."): "protocol",
+        # Bare no-silent-rewrite traceability -> protocol, matching #205/#211/#218.
+        (219, "Any change applied in the edit is traceable to a finding in the transcript — no silent rewrites."): "protocol",
+        # The mechanics-led twin keeps its trailing restraint clause in mechanics.
+        (220, "British conventions are preserved (-ise spellings, single quotation marks, *Licence*); every applied change is traceable to a finding in the transcript — no silent rewrites."): "mechanics",
+    }
+    for key, want in expected.items():
+        assert key in by_id_text, f"assertion not found in suite: {key}"
+        assert by_id_text[key] == want, (
+            f"case {key[0]} expected {want}, got {by_id_text[key]}: {key[1]!r}"
+        )
+
+
 def test_aggregator_warns_on_unmatched_graded_text() -> None:
     """A graded assertion whose text does not join to a dimension is surfaced, not dropped silently."""
     agg = _load("_aggregate", WS / "_aggregate.py")
@@ -288,6 +332,7 @@ def _run() -> int:
         test_aggregator_splits_by_dimension,
         test_committed_suite_matches_the_classifier,
         test_known_ai_tell_and_restraint_assertions_are_tagged_correctly,
+        test_negative_control_restraint_assertions_are_protocol,
         test_aggregator_warns_on_unmatched_graded_text,
         test_aggregator_dry_run_emits_a_register_sub_score,
     ]
