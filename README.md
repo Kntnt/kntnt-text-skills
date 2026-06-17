@@ -19,7 +19,7 @@ The skills come in three groups: four task skills that do the work (`/proofread`
 - Per-language conventions split into a mechanics layer (proofread scope) and a style layer (redline / edit scope), shipping with Swedish, British English and American English plus an international fallback.
 - Ten content types – article, case study, press release, web copy, teaser, report, column, opinion piece, GitHub README and a general fallback – each with its own genre file.
 - Two structural techniques, ABT and PAC, applied only from installed files.
-- An opt-in subagent loop for deeper polish, off by default and bounded to three iterations.
+- An adversarial subagent review loop: `/write` and `/edit` default to one round, `/redline`'s delegation tail is opt-in, and the ceiling is bounded to three iterations.
 - Plugin-anchored triggers: skills activate only on explicit invocation, never on a bare action word.
 - Self-contained: no external libraries or MCP servers required.
 
@@ -39,7 +39,7 @@ Ad copy, Google Ads copy and bare social-media posts without a teaser purpose ar
 
 The plugin runs in Claude Code or Cowork and needs support for slash commands, YAML frontmatter (including `disable-model-invocation`) and subagents. No external libraries or MCP servers are required; the plugin is self-contained.
 
-Subagents drive the opt-in `--max-iterations=N` loop in `/edit`, `/write` and `/redline`, and the automatic one-round floor when the redline pass surfaces a last-resort finding. The `/help` command renders through a bundled [`uv`](https://docs.astral.sh/uv/)-run script, so `uv` must be on `PATH` to use `/help`; the writing skills themselves are pure-prompt and need nothing beyond the host. Contributors who run the audit hook need `uv` too – see [Development](#development).
+Subagents drive the `--max-iterations=N` review loop in `/edit`, `/write` and `/redline` – one adversarial round by default in `/edit` and `/write`, opt-in for `/redline`'s delegation tail – and the automatic one-round floor when the redline pass surfaces a last-resort finding. The `/help` command renders through a bundled [`uv`](https://docs.astral.sh/uv/)-run script, so `uv` must be on `PATH` to use `/help`; the writing skills themselves are pure-prompt and need nothing beyond the host. Contributors who run the audit hook need `uv` too – see [Development](#development).
 
 ## Installation
 
@@ -99,7 +99,7 @@ The away-from-keyboard variant of `/redline`: the same proofread and critical-re
 /edit --max-iterations=2 @draft.md
 ```
 
-The default is a single direct pass. `--max-iterations=1`, `=2` or `=3` – or a natural-language equivalent such as *deep review*, *two rounds max* or *one round* – opts into a subagent loop with that ceiling (clamped to three).
+The default is one adversarial subagent round. `--max-iterations=2` or `=3` – or a natural-language equivalent such as *deep review* or *two rounds max* – raises the ceiling (clamped to three); `--max-iterations=0` (or *skip subagent*) opts out and runs a single direct pass.
 
 ### `/write`
 
@@ -110,7 +110,7 @@ Content creation from a brief or from source material, in four phases: brief acq
 /write en_GB Draft a column on the agency market consolidation
 ```
 
-Pass `--max-iterations=N` on the invocation to opt the polish into a subagent loop. You can override the content type's default technique in the prompt – *use ABT*, *force PAC*, *no technique* – and a technique with no installed file is refused with the alternatives named.
+The polish defaults to one adversarial subagent round; pass `--max-iterations=2` or `=3` to raise the ceiling, or `--max-iterations=0` to opt out and run a single direct pass. You can override the content type's default technique in the prompt – *use ABT*, *force PAC*, *no technique* – and a technique with no installed file is refused with the alternatives named.
 
 ### Context loaders: `/writing-rules`, `/abt`, `/pac`
 
