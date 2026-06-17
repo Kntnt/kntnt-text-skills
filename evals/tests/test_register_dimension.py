@@ -133,6 +133,81 @@ def test_aggregator_splits_by_dimension() -> None:
     assert register == {"passed": 1, "total": 2}
 
 
+def test_committed_suite_matches_the_classifier() -> None:
+    """Every committed dimension equals the classifier's output — the suite is kept in sync, not hand-patched.
+
+    The README and the classifier docstring promise the committed suite tracks
+    the classifier's editorial rules. A divergence here means a mis-tag was
+    left in the file (or a rule drifted) instead of being fixed at the rule —
+    exactly the gap that let the AI-tell / restraint / protocol mis-tags ship.
+    """
+    cd = _load("classify_dimensions", EVALS / "classify_dimensions.py")
+    suite = json.loads((EVALS / "evals.json").read_text())
+    divergences = [
+        (case["id"], exp["dimension"], cd.classify(exp["text"]), exp["text"])
+        for case in suite["evals"]
+        for exp in case["expectations"]
+        if exp["dimension"] != cd.classify(exp["text"])
+    ]
+    assert not divergences, (
+        f"{len(divergences)} committed dimension(s) diverge from the classifier; "
+        f"first: case {divergences[0][0]} committed={divergences[0][1]!r} "
+        f"classifier={divergences[0][2]!r} :: {divergences[0][3]!r}"
+    )
+
+
+def test_known_ai_tell_and_restraint_assertions_are_tagged_correctly() -> None:
+    """The previously mis-tagged AI-tell, restraint and protocol assertions carry the editorially correct dimension.
+
+    Locks the specific corrections: bare-phrased AI-tell / opening-cliché
+    assertions are register (matching their near-identical siblings); the
+    fast-path short-text restraint checks are protocol (a negative control,
+    not a register property); and the procedural assertions that previously
+    dropped to the mechanics fallback are protocol.
+    """
+    suite = json.loads((EVALS / "evals.json").read_text())
+    by_id_text = {
+        (case["id"], exp["text"]): exp["dimension"]
+        for case in suite["evals"]
+        for exp in case["expectations"]
+    }
+    expected = {
+        # Bare-phrased AI-tells / opening clichés -> register (Finding 1).
+        (115, "*In a world where…*, *It's worth noting that…*, *Let me be perfectly clear* are flagged."): "register",
+        (208, "*To summarize* opening a conclusion is rewritten."): "register",
+        # Fast-path short-text restraint -> protocol (Finding 2).
+        (112, "Finding list (if any) is short and reflects the everyday-text register."): "protocol",
+        (117, "Findings (if any) are short and reflect everyday-text register."): "protocol",
+        # Procedural assertions that fell to the mechanics fallback -> protocol (Finding 3).
+        (216, "Values above 3 would be clamped to 3 (protocol maximum)."): "protocol",
+        (404, "`lib/genres/_index.md` is read and trigger-matched."): "protocol",
+        (405, "If the flag and the natural-language phrase conflict, the flag wins; if ambiguous, ask the user."): "protocol",
+        (406, "Output is the polished text, with no user-facing dialogue (the AFK variant)."): "protocol",
+        (402, "Inheritance is one step only — the base `sv.md` does not itself inherit."): "protocol",
+    }
+    for key, want in expected.items():
+        assert key in by_id_text, f"assertion not found in suite: {key}"
+        assert by_id_text[key] == want, (
+            f"case {key[0]} expected {want}, got {by_id_text[key]}: {key[1]!r}"
+        )
+
+
+def test_aggregator_warns_on_unmatched_graded_text() -> None:
+    """A graded assertion whose text does not join to a dimension is surfaced, not dropped silently."""
+    agg = _load("_aggregate", WS / "_aggregate.py")
+    graded = [
+        {"text": "joins fine", "passed": True},
+        {"text": "drifted text not in suite", "passed": False},
+    ]
+    dim_by_text = {"joins fine": "mechanics"}
+
+    unmatched = agg.unmatched_texts(graded, dim_by_text)
+    assert unmatched == ["drifted text not in suite"], unmatched
+    # The matched entry still scores; only the drifted one is excluded.
+    by_dim = agg.split_by_dimension(graded, dim_by_text)
+    assert by_dim["mechanics"] == {"passed": 1, "total": 1}
+
+
 def test_aggregator_dry_run_emits_a_register_sub_score() -> None:
     """A dry run of the aggregator over a synthetic graded tree prints both sub-scores, the register line carrying its n."""
     suite = {
@@ -211,6 +286,9 @@ def _run() -> int:
         test_suite_file_is_object_form_with_valid_dimensions,
         test_per_skill_files_are_flattened_plain_strings,
         test_aggregator_splits_by_dimension,
+        test_committed_suite_matches_the_classifier,
+        test_known_ai_tell_and_restraint_assertions_are_tagged_correctly,
+        test_aggregator_warns_on_unmatched_graded_text,
         test_aggregator_dry_run_emits_a_register_sub_score,
     ]
     failures = 0
