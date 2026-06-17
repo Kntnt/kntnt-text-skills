@@ -20,17 +20,80 @@ import sys
 from collections import defaultdict
 from statistics import mean, stdev
 
+# Default repository root, resolved from this file's location. The suite and
+# workspace are read relative to it at run time (overridable via --repo) so the
+# module imports without touching the filesystem.
 REPO = pathlib.Path(__file__).resolve().parents[2]
-SUITE = json.loads((REPO / "evals" / "evals.json").read_text())
-WS = REPO / "evals" / "workspace"
+
+# The three scoring dimensions split into two reported numbers: the hard
+# release gate pools protocol and mechanics; register is the tracked
+# improvement target, reported separately with its assertion count.
+GATE_DIMENSIONS = ("protocol", "mechanics")
+REGISTER_DIMENSION = "register"
 
 
-def collect_records(iteration: int, runs: int) -> list[dict]:
-    """Read every run's grading.json into a list of records."""
+def build_dim_by_text(suite: dict) -> dict[str, str]:
+    """Map each assertion's verbatim text to its dimension from the suite file.
+
+    The grader prompt grades a flat list of strings and writes each result
+    back under the same verbatim `text`, so re-joining the dimension by text
+    is exact. Flat-string assertions (an un-migrated suite) carry no
+    dimension and are skipped, which leaves them out of the sub-scores rather
+    than guessing.
+    """
+    dim_by_text: dict[str, str] = {}
+    for case in suite["evals"]:
+        for exp in case["expectations"]:
+            if isinstance(exp, dict) and "dimension" in exp:
+                dim_by_text[exp["text"]] = exp["dimension"]
+    return dim_by_text
+
+
+def split_by_dimension(
+    graded: list[dict], dim_by_text: dict[str, str]
+) -> dict[str, dict[str, int]]:
+    """Tally graded assertions into `{dimension: {passed, total}}` by text.
+
+    `graded` is a flat list of grading.json expectation entries (`text`,
+    `passed`); `dim_by_text` joins each back to its dimension. Assertions
+    whose text is not in the map are ignored so a stray grading entry cannot
+    distort a sub-score.
+    """
+    by_dim: dict[str, dict[str, int]] = defaultdict(lambda: {"passed": 0, "total": 0})
+    for entry in graded:
+        dimension = dim_by_text.get(entry["text"])
+        if dimension is None:
+            continue
+        by_dim[dimension]["total"] += 1
+        if entry["passed"]:
+            by_dim[dimension]["passed"] += 1
+    return dict(by_dim)
+
+
+def gate_score(by_dim: dict[str, dict[str, int]]) -> dict[str, int]:
+    """Pool the hard-gate dimensions (protocol + mechanics) into one count."""
+    passed = sum(by_dim.get(d, {}).get("passed", 0) for d in GATE_DIMENSIONS)
+    total = sum(by_dim.get(d, {}).get("total", 0) for d in GATE_DIMENSIONS)
+    return {"passed": passed, "total": total}
+
+
+def register_score(by_dim: dict[str, dict[str, int]]) -> dict[str, int]:
+    """Return the register sub-score and its n, the improvement target."""
+    register = by_dim.get(REGISTER_DIMENSION, {"passed": 0, "total": 0})
+    return {"passed": register["passed"], "total": register["total"]}
+
+
+def collect_records(iteration: int, runs: int, ws: pathlib.Path, suite: dict) -> list[dict]:
+    """Read every run's grading.json into a list of records.
+
+    Alongside the per-run pass-rate summary, each record carries the flat
+    list of graded `{text, passed}` expectation entries so the dimension
+    breakout can be tallied downstream without re-reading the files.
+    """
     records = []
-    for case in SUITE["evals"]:
+    for case in suite["evals"]:
         base = (
-            WS
+            ws
             / case["skill_name"]
             / f"iteration-{iteration}"
             / f"eval-{case['id']:03d}-{case['name']}"
@@ -39,6 +102,7 @@ def collect_records(iteration: int, runs: int) -> list[dict]:
             run_rates = []
             run_passed = []
             run_total = []
+            graded: list[dict] = []
             for run_n in range(1, runs + 1):
                 g_path = base / cfg / f"run-{run_n}" / "grading.json"
                 if not g_path.exists():
@@ -48,6 +112,7 @@ def collect_records(iteration: int, runs: int) -> list[dict]:
                 run_passed.append(summ["passed"])
                 run_total.append(summ["total"])
                 run_rates.append(summ["pass_rate"])
+                graded.extend(g.get("expectations", []))
             if not run_rates:
                 continue
             records.append(
@@ -62,6 +127,7 @@ def collect_records(iteration: int, runs: int) -> list[dict]:
                     "total_total": sum(run_total),
                     "mean_rate": mean(run_rates),
                     "stddev_rate": stdev(run_rates) if len(run_rates) > 1 else 0.0,
+                    "graded": graded,
                 }
             )
     return records
@@ -115,6 +181,62 @@ def write_per_skill(records: list[dict], out: list[str]) -> None:
             f"{fmt_rate(wo_passed, wo_total)} "
             f"({fmt_mean_stddev(wo_recs)}) | {delta:+.0f} pp |"
         )
+
+
+def write_dimension_breakout(
+    records: list[dict], dim_by_text: dict[str, str], out: list[str]
+) -> None:
+    """Append the two-sub-score breakout (hard gate vs. register) to `out`.
+
+    Only the with-skill configuration is scored here — the split exists to
+    separate the protocol/mechanics release gate from the register
+    improvement target on the side the skill drives. Each skill row and the
+    overall row carry the pooled gate score and the register score with its
+    assertion count (its n), so a register value below 100 % reads as a
+    tracked target rather than a blocker.
+    """
+    out.append("\n## Sub-score breakout (with-skill)")
+    out.append(
+        "Protocol/mechanics is the hard release gate (any regression blocks). "
+        "Register is a tracked improvement target — reported with its n, where "
+        "only a regression against the prior register baseline is flagged."
+    )
+    out.append("\n| Skill | Protocol/mechanics gate | Register (improvement) |")
+    out.append("|---|---|---|")
+    by_skill = defaultdict(list)
+    for r in records:
+        if r["config"] == "with_skill":
+            by_skill[r["skill"]].append(r)
+    overall_graded: list[dict] = []
+    for skill in ("proofread", "redline", "edit", "write"):
+        if skill not in by_skill:
+            continue
+        graded = [e for r in by_skill[skill] for e in r["graded"]]
+        overall_graded.extend(graded)
+        by_dim = split_by_dimension(graded, dim_by_text)
+        gate = gate_score(by_dim)
+        register = register_score(by_dim)
+        out.append(
+            f"| {skill} | {fmt_rate(gate['passed'], gate['total'])} | "
+            f"{fmt_register(register)} |"
+        )
+    overall_by_dim = split_by_dimension(overall_graded, dim_by_text)
+    overall_gate = gate_score(overall_by_dim)
+    overall_register = register_score(overall_by_dim)
+    out.append(
+        f"| **overall** | "
+        f"**{fmt_rate(overall_gate['passed'], overall_gate['total'])}** | "
+        f"**{fmt_register(overall_register)}** |"
+    )
+
+
+def fmt_register(register: dict[str, int]) -> str:
+    """Format the register sub-score as `passed / n (pct%)`, carrying its n explicitly."""
+    n = register["total"]
+    if not n:
+        return "n/a (n=0)"
+    pct = round(100 * register["passed"] / n)
+    return f"{register['passed']} / {n} ({pct}%, n={n})"
 
 
 def write_per_language(records: list[dict], out: list[str]) -> None:
@@ -222,8 +344,23 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--iteration", type=int, default=2)
     parser.add_argument("--runs", type=int, default=3)
+    parser.add_argument(
+        "--repo",
+        type=pathlib.Path,
+        default=REPO,
+        help="Repository root to read evals/evals.json and evals/workspace/ from "
+        "(defaults to the checkout this script lives in; overridable for tests)",
+    )
     args = parser.parse_args()
-    records = collect_records(args.iteration, args.runs)
+
+    # Resolve the suite and workspace from the chosen repo so the breakout can
+    # be exercised against a synthetic tree without touching the real checkout.
+    repo = args.repo.resolve()
+    suite = json.loads((repo / "evals" / "evals.json").read_text())
+    ws = repo / "evals" / "workspace"
+    dim_by_text = build_dim_by_text(suite)
+
+    records = collect_records(args.iteration, args.runs, ws, suite)
     if not records:
         print(
             f"No grading.json data found for iteration {args.iteration}",
@@ -238,6 +375,7 @@ def main() -> int:
         f"target runs per config: {args.runs}.",
     ]
     write_per_skill(records, out)
+    write_dimension_breakout(records, dim_by_text, out)
     write_per_language(records, out)
     write_required_cases(records, out)
     write_overall(records, out)

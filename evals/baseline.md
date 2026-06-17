@@ -10,8 +10,18 @@
 > case 404 rewrite) carry fresh iteration-2 numbers. Variance was not
 > measured because each case ran once per configuration; the stddev cells
 > below are blank by design. From this point on, regressions are measured
-> against this baseline; any drop in the with-skill pass rate is a
-> release blocker until investigated.
+> against this baseline along two separate axes (see *Release gate* below):
+> a drop in the with-skill **protocol/mechanics** sub-score is a release
+> blocker until investigated, while **register** is a tracked improvement
+> target where only a regression against the prior register sub-score is
+> flagged.
+
+## Release gate
+
+The with-skill score splits into two numbers, scored per the `dimension` tag every assertion now carries (`protocol`, `mechanics`, `register`; see `evals/README.md`):
+
+- **Protocol/mechanics sub-score – the hard gate.** Protocol behaviour (genre/technique commit, fast-path, fallback, overlay, max-iterations parsing, last-resort floor, phase ordering, dialogue and false-positive discipline) and mechanics (typography, spelling, quotation marks, genitive, document structure) pool into one rate, expected ~100 %. **Any regression here blocks the release** until investigated.
+- **Register sub-score – the improvement target.** Anglicism interference, AI-tell removal, address and voice, jargon and clichés are scored separately and always reported with their assertion count (`n`). A value below 100 % is **not itself a blocker** – register quality is something the suite tracks and improves over time. Only a regression against the prior register sub-score is flagged. `_aggregate.py` prints both numbers under *Sub-score breakout*. At this baseline the register sub-score is at 100 % on the synthetic cases that carry register assertions; the real, sub-100 % register cases that exercise the target land in a later slice.
 
 ## Suite shape
 
@@ -126,4 +136,4 @@ Per-case timing and token use were not stored at run time. Variance was not meas
 1. Re-run the pipeline per the *Running the suite* section in `evals/README.md` for each of the four skills, from a terminal where `claude` is authenticated (not from inside a Claude Code session). `uv run evals/workspace/_runner.py --iteration <N> --runs <R>` drives the full suite; `--skill <name>` and `--case-ids <list>` scope down for partial sweeps.
 2. Aggregate the per-skill grading outputs and refresh the tables above.
 3. Update the front-matter note with the new ISO date and the plugin version being baselined.
-4. Commit the refreshed `baseline.md`. From that point on, regressions are measured against the new baseline; any drop in the with-skill pass rate is a release blocker until investigated.
+4. Commit the refreshed `baseline.md`. From that point on, regressions are measured against the new baseline per the split *Release gate* above: a drop in the with-skill protocol/mechanics sub-score blocks the release until investigated, while a drop in the register sub-score is flagged as a tracked regression of the improvement target rather than a hard blocker.

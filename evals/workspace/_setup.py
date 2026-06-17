@@ -50,6 +50,21 @@ def main() -> None:
             / f"eval-{case['id']:03d}-{case['name']}"
         )
         case_dir.mkdir(parents=True, exist_ok=True)
+        # Expectations are object-form `{text, dimension}` in the suite. The
+        # grader grades a flat list of strings, so `assertions` carries only
+        # the text and the grader prompt stays unchanged; the parallel
+        # `assertion_dimensions` list (same order) carries the dimensions
+        # through for the aggregator's sub-score breakout. A still-flat suite
+        # degrades gracefully — the text is the string itself, the dimension
+        # unknown.
+        expectations = case.get("expectations", [])
+        assertions = [
+            exp["text"] if isinstance(exp, dict) else exp for exp in expectations
+        ]
+        assertion_dimensions = [
+            exp.get("dimension") if isinstance(exp, dict) else None
+            for exp in expectations
+        ]
         meta = {
             "eval_id": case["id"],
             "eval_name": case["name"],
@@ -58,7 +73,8 @@ def main() -> None:
             "prompt": case["prompt"],
             "files": case.get("files", []),
             "expected_output": case.get("expected_output", ""),
-            "assertions": case.get("expectations", []),
+            "assertions": assertions,
+            "assertion_dimensions": assertion_dimensions,
         }
         (case_dir / "eval_metadata.json").write_text(
             json.dumps(meta, indent=2, ensure_ascii=False) + "\n"

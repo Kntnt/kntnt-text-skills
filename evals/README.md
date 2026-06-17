@@ -4,17 +4,27 @@ Test cases that exercise the four task skills – `/proofread`, `/redline`, `/ed
 
 ## Layout
 
-- `evals.json` – single aggregated suite. Every case carries `skill_name`, so it can be routed per skill while keeping one canonical list.
-- `<skill>/evals.json` – per-skill files (`proofread`, `redline`, `edit`, `write`) generated from the aggregated file. Each matches the per-skill schema in `skill-creator/references/schemas.md`. Use these when the runner expects one `evals.json` per skill directory.
+- `evals.json` – single aggregated suite. Every case carries `skill_name`, so it can be routed per skill while keeping one canonical list. Each `expectations[]` element is an object `{text, dimension}`, where `dimension` is one of `protocol`, `mechanics` or `register` (see *Scoring dimensions* below).
+- `<skill>/evals.json` – per-skill files (`proofread`, `redline`, `edit`, `write`) generated from the aggregated file. Each matches the per-skill schema in `skill-creator/references/schemas.md`, whose `expectations` is a flat list of strings – so the per-skill files **flatten** the object-form assertions back to plain text. Use these when the runner expects one `evals.json` per skill directory.
 - `fixtures/` – committed input files referenced by `evals[].files`. Includes an overlay-loader fixture at `fixtures/lib/languages/sv_FI.md`.
 - `baseline.md` – populated baseline for version 0.5.5 (generated 2026-05-28); 363 assertions, 100 % with-skill across every skill, every language, every required case, every negative-control case and every Phase 3 dialogue case.
 - `workspace/` – runner output (per-iteration directories, grading JSON, HTML viewer). Gitignored.
 
-The aggregated `evals.json` is the source of truth. Regenerate the per-skill files when the aggregated file changes:
+The aggregated `evals.json` is the source of truth. Regenerate the per-skill files when the aggregated file changes – the regeneration flattens each `{text, dimension}` assertion to its `text` so the exports still validate against the stock skill-creator schema:
 
 ```bash
-python3 -c "import json,pathlib;d=json.load(open('evals/evals.json'));[pathlib.Path(f'evals/{s}/evals.json').write_text(json.dumps({'skill_name':s,'evals':[e for e in d['evals'] if e['skill_name']==s]},indent=2,ensure_ascii=False)) for s in ('proofread','redline','edit','write')]"
+python3 -c "import json,pathlib;d=json.load(open('evals/evals.json'));[pathlib.Path(f'evals/{s}/evals.json').write_text(json.dumps({'skill_name':s,'evals':[{**e,'expectations':[x['text'] if isinstance(x,dict) else x for x in e['expectations']]} for e in d['evals'] if e['skill_name']==s]},indent=2,ensure_ascii=False)+'\n') for s in ('proofread','redline','edit','write')]"
 ```
+
+## Scoring dimensions
+
+Every assertion in the aggregated suite carries a `dimension` so the aggregator can report two numbers instead of one pooled rate:
+
+- `protocol` – procedural behaviour (genre / technique commit, fast-path, fallback, overlay, max-iterations parsing, last-resort floor, phase ordering, dialogue discipline, false-positive restraint).
+- `mechanics` – objectively verifiable output form (typography, spelling, quotation marks, genitive, document structure).
+- `register` – anglicism interference, AI-tell removal, address and voice, jargon and clichés.
+
+`protocol` and `mechanics` pool into the **hard release gate** – expected ~100 %, any regression blocks. `register` is a separate **improvement target** – reported with its assertion count (`n`); a value below 100 % is not itself a blocker, only a regression against the prior register baseline is flagged. `_aggregate.py` prints both under *Sub-score breakout*. The dimension lives only in the aggregated file and in each per-case `eval_metadata.json` (as a parallel `assertion_dimensions` list); the grader still grades a flat list of strings, so `GRADER*.md` is unchanged. `classify_dimensions.py` documents the classification and can re-migrate the suite (`--write`) if assertions change; its output is hand-reviewed against editorial judgement before committing.
 
 ## Running the suite
 

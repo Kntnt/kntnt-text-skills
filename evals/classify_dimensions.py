@@ -1,0 +1,306 @@
+# /// script
+# requires-python = ">=3.12"
+# ///
+"""Classify each eval assertion into a scoring dimension.
+
+The eval suite scores three dimensions (issue #44): `protocol` (the hard
+release gate — genre commit, fast-path, fallback, overlay, max-iterations,
+last-resort, phase ordering), `mechanics` (typography, spelling, quotation
+marks, genitive — also part of the hard gate), and `register` (anglicism
+interference, AI-tell removal, address and voice — the improvement target
+reported separately).
+
+`classify` is a best-effort first pass for the one-time migration of
+`evals/evals.json` from flat strings to `{text, dimension}` objects; the
+committed suite is then hand-reviewed against editorial judgement. Keeping
+the rules here in code makes a re-classification reproducible if assertions
+change, and documents why each assertion carries the dimension it does.
+
+Run `uv run evals/classify_dimensions.py` to print a classification of the
+current suite (text, proposed dimension) without writing anything;
+`--write` migrates `evals/evals.json` in place, preserving assertion order
+and text verbatim and leaving any assertion already in object form
+untouched.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import re
+import sys
+
+REPO = pathlib.Path(__file__).resolve().parents[1]
+SUITE_PATH = REPO / "evals" / "evals.json"
+
+# Protocol-discipline overrides: false-positive restraint and dialogue
+# discipline read like register at the substring level (they mention style
+# rewrites, "you", or stance) but assert a *behaviour* the hard gate must
+# hold — the negative-control restraint and the Phase 3 counter-defence — not
+# a property of the produced prose. They win first so the broad register and
+# regex cues below do not pull them into the improvement score. The baseline
+# doc groups these with the negative-control and dialogue protocol records.
+PROTOCOL_OVERRIDE_MARKERS = (
+    "false positive",
+    "no wall of",
+    "on vibes",
+    "spurious style rewrite",
+    "no spurious",
+    "identical or near-identical",
+    "substantive engagement",
+    "sycophancy",
+    "stubborn",
+    "canonical section order",
+    "section order and heading",
+    # The genre/technique-resolution record asserts that the Phase log
+    # documents the committed genre and that the style-layer pass ran — a
+    # protocol record, even though its evidence list enumerates style.md's
+    # AI-tell and address/voice categories as acceptable proof.
+    "genre / technique resolution",
+    "## phase log",
+)
+
+# Mechanics-discipline overrides: a structural assertion whose graded
+# content is a verbatim line, a badge-row shape or a section layout reads as
+# register only through a trailing "no AI-tell openings" clause. The dominant
+# graded content is structural, so it scores in the hard gate, not the
+# improvement target. Checked before the register markers for that reason.
+MECHANICS_OVERRIDE_MARKERS = (
+    "verbatim line",
+)
+
+# Register: the substitution and AI-tell vocabulary that the style layer
+# targets. Matching any of these marks the assertion as a register concern —
+# the thing the suite now tracks as a separate, unblocking improvement score.
+REGISTER_MARKERS = (
+    "anglicism",
+    "ai-tell",
+    "ai vocabulary",
+    "ai tell",
+    "calque",
+    "interference",
+    "jargon",
+    "cliché",
+    "cliche",
+    "opening cliché",
+    "formulaic",
+    "crutch",
+    "delve",
+    "leverage",
+    "multifaceted",
+    "tapestry",
+    "robust",
+    "comprehensive",
+    "streamline",
+    "game-changer",
+    "paradigm shift",
+    "next-generation",
+    "circle back",
+    "touch base",
+    "holistic",
+    "synergies",
+    "proactive",
+    "going forward",
+    "reach out",
+    "adressera",
+    "navigera",
+    "leverera",
+    "metrik",
+    "regulator",
+    "false balance",
+    "everyday-text register",
+    "reflect everyday-text",
+    "free language is permitted",
+)
+
+# Protocol: the procedural behaviour the hard gate must hold. These name a
+# path the skill takes (which genre it commits to, whether the fast-path
+# exited, how a natural-language iteration count parsed) rather than a
+# property of the output text.
+PROTOCOL_MARKERS = (
+    "fast-path",
+    "fast path",
+    "max-iterations",
+    "max iterations",
+    "subagent",
+    "last-resort",
+    "last resort",
+    "fallback",
+    "overlay",
+    "genre resolves",
+    "genre commits",
+    "genre is committed",
+    "genre is still committed",
+    "genre / technique resolution",
+    "genre still committed",
+    "default_technique",
+    "default technique",
+    "technique file",
+    "technique override",
+    "ceiling of",
+    "iteration",
+    "convergence",
+    "phase 1",
+    "phase 2",
+    "phase 3",
+    "phase 4",
+    "phase log",
+    "dialogue protocol",
+    "bypass behaviour",
+    "propose mode",
+    "language resolves",
+    "language resolution",
+    "scope record",
+    "scope; the without-skill",
+    "applied scope",
+    "loaded language file",
+    "briefing fields",
+    "audience layering",
+    "settles the finding",
+    "settle each finding",
+    "main agent",
+    "no subagent",
+    "fast-path exits",
+    "no technique file",
+    "is parsed to",
+    "honoured",
+    "no field is silently filled",
+    "no post-draft",
+    "no user dialogue",
+    "delegate",
+)
+
+# Mechanics: objectively verifiable output form — typography, spelling,
+# quotation marks, genitive. These are the proofread-scope conventions and
+# also part of the hard gate.
+MECHANICS_MARKERS = (
+    "thousands separator",
+    "decimal separator",
+    "no-break space",
+    "thin space",
+    "en-dash",
+    "em-dash",
+    "en dash",
+    "em dash",
+    "quotation mark",
+    "curly quote",
+    "straight ascii",
+    "speech dash",
+    "talstreck",
+    "genitive",
+    "zero-marking",
+    "zero marking",
+    "apostrophe-s",
+    "apostrophe",
+    "oxford comma",
+    "full stop",
+    "initialism",
+    "compound",
+    "split-compound",
+    "spelling",
+    "-ize",
+    "-ise",
+    "-our",
+    "-or ",
+    "typography",
+    "date format",
+    "dates are",
+    "time format",
+    "time uses",
+    "12-hour",
+    "24-hour",
+    "currency",
+    "temperature",
+    "degree sign",
+    "percent in figures",
+    "procent",
+    "comma placement",
+    "punctuation",
+    "spellings",
+)
+
+
+def classify(text: str) -> str:
+    """Return the scoring dimension for one assertion's text.
+
+    Protocol-discipline overrides win first: a false-positive-restraint or
+    dialogue-discipline assertion asserts a behaviour the hard gate holds,
+    even though it mentions style rewrites or *you*. A mechanics override
+    follows for structural assertions (verbatim line, badge row) whose only
+    register cue is a trailing AI-tell clause. Register wins next: an
+    anglicism or AI-tell finding is a register concern even inside a
+    phase-numbered sentence, because the substitution is the thing being
+    scored. Protocol wins after that: a genre commit or iteration-parse
+    assertion is procedural even when it names the conventions the committed
+    genre will apply. Mechanics is the remaining typography / spelling /
+    quotation / genitive bucket, and also the final fallback so every
+    assertion is classified. The address-and-voice regex sits last because
+    its cues (*you*, *stance*, *voice*) are weak on their own and must not
+    outrank an explicit mechanics or protocol marker.
+    """
+    lowered = text.lower()
+    if _matches(lowered, PROTOCOL_OVERRIDE_MARKERS):
+        return "protocol"
+    if _matches(lowered, MECHANICS_OVERRIDE_MARKERS):
+        return "mechanics"
+    if _matches(lowered, REGISTER_MARKERS):
+        return "register"
+    if _matches(lowered, PROTOCOL_MARKERS):
+        return "protocol"
+    if _matches(lowered, MECHANICS_MARKERS):
+        return "mechanics"
+    # Address-and-voice register cues that are awkward as bare substrings.
+    if re.search(r"\b(address|voice|first-person|third-person|register)\b", lowered):
+        return "register"
+    return "mechanics"
+
+
+def _matches(lowered: str, markers: tuple[str, ...]) -> bool:
+    """True when any marker appears as a substring of the lowered assertion text."""
+    return any(marker in lowered for marker in markers)
+
+
+def migrate(suite: dict) -> int:
+    """Rewrite every flat-string assertion to `{text, dimension}` in place; return the count migrated."""
+    migrated = 0
+    for case in suite["evals"]:
+        new_expectations = []
+        for exp in case["expectations"]:
+            if isinstance(exp, dict):
+                new_expectations.append(exp)
+                continue
+            new_expectations.append({"text": exp, "dimension": classify(exp)})
+            migrated += 1
+        case["expectations"] = new_expectations
+    return migrated
+
+
+def main() -> int:
+    """Print or write the classification of the current suite per the CLI flags."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--write",
+        action="store_true",
+        help="Migrate evals/evals.json in place instead of printing the classification",
+    )
+    args = parser.parse_args()
+
+    suite = json.loads(SUITE_PATH.read_text())
+    if args.write:
+        migrated = migrate(suite)
+        SUITE_PATH.write_text(
+            json.dumps(suite, indent=2, ensure_ascii=False) + "\n"
+        )
+        print(f"Migrated {migrated} assertions to object form in {SUITE_PATH}.")
+        return 0
+
+    for case in suite["evals"]:
+        for exp in case["expectations"]:
+            text = exp["text"] if isinstance(exp, dict) else exp
+            print(f"{classify(text)}\t{case['skill_name']}\t{case['id']}\t{text}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
