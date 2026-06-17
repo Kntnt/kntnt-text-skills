@@ -24,7 +24,7 @@ Every assertion in the aggregated suite carries a `dimension` so the aggregator 
 - `mechanics` – objectively verifiable output form (typography, spelling, quotation marks, genitive, document structure).
 - `register` – anglicism interference, AI-tell removal, address and voice, jargon and clichés.
 
-`protocol` and `mechanics` pool into the **hard release gate** – expected ~100 %, any regression blocks. `register` is a separate **improvement target** – reported with its assertion count (`n`); a value below 100 % is not itself a blocker, only a regression against the prior register baseline is flagged. `_aggregate.py` prints both under *Sub-score breakout*. The dimension lives only in the aggregated file and in each per-case `eval_metadata.json` (as a parallel `assertion_dimensions` list); the grader still grades a flat list of strings, so `GRADER*.md` is unchanged. `classify_dimensions.py` documents the classification and can re-migrate the suite (`--write`) if assertions change; its output is hand-reviewed against editorial judgement before committing.
+`protocol` and `mechanics` pool into the **hard release gate** – expected ~100 %, any regression blocks. `register` is a separate **improvement target** – reported with its assertion count (`n`); a value below 100 % is not itself a blocker, only a regression against the prior register baseline is flagged. `_aggregate.py` prints both under *Sub-score breakout*. The dimension lives only in the aggregated file and in each per-case `eval_metadata.json` (as a parallel `assertion_dimensions` list); the grader still grades a flat list of strings, so `GRADER*.md` is unchanged. `classify_dimensions.py` encodes the classification rules and can re-migrate the suite (`--write`) if assertions change. Its rules carry the editorial judgement: the committed suite is kept in sync with the classifier's output (re-running `classify` over `evals.json` reports zero divergences), so a mis-tag is corrected by adjusting a rule there rather than hand-editing the committed file.
 
 ## Running the suite
 
@@ -46,6 +46,17 @@ uv run evals/workspace/_aggregate.py --iteration 2 --runs 3 > /tmp/baseline-draf
 Subset flags exist for smoke-testing (`--skill proofread`, `--limit 4`, `--skip-graders`). Cost cap per invocation defaults to $1 executor / $3 grader batch – adjust with `--executor-budget` / `--grader-budget`.
 
 The runner is resumable: it skips jobs whose `outputs/output.md` (or `grading.json`) already exists. To redo a job, delete its run directory.
+
+`_aggregate.py` reads the tagged suite from `--repo` (default: its own checkout) and the run outputs from `--workspace` (default: `<repo>/evals/workspace`). The two can live in different checkouts. The run outputs are gitignored, so a feature branch that migrates the suite has no real outputs of its own; to score the migrated suite against the real, already-tagged grading outputs in another checkout in one command:
+
+```bash
+uv run evals/workspace/_aggregate.py \
+  --repo .                                   `# the migrated, dimension-tagged suite` \
+  --workspace /path/to/main/evals/workspace  `# the checkout that holds the real grading.json` \
+  --iteration 2 --runs 1
+```
+
+The *Sub-score breakout* then shows a real register `n`. If a graded assertion's text has drifted from the suite (e.g. a quote-style change), the join drops it; the aggregator prints a count of unmatched assertions to stderr and into the report rather than silently under-counting the gate — regenerate the grading from the current suite when that warning appears.
 
 ## Scaling rule for new languages
 

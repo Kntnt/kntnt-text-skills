@@ -10,11 +10,16 @@ marks, genitive — also part of the hard gate), and `register` (anglicism
 interference, AI-tell removal, address and voice — the improvement target
 reported separately).
 
-`classify` is a best-effort first pass for the one-time migration of
-`evals/evals.json` from flat strings to `{text, dimension}` objects; the
-committed suite is then hand-reviewed against editorial judgement. Keeping
-the rules here in code makes a re-classification reproducible if assertions
-change, and documents why each assertion carries the dimension it does.
+`classify` encodes the editorial judgement for the migration of
+`evals/evals.json` from flat strings to `{text, dimension}` objects. The
+rules are tuned so the classifier output matches that judgement directly:
+where a real assertion was found mis-tagged, the fix is a marker here, not a
+one-off override on the committed file. The committed suite is verified to
+match this classifier (re-running `classify` over it must report zero
+divergences); a divergence means either the suite or a rule here needs
+attention. Keeping the rules in code makes a re-classification reproducible
+if assertions change, and documents why each assertion carries the dimension
+it does.
 
 Run `uv run evals/classify_dimensions.py` to print a classification of the
 current suite (text, proposed dimension) without writing anything;
@@ -53,6 +58,14 @@ PROTOCOL_OVERRIDE_MARKERS = (
     "stubborn",
     "canonical section order",
     "section order and heading",
+    # The fast-path short-text restraint check ("findings ... are short and
+    # reflect the everyday-text register") is a false-positive / negative-
+    # control assertion: clean everyday prose must yield few findings. It
+    # names the everyday-text register only to describe the input, not to
+    # score the produced prose, so it belongs with the protocol restraint
+    # records — not the register improvement target. It wins ahead of the
+    # register markers below for that reason.
+    "short and reflect",
     # The genre/technique-resolution record asserts that the Phase log
     # documents the committed genre and that the style-layer pass ran — a
     # protocol record, even though its evidence list enumerates style.md's
@@ -86,6 +99,22 @@ REGISTER_MARKERS = (
     "opening cliché",
     "formulaic",
     "crutch",
+    # Canonical AI-tell openers and conclusion clichés named by their bare
+    # phrasing. Some assertions list these tells without using a category word
+    # like "ai-tell" or "calque" (e.g. "*In a world where…*, *It's worth
+    # noting that…* are flagged"), so they would otherwise fall through to the
+    # mechanics default despite naming the exact same register concern their
+    # near-identical siblings tag register. Matching the phrases themselves
+    # keeps that concern in the register score.
+    "in a world where",
+    "i en värld där",
+    "it's worth noting",
+    "det är värt att notera",
+    "let me be perfectly clear",
+    "sammanfattningsvis",
+    "to summarize",
+    "to summarise",
+    "dyk djupare",
     "delve",
     "leverage",
     "multifaceted",
@@ -109,8 +138,6 @@ REGISTER_MARKERS = (
     "metrik",
     "regulator",
     "false balance",
-    "everyday-text register",
-    "reflect everyday-text",
     "free language is permitted",
 )
 
@@ -169,6 +196,25 @@ PROTOCOL_MARKERS = (
     "no post-draft",
     "no user dialogue",
     "delegate",
+    # Procedural assertions whose phrasing carries no protocol keyword above
+    # and would otherwise drop to the mechanics fallback. Each names a path or
+    # rule the hard gate must hold: the overlay inheritance depth and the
+    # style-layer carry-through (overlay protocol); the genre-resolution read
+    # and trigger-match; the flag-versus-phrase precedence and the
+    # max-iterations clamp; the AFK no-dialogue contract; and the Phase 3
+    # defend-or-adopt counter-defence with its acceptance sequence.
+    "inheritance is one step",
+    "does not itself inherit",
+    "style h2 sections",
+    "is read and trigger-matched",
+    "the flag wins",
+    "clamped to",
+    "protocol maximum",
+    "no user-facing dialogue",
+    "afk variant",
+    "which branch was taken",
+    "if (a) defended",
+    "accepted in sequence",
 )
 
 # Mechanics: objectively verifiable output form — typography, spelling,

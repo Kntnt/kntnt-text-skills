@@ -36,10 +36,14 @@ def build_dim_by_text(suite: dict) -> dict[str, str]:
     """Map each assertion's verbatim text to its dimension from the suite file.
 
     The grader prompt grades a flat list of strings and writes each result
-    back under the same verbatim `text`, so re-joining the dimension by text
-    is exact. Flat-string assertions (an un-migrated suite) carry no
-    dimension and are skipped, which leaves them out of the sub-scores rather
-    than guessing.
+    back under the same `text`, so re-joining the dimension by text works as
+    long as the suite text and the graded text stay byte-identical. That hold
+    is only as good as the grading being regenerated from the current suite —
+    any drift (a quote-style change, a stray edit) breaks the join for the
+    affected entries, which `unmatched_texts` surfaces so they are not dropped
+    silently. Flat-string assertions (an un-migrated suite) carry no dimension
+    and are skipped, which leaves them out of the sub-scores rather than
+    guessing.
     """
     dim_by_text: dict[str, str] = {}
     for case in suite["evals"]:
@@ -68,6 +72,19 @@ def split_by_dimension(
         if entry["passed"]:
             by_dim[dimension]["passed"] += 1
     return dict(by_dim)
+
+
+def unmatched_texts(graded: list[dict], dim_by_text: dict[str, str]) -> list[str]:
+    """Return the graded assertion texts that did not join to any dimension.
+
+    The dimension join is by verbatim text, so any drift between the graded
+    `text` and the suite `text` (a curly-vs-straight quote, a stray edit
+    during migration) drops the assertion from the sub-scores silently. This
+    surfaces those casualties so the caller can warn rather than under-report
+    the gate. Order-preserving and not de-duplicated, so a repeated drift in
+    several runs is visible as several entries.
+    """
+    return [entry["text"] for entry in graded if entry["text"] not in dim_by_text]
 
 
 def gate_score(by_dim: dict[str, dict[str, int]]) -> dict[str, int]:
@@ -229,6 +246,24 @@ def write_dimension_breakout(
         f"**{fmt_register(overall_register)}** |"
     )
 
+    # Surface any graded assertion that failed the verbatim-text join instead
+    # of dropping it silently. An unmatched entry means the graded text and
+    # the suite text drifted (e.g. a quote-style change during migration), so
+    # the gate would otherwise under-count without warning.
+    unmatched = unmatched_texts(overall_graded, dim_by_text)
+    if unmatched:
+        out.append(
+            f"\n> **Warning:** {len(unmatched)} graded assertion(s) did not join "
+            f"to a dimension by verbatim text and are excluded from the sub-scores. "
+            f"The suite and grading text have drifted — regenerate grading from the "
+            f"current suite. First unmatched: {unmatched[0]!r}."
+        )
+        print(
+            f"WARNING: {len(unmatched)} graded assertion(s) unmatched by text; "
+            f"excluded from sub-scores. First: {unmatched[0]!r}",
+            file=sys.stderr,
+        )
+
 
 def fmt_register(register: dict[str, int]) -> str:
     """Format the register sub-score as `passed / n (pct%)`, carrying its n explicitly."""
@@ -351,13 +386,26 @@ def main() -> int:
         help="Repository root to read evals/evals.json and evals/workspace/ from "
         "(defaults to the checkout this script lives in; overridable for tests)",
     )
+    parser.add_argument(
+        "--workspace",
+        type=pathlib.Path,
+        default=None,
+        help="Workspace root holding the real run outputs (evals/workspace), if it "
+        "lives in a different checkout than the suite. Defaults to <repo>/evals/"
+        "workspace. Use this to score the migrated object-form suite in one "
+        "checkout against the real grading.json outputs in another, without "
+        "splicing the two trees by hand.",
+    )
     args = parser.parse_args()
 
-    # Resolve the suite and workspace from the chosen repo so the breakout can
-    # be exercised against a synthetic tree without touching the real checkout.
+    # Resolve the suite and workspace independently. The suite (with its
+    # dimensions) and the real run outputs can live in different checkouts —
+    # the migrated suite on a feature branch, the untracked grading outputs in
+    # the maintainer's main checkout — so --workspace can point the join at
+    # the real outputs while --repo supplies the tagged suite.
     repo = args.repo.resolve()
     suite = json.loads((repo / "evals" / "evals.json").read_text())
-    ws = repo / "evals" / "workspace"
+    ws = (args.workspace.resolve() if args.workspace else repo / "evals" / "workspace")
     dim_by_text = build_dim_by_text(suite)
 
     records = collect_records(args.iteration, args.runs, ws, suite)

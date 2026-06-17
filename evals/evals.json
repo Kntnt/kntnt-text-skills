@@ -952,7 +952,7 @@
         },
         {
           "text": "Finding list (if any) is short and reflects the everyday-text register.",
-          "dimension": "register"
+          "dimension": "protocol"
         }
       ]
     },
@@ -1027,7 +1027,7 @@
       "expectations": [
         {
           "text": "*In a world where…*, *It's worth noting that…*, *Let me be perfectly clear* are flagged.",
-          "dimension": "mechanics"
+          "dimension": "register"
         },
         {
           "text": "*delve into*, *leverage* (as a verb), *multifaceted*, *tapestry*, *robust*, *comprehensive*, *ultimately*, *unprecedented*, *streamline* are flagged as AI vocabulary tells.",
@@ -1129,7 +1129,7 @@
         },
         {
           "text": "Findings (if any) are short and reflect everyday-text register.",
-          "dimension": "register"
+          "dimension": "protocol"
         }
       ]
     },
@@ -1295,7 +1295,7 @@
       "expectations": [
         {
           "text": "*Det är värt att notera att…*, *I en värld där…*, *Sammanfattningsvis*, *Dyk djupare* are removed or rewritten.",
-          "dimension": "mechanics"
+          "dimension": "register"
         },
         {
           "text": "*adressera* becomes *ta upp* or *behandla*; *navigera* becomes *hantera*; *leverera* becomes *ge* or *erbjuda*; *metrik* becomes *mätvärde* or *nyckeltal*; *regulatorer* becomes *myndigheter* or *tillsynsmyndigheter*.",
@@ -1403,7 +1403,7 @@
       "expectations": [
         {
           "text": "*In a world where…*, *it's worth noting that*, *Let me be perfectly clear* are removed.",
-          "dimension": "mechanics"
+          "dimension": "register"
         },
         {
           "text": "*delve into*, *leverage* (verb), *multifaceted*, *tapestry*, *robust*, *comprehensive*, *ultimately*, *streamline* are replaced or removed.",
@@ -1415,7 +1415,7 @@
         },
         {
           "text": "*To summarize* opening a conclusion is rewritten.",
-          "dimension": "mechanics"
+          "dimension": "register"
         }
       ]
     },
@@ -1565,7 +1565,7 @@
       "expectations": [
         {
           "text": "*In a world where…*, *it's worth noting that*, *Let me be perfectly clear* are removed.",
-          "dimension": "mechanics"
+          "dimension": "register"
         },
         {
           "text": "*delve into*, *leverage* (verb), *multifaceted*, *tapestry*, *robust*, *comprehensive*, *ultimately*, *unprecedented*, *streamline* are replaced or removed.",
@@ -1639,7 +1639,7 @@
         },
         {
           "text": "Values above 3 would be clamped to 3 (protocol maximum).",
-          "dimension": "mechanics"
+          "dimension": "protocol"
         }
       ]
     },
@@ -2339,11 +2339,11 @@
         },
         {
           "text": "All style H2 sections from `sv.md` are carried through unchanged (the variant has no style overrides).",
-          "dimension": "mechanics"
+          "dimension": "protocol"
         },
         {
           "text": "Inheritance is one step only — the base `sv.md` does not itself inherit.",
-          "dimension": "mechanics"
+          "dimension": "protocol"
         }
       ]
     },
@@ -2393,7 +2393,7 @@
         },
         {
           "text": "`lib/genres/_index.md` is read and trigger-matched.",
-          "dimension": "mechanics"
+          "dimension": "protocol"
         },
         {
           "text": "Genre commits to `article` and the corresponding `lib/genres/article.md` is read.",
@@ -2434,7 +2434,7 @@
         },
         {
           "text": "If the flag and the natural-language phrase conflict, the flag wins; if ambiguous, ask the user.",
-          "dimension": "mechanics"
+          "dimension": "protocol"
         }
       ]
     },
@@ -2463,7 +2463,7 @@
         },
         {
           "text": "Output is the polished text, with no user-facing dialogue (the AFK variant).",
-          "dimension": "mechanics"
+          "dimension": "protocol"
         }
       ]
     },
@@ -2614,15 +2614,15 @@
         },
         {
           "text": "The executor's response on finding 2 is explicit: either (a) DEFENDS the original proposal with a concrete citation from a loaded file (a rule name + a one-line reason), or (b) ADOPTS the user's counter and drops the proposal. The transcript states which branch was taken.",
-          "dimension": "mechanics"
+          "dimension": "protocol"
         },
         {
           "text": "If (a) defended: the original proposal appears in `output.md`. If (b) adopted: the original proposal does NOT appear in `output.md`.",
-          "dimension": "mechanics"
+          "dimension": "protocol"
         },
         {
           "text": "Remaining findings (3+) are accepted in sequence; corresponding changes appear in `output.md`.",
-          "dimension": "mechanics"
+          "dimension": "protocol"
         },
         {
           "text": "The transcript shows substantive engagement — no 'you're right, I agree' without analysis (sycophancy fail), no 'no, my proposal stands' without citation (stubborn fail).",
