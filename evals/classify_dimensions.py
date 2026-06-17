@@ -72,6 +72,23 @@ PROTOCOL_OVERRIDE_MARKERS = (
     # AI-tell and address/voice categories as acceptable proof.
     "genre / technique resolution",
     "## phase log",
+    # The fast-path negative-control discriminator and the flow-load
+    # consequence in the structured-article case. "Either condition broken …"
+    # is the discriminator proving the standard flow ran rather than the
+    # fast-path; "… the observable consequence of the standard flow loading
+    # the genre file's review-scoped sections" names that flow-load outcome.
+    # Both assert the protocol path, not an output-form property, and would
+    # otherwise drop to the mechanics fallback.
+    "condition broken",
+    "observable consequence",
+    # The proofread-scope and output-unchanged restraint checks: clean input
+    # must come back unchanged save for mechanics normalisation. Like the
+    # "no spurious style rewrites" record they are negative-control restraint
+    # on the skill's scope discipline, not a property of produced prose, so
+    # they belong with the protocol restraint records rather than the mechanics
+    # fallback they previously dropped to.
+    "proofread scope only",
+    "unchanged from the input",
 )
 
 # Mechanics-discipline overrides: a structural assertion whose graded
@@ -81,6 +98,15 @@ PROTOCOL_OVERRIDE_MARKERS = (
 # improvement target. Checked before the register markers for that reason.
 MECHANICS_OVERRIDE_MARKERS = (
     "verbatim line",
+    # A "British conventions are preserved" assertion grades spelling,
+    # quotation marks and the genitive — mechanics — and only tacks the
+    # no-silent-rewrite traceability restraint on as a trailing clause. The
+    # dominant graded content is the convention set, so it stays in the hard
+    # gate. This override is what keeps such an assertion mechanics where its
+    # near-twin — a bare "traceable to a finding … no silent rewrites" line
+    # with no convention lead — classifies protocol via the restraint cue
+    # below, because the override is checked before that cue is reached.
+    "british conventions are preserved",
 )
 
 # Register: the substitution and AI-tell vocabulary that the style layer
@@ -215,6 +241,14 @@ PROTOCOL_MARKERS = (
     "which branch was taken",
     "if (a) defended",
     "accepted in sequence",
+    # The no-silent-rewrite traceability discipline: every applied change
+    # traces to a finding, nothing is rewritten silently. This is the same
+    # negative-control restraint as the Phase-2-traceable records already
+    # tagged protocol (#205/#211/#218); a bare line carrying only this cue
+    # would otherwise drop to the mechanics fallback. It sits in the regular
+    # protocol bucket rather than the override above so the mechanics override
+    # still wins for a convention-led assertion that merely appends the clause.
+    "no silent rewrites",
 )
 
 # Mechanics: objectively verifiable output form — typography, spelling,
@@ -273,8 +307,11 @@ def classify(text: str) -> str:
     Protocol-discipline overrides win first: a false-positive-restraint or
     dialogue-discipline assertion asserts a behaviour the hard gate holds,
     even though it mentions style rewrites or *you*. A mechanics override
-    follows for structural assertions (verbatim line, badge row) whose only
-    register cue is a trailing AI-tell clause. Register wins next: an
+    follows for assertions whose graded body is structural (a verbatim line,
+    a badge row) or a preserved-conventions set, and whose only other-dimension
+    cue is a trailing clause — a register AI-tell mention, or a no-silent-rewrite
+    restraint addendum — that must not pull the dominant graded content out of
+    the hard gate. Register wins next: an
     anglicism or AI-tell finding is a register concern even inside a
     phase-numbered sentence, because the substitution is the thing being
     scored. Protocol wins after that: a genre commit or iteration-parse
