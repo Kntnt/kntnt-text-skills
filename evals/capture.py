@@ -126,15 +126,24 @@ def _extract_section_bullets(text: str, heading: str) -> list[str]:
 # scrubs to the same token, keeping the fixture readable.
 _NAME_SPAN = re.compile(r"\b[A-ZÅÄÖ][\wÅÄÖåäö]+(?:\s+[A-ZÅÄÖ][\wÅÄÖåäö]+)*\b")
 
-# Capitalised words that open a sentence or a fixed phrase are not names; keep
-# them so the anonymiser does not maul ordinary prose. Swedish and English
-# sentence openers and connectives that appear in the fixtures live here.
+# Ordinary capitalised prose words that are not names: pronouns, articles and
+# connectives that legitimately open a sentence in Swedish or English. These are
+# kept in place so a sentence-initial capital is not mistaken for a company. The
+# set holds GENUINE prose words only — never a proper name from a fixture: a name
+# placed here would leak whenever it stood alone, which is exactly the failure a
+# real capture must avoid. It is necessarily incomplete (a capitalised real word
+# this list misses still over-scrubs, and a real name that happens to be a
+# sentence-opener here would slip through), so the heuristic is a first pass the
+# maintainer reviews in Phase 2, not a robust named-entity recogniser.
 _NAME_STOPWORDS = frozenset(
     {
-        "Vi", "Du", "Det", "Bra", "Anna", "Erik",
-        "In", "It", "The", "District", "Phase", "Mechanics", "Style",
-        "Marx", "Session", "Maintainer", "Diff", "Range", "Time",
-        "Temperature", "Percent", "Thousands", "A", "An",
+        # Swedish sentence-openers, pronouns and connectives.
+        "Vi", "Du", "Det", "Den", "De", "Han", "Hon", "Jag", "Ni",
+        "Bra", "Och", "Men", "Att", "Som", "Här", "Där", "Detta",
+        # English sentence-openers, articles, pronouns and connectives.
+        "In", "It", "The", "A", "An", "We", "I", "You", "They", "He",
+        "She", "This", "That", "These", "Those", "And", "But", "Here",
+        "There", "District",
     }
 )
 
@@ -144,12 +153,21 @@ def anonymise(text: str) -> str:
 
     A name is a capitalised single word or multi-word run. A multi-word span
     reads as a person and scrubs as one unit (*Anna Lindqvist* → *[Person 1]*);
-    a single-word span whose token is not a known sentence opener or prose word
-    reads as a company or product (*Volvo* → *[Company 1]*). Lowercase fault
-    vocabulary that assertions depend on — *adressera*, *leverera* — is never
-    touched because it is not capitalised. A single pass over the original text
-    rules out re-scanning emitted placeholders, and distinct spans map to
-    stable, numbered placeholders so a span used twice scrubs to the same token.
+    a single-word span whose token is not an ordinary capitalised prose word
+    reads as a company or product (*Volvo* → *[Company 1]*). Single first names
+    that stand alone (*Erik*) scrub the same way, because the stopword set holds
+    only genuine prose words, never fixture names. Lowercase fault vocabulary
+    that assertions depend on — *adressera*, *leverera* — is never touched
+    because it is not capitalised. A single pass over the original text rules out
+    re-scanning emitted placeholders, and distinct spans map to stable, numbered
+    placeholders so a span used twice scrubs to the same token.
+
+    The heuristic is capitalisation plus a prose-word allowlist, not robust NER:
+    a capitalised real word the allowlist misses can over-scrub, and a real name
+    coinciding with an allowlisted opener can slip through. That is why `/eval`
+    proposes — the maintainer reviews the scrubbed fixture line by line in Phase
+    2 before anything is committed (see the eval SKILL.md), so a residual leak is
+    human-catchable rather than silently shipped.
     """
 
     replacements: dict[str, str] = {}
@@ -181,6 +199,36 @@ def _emphasise(term: str) -> str:
     return f"*{term.strip('*')}*"
 
 
+# Connectives that introduce a correction target after a flagged fault, in the
+# Swedish and English the maintainer's remarks use ("ska bli", "måste bli", "byt
+# till", "becomes", "→", …). A connective is honoured only when an *emphasised*
+# target follows it: an incidental connective word in ordinary prose ("needs to
+# go") then captures nothing, so no fabricated correction is invented.
+_TARGET_CONNECTIVE = (
+    r"(?:ska\s+(?:bli|vara)|m[åa]ste\s+bli|byt(?:\s+\w+)?\s+till|"
+    r"[äa]ndra(?:\s+\w+)?\s+till|ers[äa]tt(?:\s+\w+)?\s+med|"
+    r"blir|→|->|becomes?|should\s+become|corrected\s+to|changed\s+to|"
+    r"replace[ds]?\s+with)"
+)
+
+# An emphasised correction target, optionally one of several alternatives the
+# maintainer offered (joined by a coordinating "eller"/"or"/"och"/"and"), e.g.
+# "byt till *ta upp* eller *behandla*". All listed alternatives are corrections,
+# not faults. Only conjunctions join alternatives — a comma or semicolon usually
+# separates independent clauses (a second fault), so they are deliberately not
+# alternative separators, keeping "…*ge värde*; *leverera*…" as two faults.
+_ALT_SEP = r"\s*(?:eller|or|och|and)\s+"
+_FAULT_TO_TARGETS = re.compile(
+    rf"\*([^*]+)\*\s*{_TARGET_CONNECTIVE}\s*"
+    rf"\*([^*]+)\*(?:{_ALT_SEP}\*([^*]+)\*)*",
+    re.IGNORECASE,
+)
+_EMPHASISED_AFTER_CONNECTIVE = re.compile(
+    rf"{_TARGET_CONNECTIVE}\s*\*([^*]+)\*(?:{_ALT_SEP}\*([^*]+)\*)*",
+    re.IGNORECASE,
+)
+
+
 def _faults_from_remark(remark: str) -> list[dict]:
     """Derive zero or more assertion seeds from one maintainer feedback remark.
 
@@ -188,6 +236,14 @@ def _faults_from_remark(remark: str) -> list[dict]:
     the correction the maintainer named (empty when none). Affirmations — "good
     that you kept X, no change needed" — yield nothing, because a case asserts
     faults to catch, not things already correct.
+
+    A single remark may flag several distinct faults ("*leverera värde* ska bli
+    *ge värde*; *leverera* metaforiskt är en anglicism" names two), so every
+    emphasised span that is *not* itself a named correction becomes its own seed
+    rather than collapsing the bullet to one fault. Correction targets — the
+    emphasised spans after a "ska bli" / "byt till" / "becomes" connective, and
+    any alternatives the maintainer listed — are excluded from the fault set; a
+    fault that names its correction carries that target as its `target`.
     """
 
     lower = remark.lower()
@@ -198,20 +254,29 @@ def _faults_from_remark(remark: str) -> list[dict]:
     ):
         return []
 
-    # Pull the emphasised terms the maintainer named and any explicit correction
-    # target introduced by "bli", "vara", "blir", "→", "to", or "ska bli".
-    terms = re.findall(r"\*([^*]+)\*", remark)
-    target_match = re.search(
-        r"(?:ska (?:bli|vara)|ska\s|bli|blir|vara|→|->|to|become[s]?)\s+\*?([^*.,;]+)\*?",
-        remark,
-    )
-    target = target_match.group(1).strip() if target_match else ""
+    # Resolve which emphasised spans are correction targets (after a connective,
+    # including listed alternatives) so a target is never proposed as a fault,
+    # and pair each fault that names its correction with that first target.
+    targets: set[str] = set()
+    for match in _EMPHASISED_AFTER_CONNECTIVE.finditer(remark):
+        targets.update(group.strip() for group in match.groups() if group)
+    pair_target: dict[str, str] = {}
+    for match in _FAULT_TO_TARGETS.finditer(remark):
+        pair_target[match.group(1).strip()] = match.group(2).strip()
 
-    if not terms:
+    # Every emphasised span that is not itself a correction target is a fault;
+    # each becomes its own seed so several faults in one bullet are all kept.
+    terms = [term.strip() for term in re.findall(r"\*([^*]+)\*", remark)]
+    faults = [term for term in terms if term not in targets]
+
+    if not faults:
         # No emphasised fault term: fall back to the remark itself as the fault
         # description so a numeric/structural remark still seeds an assertion.
-        return [{"term": "", "target": target, "raw": remark}]
-    return [{"term": term, "target": target, "raw": remark} for term in terms[:1]]
+        return [{"term": "", "target": "", "raw": remark}]
+    return [
+        {"term": term, "target": pair_target.get(term, ""), "raw": remark}
+        for term in faults
+    ]
 
 
 def _shape_assertion(skill: str, seed: dict, remark: str) -> str | None:
@@ -247,13 +312,40 @@ def _shape_assertion(skill: str, seed: dict, remark: str) -> str | None:
     return f"{_emphasise(term)} is flagged and corrected."
 
 
+def _classify_assertion(skill: str, shaped: str, remark: str) -> str:
+    """Classify an assertion's dimension from the right source for its skill.
+
+    For a correction skill the shaped text is "*fault* is corrected to *target*"
+    — a template that discards every word the maintainer used to name the fault,
+    so the maintainer's own classification (an "anglicism", a "thousands
+    separator") would be lost and the assertion would mis-tag as the mechanics
+    fallback. Classifying from the source remark together with the shaped text
+    keeps the maintainer's explicit register/mechanics signal while still seeing
+    the emphasised terms. Draft skills already shape the fault verbatim into the
+    assertion, so the shaped text alone classifies them faithfully.
+    """
+
+    if skill in CORRECTION_SKILLS:
+        return classify(f"{remark} {shaped}")
+    return classify(shaped)
+
+
 def _diff_before(diff: str) -> str:
-    """Reconstruct the 'before' side of a unified diff (removed and context lines)."""
+    """Reconstruct the 'before' side of a unified diff (removed and context lines).
+
+    Every unified-diff line is a one-char marker (`-` removed, `+` added, space
+    context) followed by a single separating space and the text. Added lines are
+    dropped; for the rest the marker and its one separating space are stripped so
+    the reconstructed text matches the source verbatim — keeping the space would
+    leave a stray leading blank on every committed input line.
+    """
     lines: list[str] = []
     for line in diff.splitlines():
         if line.startswith("+"):
             continue
-        lines.append(line[1:] if line.startswith("-") else line)
+        # Strip the marker plus its single separating space; a context line's
+        # marker is itself a space, so the same two-char slice applies.
+        lines.append(line[2:] if line[:1] in "- " else line)
     return "\n".join(line for line in lines if line.strip())
 
 
@@ -285,7 +377,7 @@ def propose(transcript_path: pathlib.Path) -> dict:
             expectations.append(
                 {
                     "text": shaped,
-                    "dimension": classify(shaped),
+                    "dimension": _classify_assertion(skill, shaped, remark),
                     "source": remark,
                 }
             )
