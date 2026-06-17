@@ -129,12 +129,23 @@ def iter_dir_md(directory: Path) -> list[Path]:
 
 
 def check_skill_lib_paths() -> CheckResult:
-    """Check (a) – every `../../lib/...` path in skill files resolves to an
-    actual file. Placeholders like `<lang>.md` and `<type>.md` are ignored
-    because they expand at runtime."""
+    """Check (a) – every substrate read in a skill file uses the
+    `${CLAUDE_PLUGIN_ROOT}/lib/...` form and resolves to an actual file, and
+    the legacy `../../lib/...` relative form does not reappear.
+
+    Two findings are produced. The plugin-root form is dereferenced against
+    the repository root (which is `${CLAUDE_PLUGIN_ROOT}` at runtime) and a
+    missing target is reported. The relative form is a hard regression: the
+    convention was unified on the plugin-root variable, so any new
+    `../../lib/` reference is flagged so the change cannot quietly undo
+    itself. Placeholders like `<lang>.md` and `<type>.md` are skipped in both
+    cases because they expand at runtime."""
 
     result = CheckResult(name="(a) skill -> lib path resolution")
-    pattern = re.compile(r"\.\./\.\./lib/[A-Za-z0-9_./<>-]+\.md")
+    plugin_root = re.compile(
+        r"\$\{CLAUDE_PLUGIN_ROOT\}/lib/[A-Za-z0-9_./<>-]+\.md"
+    )
+    legacy_relative = re.compile(r"\.\./\.\./lib/[A-Za-z0-9_./<>-]+\.md")
     placeholder = re.compile(r"<[^>]+>")
     for skill_dir in sorted(SKILLS_DIR.iterdir()):
         skill_md = skill_dir / "SKILL.md"
@@ -142,11 +153,12 @@ def check_skill_lib_paths() -> CheckResult:
             continue
         text = read_text(skill_md)
         for line_no, line in enumerate(text.splitlines(), start=1):
-            for match in pattern.findall(line):
+            # Plugin-root reads must resolve against the repository root.
+            for match in plugin_root.findall(line):
                 if placeholder.search(match):
                     continue
-                # Resolve relative to the skill file's directory and check.
-                target = (skill_md.parent / match).resolve()
+                relative = match[len("${CLAUDE_PLUGIN_ROOT}/") :]
+                target = (REPO_ROOT / relative).resolve()
                 if not target.exists():
                     result.findings.append(
                         Finding(
@@ -156,6 +168,19 @@ def check_skill_lib_paths() -> CheckResult:
                             message=f"unresolved reference: {match}",
                         )
                     )
+            # The retired relative form is a regression and must not reappear.
+            for match in legacy_relative.findall(line):
+                result.findings.append(
+                    Finding(
+                        check=result.name,
+                        path=relpath(skill_md),
+                        line=line_no,
+                        message=(
+                            f"retired relative form: {match} – use "
+                            "${CLAUDE_PLUGIN_ROOT}/lib/..."
+                        ),
+                    )
+                )
     return result
 
 
