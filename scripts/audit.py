@@ -55,6 +55,12 @@ SKILL_SLASH_NAMES: tuple[str, ...] = (
     "/pac",
 )
 
+# Pragmatic email shape for the manifest's `author.email`: a non-empty local
+# part, a single `@`, and a dotted domain with a two-or-more-letter TLD. This
+# guards against an empty or obviously malformed address, not against RFC 5322
+# in full – the manifest needs a sane contact, not a parser-grade validator.
+EMAIL_PATTERN: re.Pattern[str] = re.compile(r"[^@\s]+@[^@\s]+\.[A-Za-z]{2,}")
+
 
 @dataclass
 class Finding:
@@ -565,6 +571,39 @@ def check_plugin_json_and_version() -> CheckResult:
                     path=relpath(PLUGIN_JSON),
                     line=None,
                     message=f"missing required field '{required}'",
+                )
+            )
+    # The manifest declares a published contact address. The author block must
+    # be an object carrying an `email` that looks like a real address, so the
+    # recommended field cannot silently drop out or regress to a malformed value.
+    author = plugin_data.get("author")
+    if not isinstance(author, dict):
+        result.findings.append(
+            Finding(
+                check=result.name,
+                path=relpath(PLUGIN_JSON),
+                line=None,
+                message="missing 'author' object",
+            )
+        )
+    else:
+        email = author.get("email")
+        if email is None:
+            result.findings.append(
+                Finding(
+                    check=result.name,
+                    path=relpath(PLUGIN_JSON),
+                    line=None,
+                    message="missing 'author.email' field",
+                )
+            )
+        elif not isinstance(email, str) or not EMAIL_PATTERN.fullmatch(email):
+            result.findings.append(
+                Finding(
+                    check=result.name,
+                    path=relpath(PLUGIN_JSON),
+                    line=None,
+                    message=f"'author.email' is not a valid email address: {email!r}",
                 )
             )
     plugin_version = str(plugin_data.get("version", "")).strip()
