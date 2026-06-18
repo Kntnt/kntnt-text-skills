@@ -6,6 +6,8 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.8.1] – 2026-06-18
+
 ### Added
 
 - **`/eval` is now invokable in the repository as a tracked project command (`.claude/commands/eval.md`).** The eval-capture tool shipped under `evals/eval/SKILL.md` in 0.8.0 as deliberately unregistered maintainer tooling, which also left it un-typeable – `/eval` could not be submitted as a slash command at all. A thin project-local wrapper now registers it so the maintainer can invoke it by name from inside the repository, with `disable-model-invocation` keeping it explicit-only; the tool itself stays entirely under `evals/`, and the command never reaches marketplace installs, which receive the plugin's own `skills/` and `commands/` rather than the repository's project `.claude/`. `.gitignore` is widened to track `.claude/commands/` while per-user `.claude/` state (`settings.local.json`, `worktrees/`) stays ignored.
@@ -212,7 +214,8 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 - Marketplace metadata (`.claude-plugin/marketplace.json`) and `/plugin marketplace add` / `/plugin install` instructions for installation via the modern Claude Code plugin flow.
 - Keep a Changelog 1.1.0 changelog (this file) and a versioning-policy section in the README that adapts SemVer to a rules-driven plugin.
 
-[Unreleased]: https://github.com/Kntnt/kntnt-text-skills/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/Kntnt/kntnt-text-skills/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.8.1
 [0.8.0]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.8.0
 [0.7.2]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.7.2
 [0.7.1]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.7.1
