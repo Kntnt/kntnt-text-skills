@@ -6,6 +6,10 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+### Added
+
+- **`/eval` is now invokable in the repository as a tracked project command (`.claude/commands/eval.md`).** The eval-capture tool shipped under `evals/eval/SKILL.md` in 0.8.0 as deliberately unregistered maintainer tooling, which also left it un-typeable – `/eval` could not be submitted as a slash command at all. A thin project-local wrapper now registers it so the maintainer can invoke it by name from inside the repository, with `disable-model-invocation` keeping it explicit-only; the tool itself stays entirely under `evals/`, and the command never reaches marketplace installs, which receive the plugin's own `skills/` and `commands/` rather than the repository's project `.claude/`. `.gitignore` is widened to track `.claude/commands/` while per-user `.claude/` state (`settings.local.json`, `worktrees/`) stays ignored.
+
 ### Fixed
 
 - **`marketplace.json`'s plugin `source` is now an object so Claude Cowork's remote sync succeeds.** The single plugin entry used the string shorthand `"source": "."`, which a local `/plugin marketplace add` accepts but Cowork's server-side remote sync rejects with `REMOTE_SYNC_FAILED` ("External plugin sources must be objects with a 'source' field"). It is now the object form `{ "source": "github", "repo": "Kntnt/kntnt-text-skills" }`, matching the repository's git remote; the local marketplace add is unaffected. Closes [#46](https://github.com/Kntnt/kntnt-text-skills/issues/46).

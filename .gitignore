@@ -21,6 +21,8 @@ __pycache__/
 # Claude Code
 .claude/*
 !.claude/settings.json
+# Tracked maintainer-only project commands (e.g. /eval); per-user .claude/ state stays ignored
+!.claude/commands/
 
 # Eval runner output
 evals/workspace/
