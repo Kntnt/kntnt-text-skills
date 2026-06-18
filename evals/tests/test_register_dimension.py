@@ -236,6 +236,47 @@ def test_negative_control_restraint_assertions_are_protocol() -> None:
         )
 
 
+def test_grader_prompt_renders_plain_assertion_text() -> None:
+    """The standalone grader prompt lists each expectation as its plain `.text`, never a `{text, dimension}` dict-repr.
+
+    `grader_prompt` builds its own expectation block (the manual-grader path),
+    separate from `_setup.py`'s `eval_metadata.json` flattening (the runner
+    path). After the object-form migration each expectation is a
+    `{text, dimension}` dict; rendered naively it leaks a Python dict-repr —
+    and the `'dimension'` key — into the prompt the grader reads, instead of
+    the assertion to grade. The block must carry the plain text and only that.
+    """
+    prompts = _load("_prompts", WS / "_prompts.py")
+    case = {
+        "id": 999,
+        "name": "synthetic-grader-case",
+        "skill_name": "redline",
+        "prompt": "p",
+        "expected_output": "",
+        "expectations": [
+            {"text": "Thin space used (U+202F), not a comma.", "dimension": "mechanics"},
+            {"text": "Anglicism *adressera* is flagged.", "dimension": "register"},
+        ],
+    }
+
+    rendered = prompts.grader_prompt(case, "with_skill", 2, 1)
+    block = rendered.split("# Expectations to grade", 1)[1].split("# Inputs", 1)[0]
+    # Each plain assertion text appears; neither the dict-repr nor the dimension key leaks in.
+    assert "Thin space used (U+202F), not a comma." in block, block
+    assert "Anglicism *adressera* is flagged." in block, block
+    assert "'dimension'" not in rendered, rendered
+    assert "'text':" not in rendered, rendered
+
+    # A defensively still-flat (bare-string) expectation renders unchanged.
+    flat_case = {**case, "expectations": ["A bare string assertion."]}
+    flat_block = (
+        prompts.grader_prompt(flat_case, "with_skill", 2, 1)
+        .split("# Expectations to grade", 1)[1]
+        .split("# Inputs", 1)[0]
+    )
+    assert "A bare string assertion." in flat_block, flat_block
+
+
 def test_aggregator_warns_on_unmatched_graded_text() -> None:
     """A graded assertion whose text does not join to a dimension is surfaced, not dropped silently."""
     agg = _load("_aggregate", WS / "_aggregate.py")
@@ -333,6 +374,7 @@ def _run() -> int:
         test_committed_suite_matches_the_classifier,
         test_known_ai_tell_and_restraint_assertions_are_tagged_correctly,
         test_negative_control_restraint_assertions_are_protocol,
+        test_grader_prompt_renders_plain_assertion_text,
         test_aggregator_warns_on_unmatched_graded_text,
         test_aggregator_dry_run_emits_a_register_sub_score,
     ]
