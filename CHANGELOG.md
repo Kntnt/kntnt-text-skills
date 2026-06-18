@@ -6,6 +6,10 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+### Fixed
+
+- **`marketplace.json`'s plugin `source` is now an object so Claude Cowork's remote sync succeeds.** The single plugin entry used the string shorthand `"source": "."`, which a local `/plugin marketplace add` accepts but Cowork's server-side remote sync rejects with `REMOTE_SYNC_FAILED` ("External plugin sources must be objects with a 'source' field"). It is now the object form `{ "source": "github", "repo": "Kntnt/kntnt-text-skills" }`, matching the repository's git remote; the local marketplace add is unaffected. Closes [#46](https://github.com/Kntnt/kntnt-text-skills/issues/46).
+
 ## [0.8.0] – 2026-06-18
 
 ### Added

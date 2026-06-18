@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "kntnt-text-skills",
-      "source": ".",
+      "source": { "source": "github", "repo": "Kntnt/kntnt-text-skills" },
       "description": "Writing, redlining, editing and proofreading skills modelled on Kntnt's style. Ships with language files for Swedish, British English and American English."
     }
   ]
