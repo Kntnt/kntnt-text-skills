@@ -184,6 +184,60 @@ def test_anonymiser_still_scrubs_a_real_name() -> None:
     assert "Spotify" not in scrubbed, f"real product name leaked: {scrubbed!r}"
 
 
+def test_anonymiser_scrubs_inflected_brand_names() -> None:
+    """A real brand/entity name that merely ends in a Swedish inflection must still scrub.
+
+    *Handelsbanken*, *Swedbanken* and *Systembolaget* are genuine company names
+    whose spelling ends in the `-en`/`-et` definite inflection. Keeping any long
+    inflected token in place would let such a name survive verbatim into the
+    committed fixture and assertions — a privacy leak. When the heuristic cannot
+    tell a name from a common noun it must default to SCRUB; only an explicit
+    curated common-noun term is spared.
+    """
+    for name in ("Handelsbanken", "Swedbanken", "Systembolaget"):
+        scrubbed = capture.anonymise(f"{name} höjde räntan i går.")
+        assert name not in scrubbed, f"inflected brand name leaked: {scrubbed!r}"
+        assert "[Company" in scrubbed or "[Person" in scrubbed, (
+            f"inflected brand name should scrub to a placeholder: {scrubbed!r}"
+        )
+
+
+def test_propose_scrubs_inflected_brand_names_from_committed_fields() -> None:
+    """An inflected brand name in the diff or a fault remark does not survive into input_text or assertion text."""
+    transcript = (
+        "skill: edit\n"
+        "language: sv\n"
+        "prompt: /edit sv\n"
+        "\n"
+        "## Maintainer feedback\n"
+        "- \"*Handelsbanken levererar värde* är en floskel; byt till *Handelsbanken hjälper*.\"\n"
+        "\n"
+        "## Diff\n"
+        "```diff\n"
+        "- Systembolaget och Swedbanken stod kvar.\n"
+        "+ De stod kvar.\n"
+        "```\n"
+    )
+    with tempfile.NamedTemporaryFile(
+        "w", suffix=".md", delete=False, encoding="utf-8"
+    ) as handle:
+        handle.write(transcript)
+        path = pathlib.Path(handle.name)
+    try:
+        case = capture.propose(path)
+    finally:
+        path.unlink()
+    # The committed-bound fields are input_text and each assertion's text; the
+    # proposal-only source trace stays verbatim by design and is dropped on commit.
+    committed = case["input_text"] + " " + " ".join(
+        exp["text"] for exp in case["expectations"]
+    )
+    for name in ("Handelsbanken", "Systembolaget", "Swedbanken"):
+        assert name not in committed, (
+            f"inflected brand name leaked into a committed field: {committed!r}"
+        )
+
+
 def test_write_dimension_is_earned_from_the_feedback_not_a_template_artefact() -> None:
     """A write negative-draft assertion's dimension is derived from the traced feedback, not from the shaped template — which bakes in the word 'register' for every fault."""
     case = capture.propose(WRITE_TRANSCRIPT)
@@ -368,6 +422,8 @@ def _run() -> int:
         test_one_entity_maps_to_one_placeholder_across_every_committed_field,
         test_anonymiser_does_not_over_scrub_a_sentence_initial_common_word,
         test_anonymiser_still_scrubs_a_real_name,
+        test_anonymiser_scrubs_inflected_brand_names,
+        test_propose_scrubs_inflected_brand_names_from_committed_fields,
         test_write_dimension_is_earned_from_the_feedback_not_a_template_artefact,
         test_write_non_register_fault_is_not_mis_tagged_register_by_the_template,
         test_names_in_assertion_text_are_anonymised,
