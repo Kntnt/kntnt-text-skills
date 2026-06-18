@@ -74,9 +74,12 @@ anonymised – the assertion text matters most, because it is the part that land
 in `evals.json` (the `source` trace is dropped on commit, so it deliberately
 stays verbatim for provenance and is the one place a name you cited is expected
 to remain). Anonymisation is a capitalisation heuristic with a small prose-word
-allowlist, not robust named-entity recognition: a real name the allowlist
-happens to cover can slip through, and an ordinary capitalised word it misses
-can over-scrub to a `[Company N]` placeholder. Read each scrubbed assertion and
+allowlist and an inflected-common-noun rule, not robust named-entity
+recognition: a real name the allowlist happens to cover can slip through, and an
+ordinary capitalised word neither rule catches can over-scrub to a `[Company N]`
+placeholder. The same real entity scrubs to one stable placeholder across the
+brief, input text and every assertion, so a token is consistent everywhere it
+appears. Read each scrubbed assertion and
 the fixture line by line and fix any leak or mis-scrub before committing – this
 manual pass is the privacy guarantee for a real capture, not the heuristic
 alone.

@@ -142,10 +142,13 @@ _NAME_SPAN = re.compile(r"\b[A-ZÅÄÖ][\wÅÄÖåäö]+(?:\s+[A-ZÅÄÖ][\wÅÄ
 # kept in place so a sentence-initial capital is not mistaken for a company. The
 # set holds GENUINE prose words only — never a proper name from a fixture: a name
 # placed here would leak whenever it stood alone, which is exactly the failure a
-# real capture must avoid. It is necessarily incomplete (a capitalised real word
-# this list misses still over-scrubs, and a real name that happens to be a
-# sentence-opener here would slip through), so the heuristic is a first pass the
-# maintainer reviews in Phase 2, not a robust named-entity recogniser.
+# real capture must avoid. It carries only short, unambiguous function words; an
+# ambiguous capitalised common word (one that could equally be a company, like
+# *District*) is deliberately NOT listed, because skipping it would let a real
+# name of that spelling leak — the inflected-common-noun rule below catches the
+# long open-class words instead. The list is necessarily incomplete, so the
+# heuristic is a first pass the maintainer reviews in Phase 2, not a robust
+# named-entity recogniser.
 _NAME_STOPWORDS = frozenset(
     {
         # Swedish sentence-openers, pronouns and connectives.
@@ -154,9 +157,66 @@ _NAME_STOPWORDS = frozenset(
         # English sentence-openers, articles, pronouns and connectives.
         "In", "It", "The", "A", "An", "We", "I", "You", "They", "He",
         "She", "This", "That", "These", "Those", "And", "But", "Here",
-        "There", "District",
+        "There",
     }
 )
+
+# Swedish definite/plural inflectional endings that mark an open-class common
+# noun rather than a name. A sentence-initial *Tusentalsavgränsaren* (definite
+# *-aren*) or *Avgränsarna* (plural *-arna*) is ordinary prose, not a company;
+# names (*Volvo*, *Spotify*, *Ericsson*, *Erik*, *Marx*) do not carry these
+# inflections. The rule only fires on a comfortably long token, so a short name
+# that happens to end the same way is not swept up by morphology alone. It is a
+# keep-in-place signal layered on top of the function-word allowlist, never a
+# scrub trigger, so it can only reduce over-scrubbing, never cause a leak.
+_COMMON_NOUN_INFLECTIONS = ("arna", "orna", "erna", "aren", "ören", "et", "en", "an", "na")
+_MIN_INFLECTED_COMMON_NOUN = 9
+
+
+def _is_inflected_common_noun(token: str) -> bool:
+    """True when a single capitalised token reads as an inflected Swedish common noun, not a name."""
+    return len(token) >= _MIN_INFLECTED_COMMON_NOUN and token.lower().endswith(_COMMON_NOUN_INFLECTIONS)
+
+
+class _Anonymiser:
+    """A reusable scrub registry mapping each real entity to one stable placeholder.
+
+    The mapping and the person/company counters live on the instance, so the
+    SAME entity scrubs to the SAME token across every field a single candidate
+    runs through it (the input fixture, the brief, and each assertion's text).
+    Calling per field with fresh counters — the old behaviour — gave one entity
+    different numbers in different fields and made the captured case internally
+    inconsistent. The standalone `anonymise` helper below wraps a throwaway
+    instance for callers that scrub one isolated string.
+    """
+
+    def __init__(self) -> None:
+        self._replacements: dict[str, str] = {}
+        self._person_n = 0
+        self._company_n = 0
+
+    def scrub(self, text: str) -> str:
+        """Replace every proper-name span in one string, sharing this instance's mapping."""
+        return _NAME_SPAN.sub(self._replace, text)
+
+    def _replace(self, match: re.Match[str]) -> str:
+        """Map one matched span to its placeholder, leaving prose words in place."""
+        span = match.group(0)
+        # A single capitalised token that is a sentence opener, a known function
+        # word, or an inflected common noun is left in place; a multi-word span
+        # is always treated as a name.
+        if " " not in span and (span in _NAME_STOPWORDS or _is_inflected_common_noun(span)):
+            return span
+        if span in self._replacements:
+            return self._replacements[span]
+        if " " in span:
+            self._person_n += 1
+            token = f"[Person {self._person_n}]"
+        else:
+            self._company_n += 1
+            token = f"[Company {self._company_n}]"
+        self._replacements[span] = token
+        return token
 
 
 def anonymise(text: str) -> str:
@@ -167,42 +227,30 @@ def anonymise(text: str) -> str:
     a single-word span whose token is not an ordinary capitalised prose word
     reads as a company or product (*Volvo* → *[Company 1]*). Single first names
     that stand alone (*Erik*) scrub the same way, because the stopword set holds
-    only genuine prose words, never fixture names. Lowercase fault vocabulary
-    that assertions depend on — *adressera*, *leverera* — is never touched
-    because it is not capitalised. A single pass over the original text rules out
-    re-scanning emitted placeholders, and distinct spans map to stable, numbered
-    placeholders so a span used twice scrubs to the same token.
+    only genuine prose words, never fixture names. A sentence-initial inflected
+    common noun (*Tusentalsavgränsaren*) is kept in place by its Swedish
+    definite/plural ending, so an ordinary capitalised word is not mistaken for a
+    company. Lowercase fault vocabulary that assertions depend on — *adressera*,
+    *leverera* — is never touched because it is not capitalised. A single pass
+    over the original text rules out re-scanning emitted placeholders, and
+    distinct spans map to stable, numbered placeholders so a span used twice
+    scrubs to the same token.
 
-    The heuristic is capitalisation plus a prose-word allowlist, not robust NER:
-    a capitalised real word the allowlist misses can over-scrub, and a real name
-    coinciding with an allowlisted opener can slip through. That is why `/eval`
-    proposes — the maintainer reviews the scrubbed fixture line by line in Phase
-    2 before anything is committed (see the eval SKILL.md), so a residual leak is
-    human-catchable rather than silently shipped.
+    This wraps a throwaway `_Anonymiser`, so it is self-contained — each call
+    starts its numbering at one. To keep numbering consistent ACROSS several
+    fields of one candidate, share a single `_Anonymiser` instance instead (see
+    `propose`).
+
+    The heuristic is capitalisation plus a prose-word allowlist and an
+    inflected-common-noun rule, not robust NER: a capitalised real word neither
+    catches can over-scrub, and a real name coinciding with an allowlisted opener
+    can slip through. That is why `/eval` proposes — the maintainer reviews the
+    scrubbed fixture line by line in Phase 2 before anything is committed (see the
+    eval SKILL.md), so a residual leak is human-catchable rather than silently
+    shipped.
     """
 
-    replacements: dict[str, str] = {}
-    person_n = company_n = 0
-
-    def _replace(match: re.Match[str]) -> str:
-        nonlocal person_n, company_n
-        span = match.group(0)
-        # A single capitalised token that is a sentence opener or known prose
-        # word is left in place; a multi-word span is always treated as a name.
-        if " " not in span and span in _NAME_STOPWORDS:
-            return span
-        if span in replacements:
-            return replacements[span]
-        if " " in span:
-            person_n += 1
-            token = f"[Person {person_n}]"
-        else:
-            company_n += 1
-            token = f"[Company {company_n}]"
-        replacements[span] = token
-        return token
-
-    return _NAME_SPAN.sub(_replace, text)
+    return _Anonymiser().scrub(text)
 
 
 def _emphasise(term: str) -> str:
@@ -317,7 +365,7 @@ def _shape_assertion(skill: str, seed: dict, remark: str) -> str | None:
             n = sentence.group(1) if sentence else "two"
             return f"The opening reaches substance by sentence {n}, not later."
         if term:
-            return f"A fresh draft must not contain {_emphasise(term)} (flagged in the source session as a register fault)."
+            return f"A fresh draft must not contain {_emphasise(term)} (flagged in the source session)."
         return None
 
     # Correction skills: name the fault and, when given, the correction.
@@ -329,21 +377,24 @@ def _shape_assertion(skill: str, seed: dict, remark: str) -> str | None:
 
 
 def _classify_assertion(skill: str, shaped: str, remark: str) -> str:
-    """Classify an assertion's dimension from the right source for its skill.
+    """Classify an assertion's dimension from the maintainer's traced feedback.
 
-    For a correction skill the shaped text is "*fault* is corrected to *target*"
-    — a template that discards every word the maintainer used to name the fault,
-    so the maintainer's own classification (an "anglicism", a "thousands
-    separator") would be lost and the assertion would mis-tag as the mechanics
-    fallback. Classifying from the source remark together with the shaped text
-    keeps the maintainer's explicit register/mechanics signal while still seeing
-    the emphasised terms. Draft skills already shape the fault verbatim into the
-    assertion, so the shaped text alone classifies them faithfully.
+    The dimension is EARNED from the source remark — the words the maintainer
+    used to name the fault ("anglicism", "AI-tell", "thousands separator") —
+    together with the shaped text, which carries the emphasised fault and
+    correction terms. The remark is the authority: the shaped text alone would
+    mislead the classifier, because a correction shape "*fault* is corrected to
+    *target*" discards every classifying word the maintainer used and would drop
+    to the mechanics fallback whenever the fault span itself is not a marker.
+
+    The shaped text is deliberately neutral about the dimension — the write
+    negative-draft shape names no dimension word ("flagged in the source
+    session", not "a register fault") — so it cannot inject a tag the feedback
+    did not earn. A draft fault the maintainer flagged for a non-register reason
+    therefore keeps its earned dimension instead of being forced to register.
     """
 
-    if skill in CORRECTION_SKILLS:
-        return classify(f"{remark} {shaped}")
-    return classify(shaped)
+    return classify(f"{remark} {shaped}")
 
 
 def _diff_before(diff: str) -> str:
@@ -382,6 +433,16 @@ def propose(transcript_path: pathlib.Path) -> dict:
     language = header.get("language", "")
     prompt = header.get("prompt", "")
 
+    # One shared anonymiser scrubs every committed-bound field of this candidate,
+    # so a single real entity maps to one stable placeholder everywhere it
+    # appears — the genitive *Marx's teorier* in an assertion and the *Marx
+    # teorier* in the input fixture become the SAME token, not two different
+    # numbers. Scrubbing each field with a fresh registry would renumber per
+    # field and make the captured case internally inconsistent. The `source`
+    # trace is fed a throwaway scrub (it is dropped on commit), so it never
+    # consumes a placeholder number from the committed fields.
+    scrub = _Anonymiser()
+
     # Build the dimension-tagged assertions. The assertion `text` is the part
     # that lands in the committed suite (commit() keeps only {text, dimension}),
     # so it is anonymised: a name the maintainer cites inside a fault remark —
@@ -401,7 +462,7 @@ def propose(transcript_path: pathlib.Path) -> dict:
                 continue
             expectations.append(
                 {
-                    "text": anonymise(shaped),
+                    "text": scrub.scrub(shaped),
                     "dimension": _classify_assertion(skill, shaped, remark),
                     "source": remark,
                 }
@@ -410,7 +471,7 @@ def propose(transcript_path: pathlib.Path) -> dict:
     case: dict = {
         "skill_name": skill,
         "language": language,
-        "prompt": anonymise(prompt),
+        "prompt": scrub.scrub(prompt),
         "expected_output": "",
         "expectations": expectations,
     }
@@ -418,11 +479,11 @@ def propose(transcript_path: pathlib.Path) -> dict:
     # A correction skill grades a fix of an input; a draft skill works from a
     # brief and produces a fresh draft with no input to correct.
     if skill in CORRECTION_SKILLS:
-        case["input_text"] = anonymise(_diff_before(parsed["diff"]))
+        case["input_text"] = scrub.scrub(_diff_before(parsed["diff"]))
         case["brief"] = ""
     else:
         case["input_text"] = ""
-        case["brief"] = anonymise(prompt)
+        case["brief"] = scrub.scrub(prompt)
 
     return case
 
