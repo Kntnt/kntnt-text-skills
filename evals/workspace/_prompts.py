@@ -139,8 +139,17 @@ def grader_prompt(case: dict, config: str, iteration: int, run_n: int) -> str:
     run_dir = case_dir(case, iteration) / config / f"run-{run_n}"
     outputs_dir = run_dir / "outputs"
     grading_path = run_dir / "grading.json"
+    # Expectations are object-form `{text, dimension}` in the suite; the grader
+    # grades the plain assertion text, so flatten to the text here exactly as
+    # `_setup.py` does for the runner path. A still-flat suite (bare strings)
+    # degrades gracefully — the text is the string itself.
     expectations = case.get("expectations", [])
-    exp_block = "\n".join(f"  {i + 1}. {e}" for i, e in enumerate(expectations))
+    expectation_texts = [
+        e["text"] if isinstance(e, dict) else e for e in expectations
+    ]
+    exp_block = "\n".join(
+        f"  {i + 1}. {text}" for i, text in enumerate(expectation_texts)
+    )
     return f"""You are grading one configuration of one test case for the kntnt-text-skills plugin.
 
 # Case
