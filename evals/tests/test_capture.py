@@ -23,6 +23,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import pathlib
+import re
 import sys
 import tempfile
 
@@ -136,6 +137,95 @@ def test_anonymiser_scrubs_names_but_keeps_anglicism_terms() -> None:
     assert "Anna Lindqvist" not in scrubbed
     assert "Volvo" not in scrubbed
     assert "adressera" in scrubbed and "leverera" in scrubbed
+
+
+def test_one_entity_maps_to_one_placeholder_across_every_committed_field() -> None:
+    """The same real entity scrubs to the SAME placeholder everywhere it appears in a candidate's committed-bound fields, not a fresh number per field."""
+    case = capture.propose(EDIT_TRANSCRIPT)
+    # The surname Marx appears both in the input_text (the diff's before side,
+    # *Marx teorier*) and inside the genitive fault assertion (*Marx's teorier*).
+    # A single shared entity→placeholder mapping must give Marx ONE token in both
+    # fields, so the captured case is internally consistent — not [Company 2] in
+    # the input and [Company 1] in the assertion. The "teorier" anchor pins the
+    # placeholder that stands for Marx specifically in each field.
+    input_text = case["input_text"]
+    marx_assertion = next(
+        exp["text"] for exp in case["expectations"] if "teorier" in exp["text"]
+    )
+    anchor = re.compile(r"(\[(?:Person|Company) \d+\])'?s? teorier")
+    in_token = anchor.search(input_text)
+    as_token = anchor.search(marx_assertion)
+    assert in_token is not None, f"expected a Marx placeholder in the input fixture: {input_text!r}"
+    assert as_token is not None, f"expected a Marx placeholder in the assertion: {marx_assertion!r}"
+    assert in_token.group(1) == as_token.group(1), (
+        f"the same entity got different placeholders across fields: input has "
+        f"{in_token.group(1)!r}, assertion has {as_token.group(1)!r}"
+    )
+
+
+def test_anonymiser_does_not_over_scrub_a_sentence_initial_common_word() -> None:
+    """A legitimate sentence-initial common word (a long Swedish noun) is NOT mistaken for a company name and scrubbed."""
+    # *Tusentalsavgränsaren* opens the maintainer's thousands-separator remark; it
+    # is an ordinary capitalised Swedish noun, not a company, and must survive.
+    scrubbed = capture.anonymise("Tusentalsavgränsaren *1,234,567* måste bli *1 234 567* med tunt mellanslag.")
+    assert "Tusentalsavgränsaren" in scrubbed, (
+        f"sentence-initial common word was over-scrubbed: {scrubbed!r}"
+    )
+    assert "[Company" not in scrubbed and "[Person" not in scrubbed, (
+        f"no placeholder should appear for a remark with no real name: {scrubbed!r}"
+    )
+
+
+def test_anonymiser_still_scrubs_a_real_name() -> None:
+    """Tightening the heuristic must not let a genuine multi-word name or a real company through."""
+    scrubbed = capture.anonymise("Anna Lindqvist på Volvo lanserade Spotify-kampanjen.")
+    assert "Anna Lindqvist" not in scrubbed, f"real person name leaked: {scrubbed!r}"
+    assert "Volvo" not in scrubbed, f"real company name leaked: {scrubbed!r}"
+    assert "Spotify" not in scrubbed, f"real product name leaked: {scrubbed!r}"
+
+
+def test_write_dimension_is_earned_from_the_feedback_not_a_template_artefact() -> None:
+    """A write negative-draft assertion's dimension is derived from the traced feedback, not from the shaped template — which bakes in the word 'register' for every fault."""
+    case = capture.propose(WRITE_TRANSCRIPT)
+    # The fixture's flagship faults ("AI vocabulary", "AI-tell", "calque") are
+    # genuine register concerns, and the tag must be earned from that feedback —
+    # classifying the bare source remark already yields register.
+    delve = next(
+        exp for exp in case["expectations"] if "delve into the tapestry" in exp["text"]
+    )
+    assert delve["dimension"] == "register", f"AI-vocabulary fault should be register: {delve}"
+    # Every committed write assertion must carry the dimension its source remark
+    # earns. The shaped negative-draft template literally says "register fault",
+    # so classifying the template (rather than the feedback) would tag *every*
+    # write fault register regardless of what the maintainer actually flagged.
+    for exp in case["expectations"]:
+        assert exp["dimension"] == capture.classify(exp["source"]), (
+            f"write dimension must be earned from the feedback, not the template: "
+            f"{exp['dimension']!r} != classify(source)={capture.classify(exp['source'])!r} "
+            f"for {exp['source']!r}"
+        )
+
+
+def test_write_non_register_fault_is_not_mis_tagged_register_by_the_template() -> None:
+    """A write fault the feedback does NOT class as register (a Swedish cue absent from the marker lists) must not be forced to register by the shaped template's wording."""
+    # The maintainer flags a tired filler opening with a Swedish cue that no
+    # register marker matches, so the feedback earns the mechanics fallback. The
+    # shaped negative-draft template still says "register fault" — classifying
+    # the template would mis-tag this register; classifying the feedback keeps it
+    # out of the improvement score, which is the earned, correct dimension.
+    remark = (
+        "The opening *sjösätter en spännande resa* is a tired filler phrase; "
+        "a fresh draft must not contain it."
+    )
+    seed = capture._faults_from_remark(remark)[0]
+    shaped = capture._shape_assertion("write", seed, remark)
+    assert shaped is not None
+    assert capture._classify_assertion("write", shaped, remark) == capture.classify(remark), (
+        "a write fault's dimension must follow the feedback, not the 'register fault' template"
+    )
+    assert capture._classify_assertion("write", shaped, remark) != "register", (
+        "a non-register Swedish-cued fault must not be mis-tagged register by the template"
+    )
 
 
 def test_names_in_assertion_text_are_anonymised() -> None:
@@ -275,6 +365,11 @@ def _run() -> int:
         test_write_assertions_are_negative_or_structural_shape,
         test_names_are_anonymised_in_the_proposed_fixture,
         test_anonymiser_scrubs_names_but_keeps_anglicism_terms,
+        test_one_entity_maps_to_one_placeholder_across_every_committed_field,
+        test_anonymiser_does_not_over_scrub_a_sentence_initial_common_word,
+        test_anonymiser_still_scrubs_a_real_name,
+        test_write_dimension_is_earned_from_the_feedback_not_a_template_artefact,
+        test_write_non_register_fault_is_not_mis_tagged_register_by_the_template,
         test_names_in_assertion_text_are_anonymised,
         test_change_to_and_should_be_connectives_pair_fault_with_target,
         test_inner_smart_quoted_span_does_not_truncate_a_fault_remark,
