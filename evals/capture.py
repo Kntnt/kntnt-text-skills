@@ -145,10 +145,10 @@ _NAME_SPAN = re.compile(r"\b[A-ZÅÄÖ][\wÅÄÖåäö]+(?:\s+[A-ZÅÄÖ][\wÅÄ
 # real capture must avoid. It carries only short, unambiguous function words; an
 # ambiguous capitalised common word (one that could equally be a company, like
 # *District*) is deliberately NOT listed, because skipping it would let a real
-# name of that spelling leak — the inflected-common-noun rule below catches the
-# long open-class words instead. The list is necessarily incomplete, so the
-# heuristic is a first pass the maintainer reviews in Phase 2, not a robust
-# named-entity recogniser.
+# name of that spelling leak — the curated common-noun allowlist below spares the
+# handful of long open-class words a maintainer genuinely opens a remark with.
+# The list is necessarily incomplete, so the heuristic is a first pass the
+# maintainer reviews in Phase 2, not a robust named-entity recogniser.
 _NAME_STOPWORDS = frozenset(
     {
         # Swedish sentence-openers, pronouns and connectives.
@@ -161,21 +161,30 @@ _NAME_STOPWORDS = frozenset(
     }
 )
 
-# Swedish definite/plural inflectional endings that mark an open-class common
-# noun rather than a name. A sentence-initial *Tusentalsavgränsaren* (definite
-# *-aren*) or *Avgränsarna* (plural *-arna*) is ordinary prose, not a company;
-# names (*Volvo*, *Spotify*, *Ericsson*, *Erik*, *Marx*) do not carry these
-# inflections. The rule only fires on a comfortably long token, so a short name
-# that happens to end the same way is not swept up by morphology alone. It is a
-# keep-in-place signal layered on top of the function-word allowlist, never a
-# scrub trigger, so it can only reduce over-scrubbing, never cause a leak.
-_COMMON_NOUN_INFLECTIONS = ("arna", "orna", "erna", "aren", "ören", "et", "en", "an", "na")
-_MIN_INFLECTED_COMMON_NOUN = 9
+# A small curated allowlist of genuine open-class common nouns that a maintainer
+# legitimately writes sentence-initial in a feedback remark. Capitalised, they
+# would otherwise scrub as a company; listed here, they are kept in place. The
+# list holds only words confirmed to be ordinary vocabulary, never a name — the
+# thousands-separator term *Tusentalsavgränsaren* is the case the heuristic must
+# protect. It deliberately does NOT generalise by morphology: real brand names
+# (*Handelsbanken*, *Swedbanken*, *Systembolaget*) share the Swedish definite
+# *-en*/*-et* ending, so a "long token + inflection" rule would keep those names
+# in place and leak them. The principle is scrub-by-default: when the heuristic
+# cannot tell a name from a common noun it scrubs, and only an exact match in
+# this allowlist suppresses that — over-scrubbing an unlisted ordinary word is a
+# cosmetic annoyance the Phase-2 manual review fixes, whereas a leaked real name
+# is a privacy failure. Add a term here only when it is unambiguously a common
+# noun that cannot also be an entity name.
+_COMMON_NOUN_ALLOWLIST = frozenset(
+    {
+        "Tusentalsavgränsaren",
+    }
+)
 
 
-def _is_inflected_common_noun(token: str) -> bool:
-    """True when a single capitalised token reads as an inflected Swedish common noun, not a name."""
-    return len(token) >= _MIN_INFLECTED_COMMON_NOUN and token.lower().endswith(_COMMON_NOUN_INFLECTIONS)
+def _is_common_noun(token: str) -> bool:
+    """True when a single capitalised token is an explicitly allowlisted common noun, not a name."""
+    return token in _COMMON_NOUN_ALLOWLIST
 
 
 class _Anonymiser:
@@ -203,9 +212,11 @@ class _Anonymiser:
         """Map one matched span to its placeholder, leaving prose words in place."""
         span = match.group(0)
         # A single capitalised token that is a sentence opener, a known function
-        # word, or an inflected common noun is left in place; a multi-word span
-        # is always treated as a name.
-        if " " not in span and (span in _NAME_STOPWORDS or _is_inflected_common_noun(span)):
+        # word, or an explicitly allowlisted common noun is left in place;
+        # everything else — including a long token that merely ends in a Swedish
+        # inflection — is treated as a name and scrubbed. A multi-word span is
+        # always a name.
+        if " " not in span and (span in _NAME_STOPWORDS or _is_common_noun(span)):
             return span
         if span in self._replacements:
             return self._replacements[span]
@@ -227,10 +238,12 @@ def anonymise(text: str) -> str:
     a single-word span whose token is not an ordinary capitalised prose word
     reads as a company or product (*Volvo* → *[Company 1]*). Single first names
     that stand alone (*Erik*) scrub the same way, because the stopword set holds
-    only genuine prose words, never fixture names. A sentence-initial inflected
-    common noun (*Tusentalsavgränsaren*) is kept in place by its Swedish
-    definite/plural ending, so an ordinary capitalised word is not mistaken for a
-    company. Lowercase fault vocabulary that assertions depend on — *adressera*,
+    only genuine prose words, never fixture names. A sentence-initial common noun
+    is kept in place only when it appears in the small curated allowlist
+    (*Tusentalsavgränsaren*); a capitalised word that merely ends in a Swedish
+    inflection is NOT spared by morphology, because real brand names of the same
+    shape (*Handelsbanken*, *Systembolaget*) would otherwise leak. The default is
+    to scrub. Lowercase fault vocabulary that assertions depend on — *adressera*,
     *leverera* — is never touched because it is not capitalised. A single pass
     over the original text rules out re-scanning emitted placeholders, and
     distinct spans map to stable, numbered placeholders so a span used twice
@@ -241,13 +254,15 @@ def anonymise(text: str) -> str:
     fields of one candidate, share a single `_Anonymiser` instance instead (see
     `propose`).
 
-    The heuristic is capitalisation plus a prose-word allowlist and an
-    inflected-common-noun rule, not robust NER: a capitalised real word neither
-    catches can over-scrub, and a real name coinciding with an allowlisted opener
-    can slip through. That is why `/eval` proposes — the maintainer reviews the
+    The heuristic is capitalisation plus a prose-word allowlist and a small
+    curated common-noun allowlist, not robust NER: it errs toward scrubbing, so a
+    capitalised real word neither allowlist covers is over-scrubbed (a cosmetic
+    annoyance), while a real name coinciding with an allowlisted opener can still
+    slip through. That is why `/eval` proposes — the maintainer reviews the
     scrubbed fixture line by line in Phase 2 before anything is committed (see the
-    eval SKILL.md), so a residual leak is human-catchable rather than silently
-    shipped.
+    eval SKILL.md), and that manual review, not the heuristic, is the privacy
+    guarantee: it both un-scrubs a rare false positive and catches any residual
+    leak rather than letting it silently ship.
     """
 
     return _Anonymiser().scrub(text)
