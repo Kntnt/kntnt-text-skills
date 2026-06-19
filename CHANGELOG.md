@@ -6,6 +6,12 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.8.2] – 2026-06-19
+
+### Removed
+
+- **The eval suite (`evals/`) and the maintainer-only `/eval` capture command.** The whole eval apparatus is gone – the aggregated and per-skill `evals.json`, the `fixtures/`, the skill-creator-wired runner under `evals/workspace/`, the register-dimension classifier (`classify_dimensions.py`) and the `/eval` capture tooling (`evals/eval/SKILL.md`, `evals/capture.py`, `.claude/commands/eval.md`). It was maintainer-only and never shipped to marketplace installs, so installations are unaffected, and no CI job or pre-commit hook ran it – the audit (`scripts/audit.py`) is the gate and is untouched. A meaningful eval run depends on real, client-derived sessions that do not belong in a public repository, so the suite is retired rather than maintained here. The eval references in `README.md`, `docs/architecture.md` and `docs/extending.md` are removed with it, and `.gitignore` drops the now-needless `!.claude/commands/` and `evals/workspace/` entries.
+
 ## [0.8.1] – 2026-06-18
 
 ### Added
@@ -214,7 +220,8 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 - Marketplace metadata (`.claude-plugin/marketplace.json`) and `/plugin marketplace add` / `/plugin install` instructions for installation via the modern Claude Code plugin flow.
 - Keep a Changelog 1.1.0 changelog (this file) and a versioning-policy section in the README that adapts SemVer to a rules-driven plugin.
 
-[Unreleased]: https://github.com/Kntnt/kntnt-text-skills/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/Kntnt/kntnt-text-skills/compare/v0.8.2...HEAD
+[0.8.2]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.8.2
 [0.8.1]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.8.1
 [0.8.0]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.8.0
 [0.7.2]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.7.2

@@ -91,15 +91,6 @@ kntnt-text-skills/
 ├── scripts/
 │   ├── audit.py
 │   └── help.py
-├── evals/
-│   ├── README.md
-│   ├── baseline.md
-│   ├── evals.json
-│   ├── proofread/evals.json
-│   ├── redline/evals.json
-│   ├── edit/evals.json
-│   ├── write/evals.json
-│   └── fixtures/
 ├── .pre-commit-config.yaml
 ├── .gitignore
 ├── CHANGELOG.md

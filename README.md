@@ -185,10 +185,6 @@ pip install pre-commit && pre-commit install
 
 The audit ([`scripts/audit.py`](scripts/audit.py)) is a self-contained PEP 723 script, run with `uv run scripts/audit.py`; [`uv`](https://docs.astral.sh/uv/) provisions its single dependency automatically. The same script is the hard gate in CI.
 
-### Run tests
-
-The eval suite under [`evals/`](evals/) exercises the four task skills against the rule set and is wired to the [skill-creator](https://github.com/anthropics/skills/tree/main/skill-creator) pipeline. See [`evals/README.md`](evals/README.md) for the layout, the scaling rule for new languages and how to run it.
-
 ### Technical documentation
 
 The deeper record lives under [`docs/`](docs/):
@@ -196,7 +192,7 @@ The deeper record lives under [`docs/`](docs/):
 - [`docs/architecture.md`](docs/architecture.md) – the review hierarchy, the three layers, the file structure and the design principles.
 - [`docs/languages.md`](docs/languages.md) – the language model: mechanics and style layers, the default fallback, resolution and the territorial-variant overlay.
 - [`docs/content-types.md`](docs/content-types.md) – the ten content types, the ABT and PAC techniques and the global bans.
-- [`docs/extending.md`](docs/extending.md) – adding a content type, technique or language, and the eval suite.
+- [`docs/extending.md`](docs/extending.md) – adding a content type, technique or language.
 - [`docs/authoring.md`](docs/authoring.md) – the authoring rules and the pre-commit audit checklist for anyone editing `skills/` or `lib/`.
 - [`docs/versioning.md`](docs/versioning.md) – the Semantic Versioning policy adapted to a rules-driven plugin.
 
