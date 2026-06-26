@@ -17,7 +17,7 @@ The skills come in three groups: four task skills that do the work (`/proofread`
 - Eight skills in three groups: four task skills, three context loaders and a help command.
 - A strict review hierarchy – `proofread ⊂ redline ⊂ edit` – where each deeper skill is the previous one plus a phase, with no duplicated logic.
 - Per-language conventions split into a mechanics layer (proofread scope) and a style layer (redline / edit scope), shipping with Swedish, British English and American English plus an international fallback.
-- Ten content types – article, case study, press release, web copy, teaser, report, column, opinion piece, GitHub README and a general fallback – each with its own genre file.
+- Nine content types – article, case study, press release, web copy, teaser, report, column, opinion piece and a general fallback – each with its own genre file.
 - Two structural techniques, ABT and PAC, applied only from installed files.
 - An adversarial subagent review loop: `/write` and `/edit` default to one round, `/redline`'s delegation tail is opt-in, and the ceiling is bounded to three iterations.
 - Plugin-anchored triggers: skills activate only on explicit invocation, never on a bare action word.
@@ -191,7 +191,7 @@ The deeper record lives under [`docs/`](docs/):
 
 - [`docs/architecture.md`](docs/architecture.md) – the review hierarchy, the three layers, the file structure and the design principles.
 - [`docs/languages.md`](docs/languages.md) – the language model: mechanics and style layers, the default fallback, resolution and the territorial-variant overlay.
-- [`docs/content-types.md`](docs/content-types.md) – the ten content types, the ABT and PAC techniques and the global bans.
+- [`docs/content-types.md`](docs/content-types.md) – the nine content types, the ABT and PAC techniques and the global bans.
 - [`docs/extending.md`](docs/extending.md) – adding a content type, technique or language.
 - [`docs/authoring.md`](docs/authoring.md) – the authoring rules and the pre-commit audit checklist for anyone editing `skills/` or `lib/`.
 - [`docs/versioning.md`](docs/versioning.md) – the Semantic Versioning policy adapted to a rules-driven plugin.

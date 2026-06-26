@@ -4,7 +4,7 @@ What the plugin knows how to write, the narrative and analytical arcs it applies
 
 ## Content types
 
-The plugin covers ten content types – the last is a fallback:
+The plugin covers nine content types – the last is a fallback:
 
 | Content type | Swedish term | Default technique |
 |---|---|---|
@@ -16,7 +16,6 @@ The plugin covers ten content types – the last is a fallback:
 | Report / whitepaper | rapport | PAC |
 | Column | krönika | ABT (drawing, freely visible) |
 | Opinion piece | opinionstext | ABT (pushing, explicit-argumentative) |
-| GitHub README | README för GitHub | none |
 | General (fallback) | allmän text | none |
 
 Each content type has its own file in `lib/genres/` describing its purpose and context, stylistic nuance (tone, length, structure, headline conventions, address), default technique and common pitfalls. The files are compact – only what distinguishes the type from the general rules. Language-specific realisations (e.g. which mark renders attribution in a particular language) come from the loaded language files. Sections within each genre file are annotated with `<!-- scope: write -->` or `<!-- scope: review -->` markers so write-only sections are skipped during review passes and vice versa; sections relevant to both phases are left unmarked.

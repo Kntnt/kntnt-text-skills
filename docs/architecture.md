@@ -83,7 +83,6 @@ kntnt-text-skills/
 │   │   ├── report.md
 │   │   ├── column.md
 │   │   ├── opinion.md
-│   │   ├── readme-github.md
 │   │   └── general.md
 │   └── techniques/
 │       ├── abt.md

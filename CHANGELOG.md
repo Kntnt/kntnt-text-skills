@@ -6,6 +6,10 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+### Removed
+
+- **The `readme-github` content type.** The GitHub-README genre (`lib/genres/readme-github.md` and its block in `lib/genres/_index.md`) is removed; the README's structural substance is relocated to `kntnt-code-skills` as the `lib/templates/README.md` fillable template (and informs its `/doctor` README check), where it sits beside the project initialiser that writes READMEs. The consuming skills (`write`, `edit`, `redline`, `proofread`) read the genre index and simply no longer offer it; none hardcoded it. The content-type count drops from ten to nine across `README.md`, `docs/content-types.md`, and `docs/architecture.md`.
+
 ## [0.8.2] – 2026-06-19
 
 ### Removed

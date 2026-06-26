@@ -111,20 +111,6 @@ When adding, renaming or removing a genre file, update this index to match. The 
 
 ---
 
-## readme-github
-
-- name: `readme-github`
-- swedish_term: `README för GitHub`
-- default_technique: `none`
-- triggers:
-  - `readme.md`
-  - `readme for github`
-  - `github readme`
-- not_triggers:
-  - `bare 'readme' / 'readme file' / 'readme-fil' without 'github' or a '.md' filename – too broad; ask instead`
-
----
-
 ## report
 
 - name: `report`
