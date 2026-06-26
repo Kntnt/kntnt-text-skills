@@ -6,6 +6,8 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.9.0] – 2026-06-26
+
 ### Removed
 
 - **The `readme-github` content type.** The GitHub-README genre (`lib/genres/readme-github.md` and its block in `lib/genres/_index.md`) is removed; the README's structural substance is relocated to `kntnt-code-skills` as the `lib/templates/README.md` fillable template (and informs its `/doctor` README check), where it sits beside the project initialiser that writes READMEs. The consuming skills (`write`, `edit`, `redline`, `proofread`) read the genre index and simply no longer offer it; none hardcoded it. The content-type count drops from ten to nine across `README.md`, `docs/content-types.md`, and `docs/architecture.md`.
@@ -224,7 +226,8 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 - Marketplace metadata (`.claude-plugin/marketplace.json`) and `/plugin marketplace add` / `/plugin install` instructions for installation via the modern Claude Code plugin flow.
 - Keep a Changelog 1.1.0 changelog (this file) and a versioning-policy section in the README that adapts SemVer to a rules-driven plugin.
 
-[Unreleased]: https://github.com/Kntnt/kntnt-text-skills/compare/v0.8.2...HEAD
+[Unreleased]: https://github.com/Kntnt/kntnt-text-skills/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.9.0
 [0.8.2]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.8.2
 [0.8.1]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.8.1
 [0.8.0]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.8.0
