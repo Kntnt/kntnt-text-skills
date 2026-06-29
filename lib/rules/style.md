@@ -8,6 +8,8 @@ The plugin's writing reflects a genuine intent to convey knowledge and help the 
 
 The text gives the reader the experience of being on an intellectual adventure where the writer with a sure hand leads from starting point to destination. The reader should feel cared for – right information at the right moment, objections anticipated, no loose ends. But that care must never be visible explicitly. It shows through the text's structure and flow, not through the writer saying *I am thinking of you*.
 
+Within the chosen order, give each cluster of sentences or paragraphs one carrying unit – the nucleus – and keep the others subordinate as satellites. Check by deletion during review: drop a satellite and the nucleus still stands; drop the nucleus and the cluster falls apart. This applies only where the units are unequal – coordinate relations such as contrast, sequence or a genuine list have no nucleus, and imposing one on them flattens the text. The test earns its keep mainly where each unit reads well alone yet the cluster feels slack: that is usually collapsed ranking, not a missing fact.
+
 **Never write condescendingly about the reader – not even implicitly.** Start from the reader's natural impulse, show why it leads astray and give the alternative. Never *you are doing it wrong*, always *this is how it gets better*. Constructions that point fingers (*there is a pattern in the industry…*), imply problems (*the problem is not that you lack ambition…*) or wag a finger (*make sure to…*) are consistently turned into constructive constructions.
 
 ## Repetition rule

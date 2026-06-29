@@ -6,6 +6,12 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 
 ## [Unreleased]
 
+## [0.10.0] – 2026-06-29
+
+### Added
+
+- **A nucleus–satellite ranking rule in the substantive style foundation (`lib/rules/style.md`).** Within the chosen order, each cluster of sentences or paragraphs is now expected to carry one leading unit – the nucleus – with the rest subordinate as satellites, verified by a deletion test in review: drop a satellite and the nucleus still stands; drop the nucleus and the cluster falls apart. The rule fires only where the units are unequal – coordinate relations such as contrast, sequence or a genuine list have no nucleus and are left untouched – so the editorial review (redline, edit) gains a collapsed-ranking diagnostic, catching for instance a feature dump or a claim with its evidence flattened into a bare list, without reversing any prior finding. It sits inside the organising principle as a sharpening of *right information at the right moment*.
+
 ## [0.9.0] – 2026-06-26
 
 ### Removed
@@ -226,7 +232,8 @@ History starts at **0.3.0** – the first version with a documented baseline. Ea
 - Marketplace metadata (`.claude-plugin/marketplace.json`) and `/plugin marketplace add` / `/plugin install` instructions for installation via the modern Claude Code plugin flow.
 - Keep a Changelog 1.1.0 changelog (this file) and a versioning-policy section in the README that adapts SemVer to a rules-driven plugin.
 
-[Unreleased]: https://github.com/Kntnt/kntnt-text-skills/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/Kntnt/kntnt-text-skills/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.10.0
 [0.9.0]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.9.0
 [0.8.2]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.8.2
 [0.8.1]: https://github.com/Kntnt/kntnt-text-skills/releases/tag/v0.8.1
